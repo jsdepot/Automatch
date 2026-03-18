@@ -209,8 +209,8 @@ select option{background:var(--surface);color:var(--ink)}
 .gal-tab.active{background:var(--ink);color:#fff}
 
 .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem}
-.gallery img{width:100%;height:130px;object-fit:cover;border-radius:12px;cursor:pointer;transition:transform var(--trans),opacity var(--trans)}
-.gallery img:hover{transform:scale(1.03);opacity:0.92}
+.gallery img{width:100%;height:130px;object-fit:cover;border-radius:12px;cursor:zoom-in;transition:transform var(--trans),opacity var(--trans),box-shadow var(--trans)}
+.gallery img:hover{transform:scale(1.03);opacity:0.92;box-shadow:0 6px 20px rgba(0,0,0,0.18)}
 
 /* ── FULLSCREEN LIGHTBOX ─────────────────────────────────────────────────── */
 .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
@@ -773,7 +773,7 @@ const CARS = [
 // ── FALLBACK image (used if OEM CDN returns 404)
 const FALLBACK = 'https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg';
 
-function img(path){ return path.startsWith('http') ? path : CDN + path; }
+function img(path){ if(!path) return FALLBACK; return path.startsWith('http') ? path : CDN + path; }
 
 // ── SIZE ORDER for segment-based sorting
 const SEG_ORDER={'Subcompact':1,'Compact':2,'Mid-Size':3,'Full-Size':4};
@@ -823,7 +823,7 @@ function renderGrid(cars){
     const inC=cmpList.includes(c.id);
     return `<div class="car-card" onclick="openCar('${c.id}')">
       <div class="img-wrap">
-        <img class="card-img" src="${img(c.ext[0])}" alt="${c.brand} ${c.model}"
+        <img class="card-img" src="${img(c.ext&&c.ext[0])}" alt="${c.brand} ${c.model}"
           onerror="this.onerror=null;this.src='${FALLBACK}'">
         <span class="brand-bdg">${c.brand}</span>
         <div class="price-badge">From <span>${fmt(c.msrp)}</span></div>
@@ -865,7 +865,7 @@ function openCar(id){
   document.getElementById('mYear').textContent=c.year+' Model Year';
   document.getElementById('mSeg').textContent=c.segment+' · '+c.body;
   const mh=document.getElementById('mHero');
-  mh.src=img(c.ext[0]);
+  mh.src=img(c.ext&&c.ext[0]);
   mh.onerror=()=>{mh.onerror=null;mh.src=FALLBACK;};
   const inC=cmpList.includes(c.id);
   const btn=document.getElementById('addBtn');
@@ -882,11 +882,23 @@ function renderGal(){
   const c=activeCar;
   const imgs=galType==='ext'?c.ext:c.int;
   const label=galType==='ext'?'Exterior':'Interior';
+  const fullUrls=imgs.map(x=>img(x));
+  const caption=c.brand+' '+c.model+' – '+label;
   document.getElementById('mGal').innerHTML=imgs.map((p,i)=>
-    `<img src="${img(p)}" alt="${c.brand} ${c.model} ${label}" title="Click to expand"
-      onclick="openLb(${JSON.stringify(imgs.map(x=>img(x)))},${i},'${c.brand} ${c.model} ${label}')"
+    `<img src="${img(p)}" alt="${c.brand} ${c.model} ${label}"
+      title="Click to expand" style="cursor:zoom-in"
+      data-idx="${i}"
+      onclick="galImgClick(${i})"
       onerror="this.onerror=null;this.src=intFallback('${p}','${c.id}')">`
   ).join('');
+}
+
+function galImgClick(idx){
+  const c=activeCar;
+  if(!c) return;
+  const imgs=(galType==='ext'?c.ext:c.int).map(x=>img(x));
+  const label=galType==='ext'?'Exterior':'Interior';
+  openLb(imgs, idx, c.brand+' '+c.model+' – '+label);
 }
 
 // Interior image fallback chain: try _i_oem_ → _d_oem_ → _detail_oem_ → exterior fq
@@ -894,6 +906,7 @@ function intFallback(path, carId){
   const c=CARS.find(x=>x.id===carId);
   if(!c) return FALLBACK;
   // Full URLs (http) that fail → fall back to first exterior
+  if(!path) return FALLBACK;
   if(path.startsWith('http')) return img(c.ext[0]);
   // If the _i_oem_ failed, try _d_oem_ (dashboard), then fall back to first exterior
   if(path.includes('_i_oem_')){
@@ -1139,40 +1152,38 @@ function goHome(){
 
     <!-- ADD TAB -->
     <div id="admTabAdd" class="adm-tab-body">
-      <div class="adm-section-title">Step 1 — Provide Sources</div>
+      <div class="adm-section-title">Step 1 — Add your sources</div>
+
       <div class="adm-field-grid">
         <div class="adm-field">
-          <label class="adm-label">Manufacturer Page URL <span class="adm-req">*</span></label>
-          <input id="admMfrUrl" class="adm-input" type="url" placeholder="e.g. https://www.toyota.com/rav4pluginhybrid/">
-          <div class="adm-hint">Toyota, Honda, Nissan, Kia — any official product page</div>
+          <label class="adm-label">Manufacturer Page URL</label>
+          <input id="admMfrUrl" class="adm-input" type="url" placeholder="e.g. https://www.mazdausa.com/vehicles/mx-5-miata-rf">
+          <div class="adm-hint">Official product page — for specs, pricing &amp; trim info</div>
         </div>
         <div class="adm-field">
-          <label class="adm-label">Photo Source URL <span class="adm-opt">(optional)</span></label>
-          <input id="admPhotoUrl" class="adm-input" type="url" placeholder="e.g. https://www.edmunds.com/toyota/rav4/2026/pictures/">
-          <div class="adm-hint">Edmunds, KBB, or any page with OEM or press photos</div>
+          <label class="adm-label">Photo Page URL <span class="adm-opt">(optional)</span></label>
+          <input id="admPhotoUrl" class="adm-input" type="url" placeholder="e.g. https://www.edmunds.com/mazda/mx-5-miata/2025/pictures/">
+          <div class="adm-hint">Edmunds, KBB or any page with OEM photos</div>
         </div>
       </div>
 
-      <div class="adm-fetch-row">
-        <button class="adm-fetch-btn" id="admFetchBtn" onclick="admFetchData()">
-          <span id="admFetchBtnTxt">✦ Fetch &amp; Extract Data</span>
-          <span id="admFetchSpinner" style="display:none">⟳ Fetching…</span>
-        </button>
-        <button class="adm-manual-btn" onclick="admFillManual()" title="Skip auto-fetch and fill the form manually">✎ Fill Manually</button>
-      </div>
+      <button class="adm-fetch-btn" onclick="admOpenUrl()">
+        ↗ Open Sources in New Tabs
+      </button>
       <div id="admFetchError" class="adm-error" style="display:none"></div>
 
-      <!-- Debug Log Panel -->
-      <div id="admDebugPanel" style="display:none">
-        <div class="adl-header">
-          <span class="adl-title">⬡ Debug Log</span>
-          <div class="adl-actions">
-            <button class="adl-copy-btn" onclick="admCopyLog()" title="Copy log to clipboard">⎘ Copy</button>
-            <button class="adl-clear-btn" onclick="clearAdmLog();document.getElementById('admDebugPanel').style.display='none'">✕ Clear</button>
-          </div>
+      <!-- Cheat sheet -->
+      <div class="adm-cheatsheet">
+        <div class="adm-cs-title">What to look for</div>
+        <div class="adm-cs-grid">
+          <div class="adm-cs-item"><span class="adm-cs-tag">MSRP</span>Usually on the main page headline or in the Trims section</div>
+          <div class="adm-cs-item"><span class="adm-cs-tag">Trims</span>Often a "Build &amp; Price" or "Trims" tab — list each name &amp; starting price</div>
+          <div class="adm-cs-item"><span class="adm-cs-tag">Dimensions</span>Under Specs — look for Length, Width, Height, Wheelbase</div>
+          <div class="adm-cs-item"><span class="adm-cs-tag">Images</span>Right-click any photo → "Copy image address" and paste below</div>
         </div>
-        <div id="admDebugLog" class="adl-log"></div>
       </div>
+
+      <button class="adm-fill-btn" onclick="admFillManual()">✎ Open Entry Form →</button>
 
       <!-- Confirmation / Edit form — hidden until fetch succeeds -->
       <div id="admConfirmForm" style="display:none">
@@ -1396,23 +1407,37 @@ function goHome(){
 .adm-mono{font-family:'Courier New',monospace;font-size:0.75rem}
 
 /* ── BUTTONS ── */
-.adm-fetch-row{display:flex;gap:0.6rem;align-items:stretch;margin-bottom:0.5rem}
 .adm-fetch-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;
+  background:#f5f5f8;color:#44444f;
+  border:1px solid rgba(0,0,0,0.12);border-radius:10px;padding:0.7rem 1.5rem;cursor:pointer;
+  transition:background 0.15s;width:100%;margin-bottom:0.85rem;
+  display:flex;align-items:center;justify-content:center;gap:0.4rem;
+}
+.adm-fetch-btn:hover{background:#ebebf0}
+/* Cheatsheet */
+.adm-cheatsheet{
+  background:#f9f9fc;border:1px solid rgba(0,0,0,0.07);border-radius:10px;
+  padding:0.9rem 1rem;margin-bottom:0.85rem;
+}
+.adm-cs-title{font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  color:#9898aa;margin-bottom:0.6rem;}
+.adm-cs-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;}
+@media(max-width:500px){.adm-cs-grid{grid-template-columns:1fr}}
+.adm-cs-item{font-size:0.75rem;color:#44444f;line-height:1.4;display:flex;gap:0.4rem;align-items:flex-start}
+.adm-cs-tag{
+  font-size:0.65rem;font-weight:700;letter-spacing:0.05em;
+  background:#111118;color:#fff;border-radius:4px;padding:1px 5px;
+  flex-shrink:0;margin-top:1px;
+}
+.adm-fill-btn{
   font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;
   background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;
   border:none;border-radius:10px;padding:0.75rem 1.5rem;cursor:pointer;
-  transition:opacity 0.15s,transform 0.1s;flex:1;
+  transition:opacity 0.15s,transform 0.1s;width:100%;margin-bottom:0.5rem;
 }
-.adm-fetch-btn:hover{opacity:0.88}
-.adm-fetch-btn:active{transform:scale(0.99)}
-.adm-fetch-btn:disabled{opacity:0.5;cursor:not-allowed}
-.adm-manual-btn{
-  font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;
-  background:#f5f5f8;color:#44444f;border:1px solid rgba(0,0,0,0.12);
-  border-radius:10px;padding:0.75rem 1rem;cursor:pointer;white-space:nowrap;
-  transition:background 0.15s,border-color 0.15s;flex-shrink:0;
-}
-.adm-manual-btn:hover{background:#ebebf0;border-color:rgba(0,0,0,0.2)}
+.adm-fill-btn:hover{opacity:0.88}
+.adm-fill-btn:active{transform:scale(0.99)}
 
 .adm-btn-primary{
   font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;
@@ -1447,52 +1472,6 @@ function goHome(){
   border:1px solid rgba(0,0,0,0.1);background:#f5f5f8;
 }
 .adm-img-preview img.broken{opacity:0.3;filter:grayscale(1)}
-
-/* ── DEBUG LOG ── */
-#admDebugPanel{
-  margin-top:0.75rem;border-radius:10px;overflow:hidden;
-  border:1px solid rgba(0,0,0,0.1);
-}
-.adl-header{
-  display:flex;align-items:center;justify-content:space-between;
-  background:#1a1a2e;padding:0.5rem 0.75rem;
-}
-.adl-title{font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.7);letter-spacing:0.06em}
-.adl-actions{display:flex;gap:0.4rem}
-.adl-copy-btn,.adl-clear-btn{
-  font-family:'DM Sans',sans-serif;font-size:0.68rem;
-  background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);
-  border:1px solid rgba(255,255,255,0.15);border-radius:4px;
-  padding:0.2rem 0.5rem;cursor:pointer;transition:background 0.12s;
-}
-.adl-copy-btn:hover,.adl-clear-btn:hover{background:rgba(255,255,255,0.2);color:#fff}
-.adl-log{
-  background:#0d1117;max-height:260px;overflow-y:auto;
-  font-family:'Courier New',monospace;font-size:0.72rem;
-  padding:0.5rem;display:flex;flex-direction:column;gap:2px;
-}
-.adl-row{display:flex;flex-direction:column;gap:1px;padding:3px 4px;border-radius:4px}
-.adl-row:hover{background:rgba(255,255,255,0.03)}
-.adl-info{color:#8b949e}
-.adl-ok{color:#3fb950}
-.adl-warn{color:#d29922}
-.adl-error{color:#f85149;background:rgba(248,81,73,0.07)}
-.adl-row .adl-ts{color:rgba(255,255,255,0.25);margin-right:0.4rem;flex-shrink:0}
-.adl-badge{
-  display:inline-block;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;
-  padding:1px 4px;border-radius:3px;margin-right:0.4rem;vertical-align:middle;flex-shrink:0;
-}
-.adl-badge-info{background:rgba(88,166,255,0.15);color:#58a6ff}
-.adl-badge-ok{background:rgba(63,185,80,0.15);color:#3fb950}
-.adl-badge-warn{background:rgba(210,153,34,0.15);color:#d29922}
-.adl-badge-error{background:rgba(248,81,73,0.2);color:#f85149}
-.adl-msg{color:inherit;line-height:1.4}
-.adl-detail{
-  margin:3px 0 2px 2.5rem;padding:4px 6px;
-  background:rgba(255,255,255,0.04);border-left:2px solid rgba(255,255,255,0.1);
-  border-radius:0 4px 4px 0;font-size:0.68rem;color:#8b949e;
-  white-space:pre-wrap;word-break:break-all;max-height:120px;overflow-y:auto;
-}
 
 /* ── EDIT LIST ── */
 .adm-search-wrap{margin-bottom:0.75rem}
@@ -1574,246 +1553,20 @@ function switchAdmTab(tab, el){
 }
 
 // ── FETCH & EXTRACT ──
-// ── DEBUG LOG ──────────────────────────────────────────────────────────────
-const admLog = [];
-function admLogLine(type, msg, detail=''){
-  const ts = new Date().toISOString().substring(11,23);
-  admLog.push({ts, type, msg, detail});
-  renderAdmLog();
-}
-function renderAdmLog(){
-  const el = document.getElementById('admDebugLog');
-  if(!el) return;
-  el.innerHTML = admLog.map(l=>`
-    <div class="adl-row adl-${l.type}">
-      <span class="adl-ts">${l.ts}</span>
-      <span class="adl-badge adl-badge-${l.type}">${l.type.toUpperCase()}</span>
-      <span class="adl-msg">${escHtml(l.msg)}</span>
-      ${l.detail ? `<pre class="adl-detail">${escHtml(l.detail)}</pre>` : ''}
-    </div>
-  `).join('');
-  el.scrollTop = el.scrollHeight;
-}
-function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function clearAdmLog(){ admLog.length=0; renderAdmLog(); }
-
-// ── FETCH & EXTRACT ──────────────────────────────────────────────────────────
-async function admFetchData(){
-  const mfrUrl = document.getElementById('admMfrUrl').value.trim();
+// ── OPEN URL HELPER ─────────────────────────────────────────────────────────
+function admOpenUrl(){
+  const url = document.getElementById('admMfrUrl').value.trim();
   const photoUrl = document.getElementById('admPhotoUrl').value.trim();
-
-  if(!mfrUrl){ showAdmError('Please enter a manufacturer URL.'); return; }
-
-  const btn = document.getElementById('admFetchBtn');
-  document.getElementById('admFetchBtnTxt').style.display='none';
-  document.getElementById('admFetchSpinner').style.display='inline';
-  btn.disabled=true;
-  document.getElementById('admFetchError').style.display='none';
-  document.getElementById('admConfirmForm').style.display='none';
-
-  // Show and clear the debug panel
-  clearAdmLog();
-  document.getElementById('admDebugPanel').style.display='block';
-  admLogLine('info', 'Starting fetch & extract');
-  admLogLine('info', 'Manufacturer URL: ' + mfrUrl);
-  if(photoUrl) admLogLine('info', 'Photo URL: ' + photoUrl);
-
-  try {
-    admLogLine('info', 'Building API request (model: claude-sonnet-4-20250514, web_search enabled)');
-
-    const systemPrompt = `You are a car data extraction assistant. You will receive one or two URLs for a car. Your task:
-1. Use web_search to search for the car's specs, pricing, trims, and images. Search for the car model name plus "specs", "price", "trims", and "pictures".
-2. Also try to directly fetch the provided manufacturer URL using web_search.
-3. Extract all data and return ONLY a raw JSON object — no markdown fences, no prose, nothing else.
-
-Required JSON schema:
-{
-  "brand": "Mazda",
-  "model": "MX-5 Miata RF",
-  "year": 2025,
-  "body": "Coupe",
-  "segment": "Compact",
-  "msrp": 37850,
-  "dims": { "length": "154.1\"", "width": "68.1\"", "height": "48.8\"", "wheelbase": "90.9\"" },
-  "ext": ["https://...full-url..."],
-  "int": ["https://...full-url..."],
-  "trims": [
-    { "name": "Grand Touring", "price": 37850, "features": ["2.0L Skyactiv-G (181 hp)", "6-speed manual", "Bose 9-speaker audio"] }
-  ]
-}
-
-Field rules:
-- body: one of SUV, Sedan, Hatchback, Truck, Coupe, Minivan, Wagon
-- segment: one of Subcompact, Compact, Mid-Size, Full-Size
-- msrp: plain integer, no $ or commas
-- dims: include inch symbol in each value string
-- ext/int: full https:// image URLs only. Prefer clean studio/OEM photos from media.ed.edmunds-media.com or similar CDNs. Empty array [] if none found.
-- trims: array of {name, price (int), features (string array, max 8 items)}
-- CRITICAL: Output ONLY the raw JSON object. No backticks, no markdown, no explanation whatsoever.`;
-
-    const userMsg = `Manufacturer URL: ${mfrUrl}${photoUrl ? '\nPhoto/review URL: ' + photoUrl : ''}
-
-Search for specs, pricing, dimensions, trim levels, and images for this car. Return only the JSON object.`;
-
-    const requestBody = {
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 2000,
-      tools: [{type:'web_search_20250305', name:'web_search'}],
-      system: systemPrompt,
-      messages: [{role:'user', content:userMsg}]
-    };
-
-    admLogLine('info', 'Sending request to Anthropic API…');
-    let response, data;
-
-    // Detect environment: claude.ai artifact vs local file
-    const isClaudeAI = location.hostname.includes('claude.ai') || location.hostname.includes('anthropic.com');
-    const apiUrl = 'https://api.anthropic.com/v1/messages';
-    admLogLine('info', `Environment: ${isClaudeAI ? 'claude.ai (proxied)' : 'local file'} — ${location.hostname || 'filesystem'}`);
-
-    if(!isClaudeAI){
-      admLogLine('error', 'CORS restriction: direct API calls only work when this file is open inside claude.ai');
-      admLogLine('info', 'To use this feature, open the file in claude.ai, or use the manual entry form below');
-      throw new Error('This feature requires the page to be open inside claude.ai. The browser blocks direct Anthropic API calls from local files due to CORS. Use the manual entry fields below to add the car data yourself.');
-    }
-
-    try {
-      response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        credentials: 'include',
-        body: JSON.stringify(requestBody)
-      });
-      admLogLine('info', `HTTP response status: ${response.status} ${response.statusText}`);
-    } catch(networkErr){
-      admLogLine('error', 'Network request failed — cannot reach Anthropic API', networkErr.message);
-      const isCors = networkErr.message.includes('fetch') || networkErr.message === 'Failed to fetch';
-      if(isCors){
-        throw new Error('CORS error: The browser blocked the API call. This page must be opened inside claude.ai for auto-fetch to work. Use the manual entry form instead.');
-      }
-      throw new Error('Network error: ' + networkErr.message);
-    }
-
-    try {
-      data = await response.json();
-    } catch(jsonErr){
-      admLogLine('error', 'Failed to parse API response as JSON', jsonErr.message);
-      throw new Error('API returned non-JSON response (status ' + response.status + ')');
-    }
-
-    admLogLine('info', 'API response received', JSON.stringify({
-      id: data.id,
-      model: data.model,
-      stop_reason: data.stop_reason,
-      usage: data.usage,
-      content_blocks: data.content?.length,
-      error: data.error
-    }, null, 2));
-
-    // Check for API-level error
-    if(data.error){
-      admLogLine('error', 'API returned error: ' + data.error.type, data.error.message);
-      throw new Error(`API error (${data.error.type}): ${data.error.message}`);
-    }
-
-    // Check HTTP status
-    if(!response.ok){
-      admLogLine('error', `HTTP ${response.status} error`, JSON.stringify(data, null, 2));
-      throw new Error(`HTTP ${response.status}: ${JSON.stringify(data)}`);
-    }
-
-    // Log each content block
-    if(!data.content || data.content.length === 0){
-      admLogLine('error', 'API response has no content blocks');
-      throw new Error('Empty response from API — no content returned.');
-    }
-
-    admLogLine('info', `Response has ${data.content.length} content block(s):`);
-    let rawText = '';
-    for(const [i, block] of data.content.entries()){
-      if(block.type === 'text'){
-        admLogLine('ok', `Block ${i}: text (${block.text.length} chars)`, block.text.substring(0, 500) + (block.text.length > 500 ? '…' : ''));
-        rawText += block.text;
-      } else if(block.type === 'tool_use'){
-        admLogLine('info', `Block ${i}: tool_use — ${block.name}`, JSON.stringify(block.input).substring(0, 200));
-      } else if(block.type === 'tool_result'){
-        admLogLine('info', `Block ${i}: tool_result`, JSON.stringify(block).substring(0, 200));
-      } else {
-        admLogLine('info', `Block ${i}: ${block.type}`, JSON.stringify(block).substring(0, 200));
-      }
-    }
-
-    if(!rawText.trim()){
-      admLogLine('error', 'No text blocks found in response — AI may have only called tools without returning final text');
-      admLogLine('info', 'Full response dump', JSON.stringify(data.content, null, 2).substring(0, 1000));
-      throw new Error('AI returned no text output. It may have only performed web searches without summarising results. Try again or add a photo URL to help.');
-    }
-
-    admLogLine('info', 'Raw text from AI (' + rawText.length + ' chars):', rawText.substring(0, 600));
-
-    // Strip markdown fences
-    const cleaned = rawText.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
-    if(cleaned !== rawText.trim()){
-      admLogLine('info', 'Stripped markdown fences from response');
-    }
-
-    // Find first { ... } JSON object in case there's surrounding text
-    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
-    if(!jsonMatch){
-      admLogLine('error', 'No JSON object found in AI response', cleaned.substring(0, 400));
-      throw new Error('AI response did not contain a JSON object. See debug log for the raw output.');
-    }
-    const jsonStr = jsonMatch[0];
-    if(jsonStr.length < cleaned.length){
-      admLogLine('info', 'Extracted JSON object from surrounding text (' + (cleaned.length - jsonStr.length) + ' chars trimmed)');
-    }
-
-    let car;
-    try {
-      car = JSON.parse(jsonStr);
-      admLogLine('ok', 'JSON parsed successfully', JSON.stringify(car, null, 2).substring(0, 800));
-    } catch(parseErr){
-      admLogLine('error', 'JSON.parse failed: ' + parseErr.message, jsonStr.substring(0, 500));
-      throw new Error('JSON parse error: ' + parseErr.message + '. See debug log for the raw string.');
-    }
-
-    // Validate required fields
-    const missing = ['brand','model','year','msrp'].filter(k=>!car[k]);
-    if(missing.length){
-      admLogLine('warn', 'Missing required fields: ' + missing.join(', ') + ' — filling with defaults');
-    }
-
-    // Normalise body/segment to valid values
-    const validBodies = ['SUV','Sedan','Hatchback','Truck','Coupe','Minivan','Wagon'];
-    const validSegs = ['Subcompact','Compact','Mid-Size','Full-Size'];
-    if(!validBodies.includes(car.body)){
-      admLogLine('warn', `body="${car.body}" is not a valid option — defaulting to "Coupe"`);
-      car.body = 'Coupe';
-    }
-    if(!validSegs.includes(car.segment)){
-      admLogLine('warn', `segment="${car.segment}" is not a valid option — defaulting to "Compact"`);
-      car.segment = 'Compact';
-    }
-
-    admLogLine('ok', '✓ Extraction complete — populating form');
-    populateAddForm(car);
-
-  } catch(err){
-    admLogLine('error', 'FATAL: ' + err.message);
-    showAdmError(err.message + ' — see the Debug Log below for details.');
-  } finally {
-    document.getElementById('admFetchBtnTxt').style.display='inline';
-    document.getElementById('admFetchSpinner').style.display='none';
-    btn.disabled=false;
-  }
+  if(!url){ showAdmError('Enter a URL first.'); return; }
+  window.open(url, '_blank');
+  if(photoUrl) window.open(photoUrl, '_blank');
 }
 
 function showAdmError(msg){
   const el = document.getElementById('admFetchError');
   el.innerHTML = msg;
-  el.style.display='block';
+  el.style.display = 'block';
 }
-
 // ── POPULATE CONFIRM FORM ──
 function populateAddForm(car){
   document.getElementById('cf-brand').value = car.brand||'';
@@ -1826,8 +1579,8 @@ function populateAddForm(car){
   document.getElementById('cf-width').value = car.dims?.width||'';
   document.getElementById('cf-height').value = car.dims?.height||'';
   document.getElementById('cf-wheelbase').value = car.dims?.wheelbase||'';
-  document.getElementById('cf-ext').value = (car.ext||[]).join('\n');
-  document.getElementById('cf-int').value = (car.int||[]).join('\n');
+  document.getElementById('cf-ext').value = (car.ext||[]).filter(Boolean).join('\n');
+  document.getElementById('cf-int').value = (car.int||[]).filter(Boolean).join('\n');
   document.getElementById('cf-trims').value = JSON.stringify(car.trims||[], null, 2);
 
   renderImgPreview('cf-ext','cf-int','admImgPreview');
@@ -1906,7 +1659,6 @@ function admResetAdd(){
   document.getElementById('admConfirmForm').style.display='none';
   document.getElementById('admFetchError').style.display='none';
   document.getElementById('admPublishMsg').style.display='none';
-  document.getElementById('admDebugPanel').style.display='none';
 }
 
 function admFillManual(){
@@ -1919,7 +1671,6 @@ function admFillManual(){
     trims:[{name:'Base',price:0,features:[]}]
   });
   document.getElementById('admFetchError').style.display='none';
-  document.getElementById('admDebugPanel').style.display='none';
 }
 
 // ── EDIT LIST ──
@@ -1930,7 +1681,7 @@ function renderAdmEditList(){
   list.innerHTML = filtered.map(c=>`
     <div class="adm-edit-row" onclick="admOpenEdit('${c.id}')">
       <div class="adm-edit-row-left">
-        <img class="adm-edit-thumb" src="${img(c.ext[0])}" alt="" onerror="this.src='${FALLBACK}'">
+        <img class="adm-edit-thumb" src="${img(c.ext&&c.ext[0])}" alt="" onerror="this.src='${FALLBACK}'">
         <div>
           <div class="adm-edit-name">${c.brand} ${c.model}</div>
           <div class="adm-edit-meta">${c.year} · ${c.body} · ${c.segment} · ${fmt(c.msrp)}</div>
@@ -1958,8 +1709,8 @@ function admOpenEdit(id){
   document.getElementById('ef-width').value = c.dims?.width||'';
   document.getElementById('ef-height').value = c.dims?.height||'';
   document.getElementById('ef-wheelbase').value = c.dims?.wheelbase||'';
-  document.getElementById('ef-ext').value = (c.ext||[]).join('\n');
-  document.getElementById('ef-int').value = (c.int||[]).join('\n');
+  document.getElementById('ef-ext').value = (c.ext||[]).filter(Boolean).join('\n');
+  document.getElementById('ef-int').value = (c.int||[]).filter(Boolean).join('\n');
   document.getElementById('ef-trims').value = JSON.stringify(c.trims||[], null, 2);
 
   renderImgPreview('ef-ext','ef-int','admEditImgPreview');
@@ -2030,14 +1781,6 @@ function admCancelEdit(){
   document.getElementById('admEditForm').style.display='none';
 }
 
-function admCopyLog(){
-  const lines = admLog.map(l=>`[${l.ts}] [${l.type.toUpperCase()}] ${l.msg}${l.detail ? '\n' + l.detail : ''}`).join('\n');
-  navigator.clipboard.writeText(lines).then(()=>{
-    const btn = document.querySelector('.adl-copy-btn');
-    btn.textContent='✓ Copied';
-    setTimeout(()=>btn.textContent='⎘ Copy', 1500);
-  }).catch(()=>{ alert('Copy failed — try selecting the log text manually.'); });
-}
 </script>
 </body>
 </html>
