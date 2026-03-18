@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AutoMatch — Car Comparison</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -346,7 +344,7 @@ select option{background:var(--surface);color:var(--ink)}
 }
 </style>
 </head>
-<body>
+<body style="overflow: hidden;">
 <header>
   <div>
     <div class="logo" onclick="goHome()" style="cursor:pointer" title="Back to home">Auto<span>Match</span></div>
@@ -384,16 +382,512 @@ select option{background:var(--surface);color:var(--ink)}
   <div class="divider"></div>
   <div class="sort-wrap">
     <span class="ctrl-lbl">Sort</span>
-    <button class="sort-btn" id="sb-price-asc"  onclick="setSort('price','asc')">Price ↑</button>
+    <button class="sort-btn" id="sb-price-asc" onclick="setSort('price','asc')">Price ↑</button>
     <button class="sort-btn" id="sb-price-desc" onclick="setSort('price','desc')">Price ↓</button>
-    <button class="sort-btn" id="sb-size-asc"   onclick="setSort('size','asc')">Size ↑</button>
-    <button class="sort-btn" id="sb-size-desc"  onclick="setSort('size','desc')">Size ↓</button>
-    <button class="sort-btn" id="sb-model-asc"  onclick="setSort('model','asc')">A–Z Model</button>
-    <button class="sort-btn" id="sb-brand-asc"  onclick="setSort('brand','asc')">A–Z Make</button>
+    <button class="sort-btn" id="sb-size-asc" onclick="setSort('size','asc')">Size ↑</button>
+    <button class="sort-btn" id="sb-size-desc" onclick="setSort('size','desc')">Size ↓</button>
+    <button class="sort-btn" id="sb-model-asc" onclick="setSort('model','asc')">A–Z Model</button>
+    <button class="sort-btn" id="sb-brand-asc" onclick="setSort('brand','asc')">A–Z Make</button>
   </div>
-  <div class="res-cnt"><b id="cnt">0</b> vehicles</div>
+  <div class="res-cnt"><b id="cnt">31</b> vehicles</div>
 </div>
-<div id="mainView"><div class="main"><div class="car-grid" id="grid"></div></div></div>
+<div id="mainView"><div class="main"><div class="car-grid" id="grid"><div class="car-card" onclick="openCar('n-versa')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg" alt="Nissan Versa" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Nissan</span>
+        <div class="price-badge">From <span>$17,390</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'n-versa')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Versa</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Subcompact</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('n-sentra')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_1_500.jpg" alt="Nissan Sentra" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Nissan</span>
+        <div class="price-badge">From <span>$22,730</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'n-sentra')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Sentra</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">3 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('n-altima')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_fq_oem_1_500.jpg" alt="Nissan Altima" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Nissan</span>
+        <div class="price-badge">From <span>$27,000</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'n-altima')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Altima</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('n-kicks')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://www.nissanusa.com/content/dam/Nissan/us/vehicles/kicks/2026/gallery/exterior/lightbox/2026-nissan-kicks-two-tone-color.jpg" alt="Nissan Kicks" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Nissan</span>
+        <div class="price-badge">From <span>$21,830</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'n-kicks')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Kicks</div>
+        <div class="card-sub">2026 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Subcompact</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">3 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('n-rogue')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_1_500.jpg" alt="Nissan Rogue" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Nissan</span>
+        <div class="price-badge">From <span>$29,990</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'n-rogue')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Rogue</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('n-pathfinder')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_1_500.jpg" alt="Nissan Pathfinder" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Nissan</span>
+        <div class="price-badge">From <span>$38,690</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'n-pathfinder')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Pathfinder</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('k-k4')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_fq_oem_1_500.jpg" alt="Kia K4" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Kia</span>
+        <div class="price-badge">From <span>$21,990</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'k-k4')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">K4</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('k-k5')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_1_500.jpg" alt="Kia K5" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Kia</span>
+        <div class="price-badge">From <span>$25,590</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'k-k5')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">K5</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('k-seltos')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_1_500.jpg" alt="Kia Seltos" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Kia</span>
+        <div class="price-badge">From <span>$26,185</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'k-seltos')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Seltos</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Subcompact</span>
+          <span class="body-pill">Crossover</span>
+          <span class="ctag">3 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('k-sportage')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/kia/sportage/2024/oem/2024_kia_sportage_4dr-suv_x-pro_fq_oem_1_500.jpg" alt="Kia Sportage" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Kia</span>
+        <div class="price-badge">From <span>$27,590</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'k-sportage')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Sportage</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('k-telluride')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_1_500.jpg" alt="Kia Telluride" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Kia</span>
+        <div class="price-badge">From <span>$36,390</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'k-telluride')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Telluride</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('h-civic')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg" alt="Honda Civic" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Honda</span>
+        <div class="price-badge">From <span>$24,250</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'h-civic')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Civic</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('h-accord')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_fq_oem_1_500.jpg" alt="Honda Accord" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Honda</span>
+        <div class="price-badge">From <span>$28,745</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'h-accord')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Accord</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('h-crv')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_1_500.jpg" alt="Honda CR-V" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Honda</span>
+        <div class="price-badge">From <span>$30,920</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'h-crv')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">CR-V</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('h-passport')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_fq_oem_1_500.jpg" alt="Honda Passport" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Honda</span>
+        <div class="price-badge">From <span>$42,400</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'h-passport')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Passport</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">3 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('h-pilot')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_fq_oem_1_500.jpg" alt="Honda Pilot" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Honda</span>
+        <div class="price-badge">From <span>$40,275</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'h-pilot')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Pilot</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('h-ridgeline')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_fq_oem_1_500.jpg" alt="Honda Ridgeline" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Honda</span>
+        <div class="price-badge">From <span>$40,150</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'h-ridgeline')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Ridgeline</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">Truck</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('h-prelude')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg" alt="Honda Prelude Hybrid" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Honda</span>
+        <div class="price-badge">From <span>$35,000</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'h-prelude')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Prelude Hybrid</div>
+        <div class="card-sub">2026 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">Sports Car</span>
+          <span class="ctag">1 trim</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-corolla')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_1_500.jpg" alt="Toyota Corolla" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$22,325</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-corolla')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Corolla</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">6 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-corollacross')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_1_500.jpg" alt="Toyota Corolla Cross" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$24,470</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-corollacross')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Corolla Cross</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Subcompact</span>
+          <span class="body-pill">Crossover</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-chr')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg" alt="Toyota C-HR" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$29,825</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-chr')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">C-HR</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Subcompact</span>
+          <span class="body-pill">Crossover</span>
+          <span class="ctag">3 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-camry')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_1_500.jpg" alt="Toyota Camry" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$28,950</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-camry')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Camry</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">Sedan</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-rav4')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_1_500.jpg" alt="Toyota RAV4 Hybrid" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$32,125</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-rav4')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">RAV4 Hybrid</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-rav4prime')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg" alt="Toyota RAV4 Plug-in Hybrid" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$42,950</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-rav4prime')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">RAV4 Plug-in Hybrid</div>
+        <div class="card-sub">2026 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Compact</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-bz4x')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_1_500.jpg" alt="Toyota bZ4X" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$43,490</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-bz4x')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">bZ4X</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">3 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-highlander')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_1_500.jpg" alt="Toyota Highlander" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$40,860</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-highlander')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Highlander</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-grandhighlander')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_1_500.jpg" alt="Toyota Grand Highlander" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$42,310</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-grandhighlander')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Grand Highlander</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">4 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-crownsignia')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_1_500.jpg" alt="Toyota Crown Signia" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$40,230</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-crownsignia')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Crown Signia</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">Crossover</span>
+          <span class="ctag">2 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-4runner')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_1_500.jpg" alt="Toyota 4Runner" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$41,270</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-4runner')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">4Runner</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Mid-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-sequoia')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_1_500.jpg" alt="Toyota Sequoia" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$62,295</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-sequoia')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Sequoia</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Full-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">5 trims</span>
+        </div>
+      </div>
+    </div><div class="car-card" onclick="openCar('t-landcruiser')">
+      <div class="img-wrap">
+        <img class="card-img" src="https://media.ed.edmunds-media.com/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_1_500.jpg" alt="Toyota Land Cruiser" onerror="this.onerror=null;this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <span class="brand-bdg">Toyota</span>
+        <div class="price-badge">From <span>$56,450</span></div>
+        <div class="cmp-chk " onclick="toggleCmp(event,'t-landcruiser')" title="Add to compare">+</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">Land Cruiser</div>
+        <div class="card-sub">2025 Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">Full-Size</span>
+          <span class="body-pill">SUV</span>
+          <span class="ctag">3 trims</span>
+        </div>
+      </div>
+    </div></div></div></div>
 <div class="cmp-view" id="cmpView">
   <button class="back-btn" onclick="closeCmpView()">← All vehicles</button>
   <div class="cmp-hd">Side-by-side comparison</div>
@@ -430,7 +924,7 @@ select option{background:var(--surface);color:var(--ink)}
 <div class="cmp-panel" id="cmpPanel">
   <span class="cmp-plbl">Compare</span>
   <div class="cmp-slots" id="cmpSlots"></div>
-  <button class="cmp-go" id="cmpGo" onclick="openCmpView()" disabled>Compare Now →</button>
+  <button class="cmp-go" id="cmpGo" onclick="openCmpView()" disabled="">Compare Now →</button>
 </div>
 
 <!-- LIGHTBOX -->
@@ -439,8 +933,8 @@ select option{background:var(--surface);color:var(--ink)}
     <img class="lb-img" id="lbImg" src="" alt="">
   </div>
   <button class="lb-close" onclick="closeLb()">✕</button>
-  <button class="lb-prev" onclick="lbNav(-1)">&#8249;</button>
-  <button class="lb-next" onclick="lbNav(1)">&#8250;</button>
+  <button class="lb-prev" onclick="lbNav(-1)">‹</button>
+  <button class="lb-next" onclick="lbNav(1)">›</button>
   <div class="lb-caption" id="lbCaption"></div>
   <div class="lb-counter" id="lbCounter"></div>
 </div>
@@ -451,329 +945,2197 @@ const CDN = 'https://media.ed.edmunds-media.com';
 
 // Each car has: ext[] = exterior OEM image paths, int[] = interior image paths
 // All paths are relative to CDN base
-const CARS = [
- // ─── NISSAN ────────────────────────────────────────────────────────────────
- {id:'n-versa',brand:'Nissan',model:'Versa',year:2025,body:'Sedan',segment:'Subcompact',msrp:17390,
-  ext:['/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg','/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_2_500.jpg'],
-  int:['/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_i_oem_1_500.jpg','/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_d_oem_1_500.jpg'],
-  dims:{length:'175.0"',width:'67.3"',height:'57.7"',wheelbase:'103.1"'},
-  trims:[
-    {name:'S',price:17390,features:['1.6L 4-cyl (122 hp)','5-speed manual','15" steel wheels','7" touchscreen','Bluetooth','Forward Collision Warning','35 MPG combined']},
-    {name:'S CVT',price:19190,features:['CVT automatic','Automatic Emergency Braking','Rear Cross Traffic Alert','Apple CarPlay / Android Auto']},
-    {name:'SV',price:20690,features:['16" aluminum-alloy wheels','Heated front seats','ProPilot Assist','Blind Spot Warning','8" display']},
-    {name:'SR',price:21390,features:['17" machine-finished wheels','Auto temp control','Sport cloth seats','NissanConnect Services','8-speaker audio']},
-  ]},
- {id:'n-sentra',brand:'Nissan',model:'Sentra',year:2025,body:'Sedan',segment:'Compact',msrp:22730,
-  ext:['/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_1_500.jpg','/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_2_500.jpg'],
-  int:['/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_i_oem_1_500.jpg','/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_d_oem_1_500.jpg'],
-  dims:{length:'182.7"',width:'70.8"',height:'57.3"',wheelbase:'105.1"'},
-  trims:[
-    {name:'S',price:22730,features:['2.0L 4-cyl (149 hp)','CVT','8" touchscreen','Safety Shield 360','Apple CarPlay / Android Auto']},
-    {name:'SV',price:23480,features:['17" aluminum wheels','Heated front seats','Leather-wrapped wheel','ProPilot Assist']},
-    {name:'SR',price:25730,features:['Sport exterior','Sport-tuned suspension','LED headlights','NissanConnect navigation']},
-  ]},
- {id:'n-altima',brand:'Nissan',model:'Altima',year:2025,body:'Sedan',segment:'Mid-Size',msrp:27000,
-  ext:['/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_fq_oem_1_500.jpg','/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sv_fq_oem_1_500.jpg'],
-  int:['/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_i_oem_1_500.jpg','/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_d_oem_1_500.jpg'],
-  dims:{length:'192.5"',width:'73.0"',height:'57.9"',wheelbase:'111.2"'},
-  trims:[
-    {name:'S',price:27000,features:['2.5L 4-cyl (188 hp)','CVT w/ Sport mode','8" touchscreen','Safety Shield 360','39 MPG highway']},
-    {name:'SV',price:29330,features:['Wireless CarPlay / Android Auto','12.3" display available','ProPilot Assist','Heated seats']},
-    {name:'SL',price:32230,features:['Leather seating','Bose 9-speaker audio','Heated & ventilated seats','Head-up display']},
-    {name:'SR',price:30830,features:['Sport-tuned suspension','Paddle shifters','19" sport wheels','Sport mode']},
-    {name:'Platinum',price:35330,features:['Semi-aniline leather','Quilted seating','Adaptive LED headlights','Panoramic moonroof']},
-  ]},
- {id:'n-kicks',brand:'Nissan',model:'Kicks',year:2025,body:'Crossover',segment:'Subcompact',msrp:21830,
-  ext:['/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_fq_oem_1_500.jpg','/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_fq_oem_2_500.jpg'],
-  int:['/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_i_oem_1_500.jpg','/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_d_oem_1_500.jpg'],
-  dims:{length:'171.9"',width:'70.9"',height:'61.5"',wheelbase:'103.1"'},
-  trims:[
-    {name:'S',price:21830,features:['2.0L 4-cyl (141 hp)','7" touchscreen','Safety Shield 360','FWD or AWD','28/35 MPG']},
-    {name:'SV',price:23680,features:['17" alloy wheels','12.3" NissanConnect','Heated front seats','LED headlights']},
-    {name:'SR',price:26180,features:['ProPilot Assist','Bose 10-speaker audio','Traffic Sign Recognition','Wireless CarPlay / Android Auto']},
-  ]},
- {id:'n-rogue',brand:'Nissan',model:'Rogue',year:2025,body:'SUV',segment:'Compact',msrp:29990,
-  ext:['/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_1_500.jpg','/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_2_500.jpg'],
-  int:['/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_i_oem_1_500.jpg','/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_d_oem_1_500.jpg'],
-  dims:{length:'182.5"',width:'72.4"',height:'67.4"',wheelbase:'106.5"'},
-  trims:[
-    {name:'S',price:29990,features:['1.5L VC-Turbo (201 hp)','FWD standard','Safety Shield 360','8" touchscreen','30 MPG combined']},
-    {name:'SV',price:32900,features:['AWD available','Panoramic moonroof','Heated seats','12.3" NissanConnect']},
-    {name:'SL',price:38200,features:['Leather seating','Bose audio','Heated rear seats','ProPilot Assist','Around View Monitor']},
-    {name:'Platinum',price:41100,features:['10.8" Head-Up Display','Quilted leather','Digital rearview mirror']},
-  ]},
- {id:'n-pathfinder',brand:'Nissan',model:'Pathfinder',year:2025,body:'SUV',segment:'Mid-Size',msrp:38690,
-  ext:['/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_1_500.jpg','/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_2_500.jpg'],
-  int:['/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_i_oem_1_500.jpg','/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_d_oem_1_500.jpg'],
-  dims:{length:'196.8"',width:'78.0"',height:'70.6"',wheelbase:'114.2"'},
-  trims:[
-    {name:'S',price:38690,features:['3.5L V6 (284 hp)','9-speed auto','8-passenger','8" touchscreen','Safety Shield 360']},
-    {name:'SV',price:41390,features:['Leather seats','Heated wheel','Power driver seat','ProPilot Assist','Tri-zone climate']},
-    {name:'SL',price:46900,features:['6,000-lb tow (w/pkg)','Panoramic moonroof','Bose 13-speaker audio','Hands-free liftgate']},
-    {name:'Rock Creek',price:45800,features:['Off-road suspension','All-terrain tires','Rock Creek cladding','Hill Descent Control']},
-    {name:'Platinum',price:50640,features:['Semi-aniline leather','12.3" gauge cluster','Head-up display','Heated 2nd-row captain chairs']},
-  ]},
- // ─── KIA ───────────────────────────────────────────────────────────────────
- {id:'k-k4',brand:'Kia',model:'K4',year:2025,body:'Sedan',segment:'Compact',msrp:21990,
-  ext:['/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_fq_oem_1_500.jpg','/kia/k4/2025/oem/2025_kia_k4_sedan_ex_fq_oem_1_500.jpg'],
-  int:['/kia/k4/2025/oem/2025_kia_k4_sedan_ex_detail_oem_1_500.jpg','/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_detail_oem_1_500.jpg'],
-  dims:{length:'183.1"',width:'71.6"',height:'55.9"',wheelbase:'107.9"'},
-  trims:[
-    {name:'LX',price:21990,features:['2.0L 4-cyl (147 hp)','12.3" dual display','Lane Keeping Assist','Forward Collision Avoidance','10-yr/100k warranty']},
-    {name:'LXS',price:22990,features:['Blind Spot Collision Warning','Rear USB-C ports','Enhanced safety package']},
-    {name:'EX',price:23990,features:['Digital instrument cluster','Dual-zone auto climate','Wireless charging pad','Leather-trimmed steering wheel']},
-    {name:'GT-Line',price:25190,features:['Sport-tuned suspension','Red interior accents','Sport exhaust','LED headlights & taillights']},
-    {name:'GT-Line Turbo',price:28090,features:['1.6L Turbo (190 hp)','8-speed DCT','Bose audio','Ventilated seats','HUD','Sport Plus mode']},
-  ]},
- {id:'k-k5',brand:'Kia',model:'K5',year:2025,body:'Sedan',segment:'Mid-Size',msrp:25590,
-  ext:['/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_1_500.jpg','/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_2_500.jpg'],
-  int:['/kia/k5/2025/oem/2025_kia_k5_sedan_gt_i_oem_1_500.jpg','/kia/k5/2025/oem/2025_kia_k5_sedan_gt_d_oem_1_500.jpg'],
-  dims:{length:'191.1"',width:'73.2"',height:'56.9"',wheelbase:'111.8"'},
-  trims:[
-    {name:'LX',price:25590,features:['2.5L 4-cyl (191 hp)','8-speed auto','12.3" touchscreen','Wireless CarPlay / Android Auto','Smart parking assist']},
-    {name:'EX',price:27490,features:['Heated front seats','Power sunroof','Wireless charging','Blind-Spot Avoidance']},
-    {name:'GT-Line AWD',price:30390,features:['Torque-vectoring AWD','Sport-tuned suspension','18" wheels','Paddle shifters']},
-    {name:'GT',price:35590,features:['2.5L Turbo (290 hp)','0-60 beats BMW 530i','Launch Control','19" staggered wheels','Bose audio']},
-  ]},
- {id:'k-seltos',brand:'Kia',model:'Seltos',year:2025,body:'Crossover',segment:'Subcompact',msrp:26185,
-  ext:['/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_1_500.jpg','/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_2_500.jpg'],
-  int:['/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_i_oem_1_500.jpg','/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_d_oem_1_500.jpg'],
-  dims:{length:'172.0"',width:'71.0"',height:'64.2"',wheelbase:'102.4"'},
-  trims:[
-    {name:'LX',price:26185,features:['2.0L 4-cyl (146 hp)','10.25" dual screen','Rear cross-traffic alert','Lane Keeping Assist']},
-    {name:'EX',price:28185,features:['AWD available','Sunroof','Wireless CarPlay / Android Auto','Heated front seats','Highway Drive Assist']},
-    {name:'SX',price:32280,features:['1.6L Turbo (195 hp)','DCT','Bose 7-speaker','Ventilated seats','Roof rails','HUD']},
-  ]},
- {id:'k-sportage',brand:'Kia',model:'Sportage',year:2025,body:'SUV',segment:'Compact',msrp:27590,
-  ext:['/kia/sportage/2024/oem/2024_kia_sportage_4dr-suv_x-pro_fq_oem_1_500.jpg','/kia/sportage/2025/izmo/2025_kia_sportage_4dr-suv_ex_pr_izmo_1_500.jpg'],
-  int:['/kia/sportage/2025/oem/2025_kia_sportage_4dr-suv_ex_i_oem_1_500.jpg','/kia/sportage/2025/oem/2025_kia_sportage_4dr-suv_ex_d_oem_1_500.jpg'],
-  dims:{length:'182.3"',width:'73.6"',height:'65.0"',wheelbase:'108.9"'},
-  trims:[
-    {name:'LX',price:27590,features:['2.5L 4-cyl (187 hp)','12.3" panoramic display','IIHS Top Safety Pick+','Class-leading cargo room']},
-    {name:'EX',price:29590,features:['AWD available','Heated steering wheel','Surround View Monitor','Highway Drive Assist II','Wireless charging']},
-    {name:'X-Pro',price:33990,features:['Off-road suspension','Hill Descent Control','Multi-terrain modes','All-terrain tires','Skid plates']},
-    {name:'SX Prestige',price:39785,features:['Panoramic moonroof','Bose 8-speaker','Ventilated seats','Nappa leather','HUD','LED ambient lighting']},
-  ]},
- {id:'k-telluride',brand:'Kia',model:'Telluride',year:2025,body:'SUV',segment:'Mid-Size',msrp:36390,
-  ext:['/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_1_500.jpg','/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_2_500.jpg'],
-  int:['/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_i_oem_1_500.jpg','/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_d_oem_1_500.jpg'],
-  dims:{length:'196.9"',width:'78.3"',height:'68.9"',wheelbase:'114.2"'},
-  trims:[
-    {name:'LX',price:36390,features:['3.8L V6 (291 hp)','8-speed auto','3-row / 8-passenger','10.25" touchscreen','Kia DriveWise safety suite']},
-    {name:'EX',price:40390,features:['Heated front & 2nd-row seats','Panoramic sunroof','Wireless CarPlay / Android Auto','Hands-free liftgate']},
-    {name:'X-Pro',price:44990,features:['AWD w/ torque vectoring','Locking differential','Off-road terrain modes','19" all-terrain tires','Skid plates']},
-    {name:'SX Prestige',price:52885,features:['Nappa leather','Harman Kardon 10-speaker','Heated & ventilated seats','Rear entertainment','HUD']},
-  ]},
- // ─── HONDA ─────────────────────────────────────────────────────────────────
- {id:'h-civic',brand:'Honda',model:'Civic',year:2025,body:'Sedan',segment:'Compact',msrp:24250,
-  ext:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_2_500.jpg'],
-  int:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_i_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_d_oem_1_500.jpg'],
-  dims:{length:'184.0"',width:'70.9"',height:'55.7"',wheelbase:'107.7"'},
-  trims:[
-    {name:'LX',price:24250,features:['2.0L 4-cyl (150 hp)','CVT','7" touchscreen','Apple CarPlay / Android Auto','Honda Sensing std','32/41 MPG']},
-    {name:'Sport',price:26250,features:['18" gloss-black alloy wheels','Paddle shifters','Blind Spot Info System','Heated side mirrors','Sport mode']},
-    {name:'Sport Hybrid',price:28750,features:['2.0L Hybrid (200 hp)','One-touch moonroof','Heated front seats','Dual-zone climate','50/47 MPG']},
-    {name:'Sport Touring Hybrid',price:31750,features:['9" touchscreen w/ Google built-in','Leather-trimmed seats','Bose 12-speaker','Wireless CarPlay','Wireless charging']},
-    {name:'Si',price:29900,features:['1.5L Turbo (200 hp)','6-speed manual only','Sport seats w/ bolsters','Rev-match downshift','Adaptive dampers']},
-  ]},
- {id:'h-accord',brand:'Honda',model:'Accord',year:2025,body:'Sedan',segment:'Mid-Size',msrp:28745,
-  ext:['/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_fq_oem_1_500.jpg','/honda/accord/2025/oem/2025_honda_accord_sedan_touring-hybrid_fq_oem_1_500.jpg'],
-  int:['/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_i_oem_1_500.jpg','/honda/accord/2025/oem/2025_honda_accord_sedan_touring-hybrid_i_oem_1_500.jpg'],
-  dims:{length:'195.7"',width:'73.3"',height:'57.1"',wheelbase:'111.4"'},
-  trims:[
-    {name:'LX',price:28745,features:['1.5L Turbo (192 hp)','10.2" touchscreen','Honda Sensing std','Wireless CarPlay / Android Auto','Heated front seats']},
-    {name:'Sport',price:30895,features:['18" wheels','12.3" display','Remote start','Traffic Jam Assist']},
-    {name:'EX-L',price:34045,features:['Leather-trimmed seats','Heated rear seats','Bose 12-speaker audio']},
-    {name:'Sport Hybrid',price:32545,features:['2.0L Hybrid (204 hp)','46 MPG combined','Lane centering assist']},
-    {name:'Touring Hybrid',price:37945,features:['Nappa leather','Panoramic moonroof','HUD','Wireless charging','Bose 14-speaker']},
-  ]},
- {id:'h-crv',brand:'Honda',model:'CR-V',year:2025,body:'SUV',segment:'Compact',msrp:30920,
-  ext:['/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_1_500.jpg','/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_2_500.jpg'],
-  int:['/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_i_oem_1_500.jpg','/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_d_oem_1_500.jpg'],
-  dims:{length:'184.8"',width:'73.0"',height:'66.3"',wheelbase:'107.3"'},
-  trims:[
-    {name:'LX',price:30920,features:['1.5L Turbo (190 hp)','9" touchscreen','Wireless CarPlay / Android Auto','Honda Sensing safety suite']},
-    {name:'EX',price:33150,features:['Panoramic moonroof','18" wheels','Heated front seats','Remote start','Power tailgate','Blind spot monitoring']},
-    {name:'EX-L',price:35400,features:['Leather-trimmed seats','8-speaker premium audio','Power rear liftgate','Parking sensors','Wireless charging']},
-    {name:'Sport Hybrid',price:36045,features:['2.0L Hybrid (204 hp)','40 MPG combined FWD','Honda Sensing 360','Traffic Jam Assist','EV mode']},
-    {name:'TrailSport Hybrid',price:39000,features:['Off-road suspension','All-terrain tires','AWD standard','Trail mode','Rugged exterior cladding']},
-  ]},
- {id:'h-passport',brand:'Honda',model:'Passport',year:2025,body:'SUV',segment:'Mid-Size',msrp:42400,
-  ext:['/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_fq_oem_1_500.jpg','/honda/passport/2025/oem/2025_honda_passport_4dr-suv_black-edition_fq_oem_1_500.jpg'],
-  int:['/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_i_oem_1_500.jpg','/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_d_oem_1_500.jpg'],
-  dims:{length:'189.1"',width:'78.6"',height:'72.2"',wheelbase:'110.9"'},
-  trims:[
-    {name:'EX-L',price:42400,features:['3.5L V6 (280 hp)','9-speed auto','AWD standard','Leather seats','Power moonroof','10.2" touchscreen','5,000-lb towing']},
-    {name:'TrailSport',price:45000,features:['Off-road suspension','All-terrain tires','Skid plates','Orange stitching accents','LED fog lights','Navigation']},
-    {name:'Black Edition',price:48470,features:['20" gloss-black wheels','Black leather interior','Crystal Black Pearl exclusive','Wireless charging','Hands-free liftgate']},
-  ]},
- {id:'h-pilot',brand:'Honda',model:'Pilot',year:2025,body:'SUV',segment:'Mid-Size',msrp:40275,
-  ext:['/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_fq_oem_1_500.jpg','/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_black-edition_fq_oem_1_500.jpg'],
-  int:['/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_i_oem_1_500.jpg','/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_d_oem_1_500.jpg'],
-  dims:{length:'196.5"',width:'78.6"',height:'70.6"',wheelbase:'113.8"'},
-  trims:[
-    {name:'Sport',price:40275,features:['3.5L V6 (285 hp)','10-speed auto','AWD standard','9" touchscreen','3-row / 8-pass','Honda Sensing 360']},
-    {name:'EX-L',price:44475,features:['Leather seats','Hands-free power liftgate','2nd-row captain chairs','Heated front seats','12" display']},
-    {name:'TrailSport',price:48275,features:['Off-road suspension','ATF tires','10-mode i-VTM4 AWD','Roof rails','G-forces display']},
-    {name:'Black Edition',price:50475,features:['All-black interior & exterior accents','Heated & ventilated seats','12-speaker Bose audio','HUD']},
-    {name:'Elite',price:52275,features:['Nappa leather','Rear entertainment system','Built-in 4G LTE Wi-Fi','15.2" rear screens']},
-  ]},
- {id:'h-ridgeline',brand:'Honda',model:'Ridgeline',year:2025,body:'Truck',segment:'Mid-Size',msrp:40150,
-  ext:['/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_fq_oem_1_500.jpg','/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_rq_oem_1_500.jpg'],
-  int:['/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_rtl_i_oem_1_500.jpg','/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_rtl_d_oem_1_500.jpg'],
-  dims:{length:'210.2"',width:'78.6"',height:'70.8"',wheelbase:'125.2"'},
-  trims:[
-    {name:'Sport',price:40150,features:['3.5L V6 (280 hp)','9-speed auto','AWD standard','9" touchscreen','In-Bed Trunk®','Dual-action tailgate','5,000-lb towing','Honda Sensing']},
-    {name:'Sport+',price:42050,features:['Wireless CarPlay / Android Auto','Wireless phone charger','2nd-row USB-C ports','Remote start']},
-    {name:'RTL',price:42980,features:['Leather-trimmed seats','Heated front seats','Driver seat memory','One-touch power moonroof','8-speaker audio']},
-    {name:'TrailSport',price:45380,features:['Off-road suspension','All-terrain tires','Orange TrailSport accents','Truck-bed audio system']},
-    {name:'Black Edition',price:46750,features:['All-black exterior trim','Black leather interior','12-speaker audio','In-Bed 400W power outlet']},
-  ]},
- {id:'h-prelude',brand:'Honda',model:'Prelude Hybrid',year:2026,body:'Sports Car',segment:'Compact',msrp:35000,
-  ext:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_3_500.jpg'],
-  int:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_i_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_d_oem_1_500.jpg'],
-  dims:{length:'179.9"',width:'71.3"',height:'53.9"',wheelbase:'107.5"'},
-  trims:[
-    {name:'Prelude Hybrid',price:35000,features:['2.0L Hybrid (200 hp) + dual electric motors','Type R suspension hardware','Brembo front brakes','Adaptive dampers','S+ simulated shift system','Bose stereo','Google built-in infotainment','~mid-40s MPG est.']},
-  ]},
- // ─── TOYOTA ────────────────────────────────────────────────────────────────
- {id:'t-corolla',brand:'Toyota',model:'Corolla',year:2025,body:'Sedan',segment:'Compact',msrp:22325,
-  ext:['/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_1_500.jpg','/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_2_500.jpg'],
-  int:['/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_i_oem_1_500.jpg','/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_d_oem_1_500.jpg'],
-  dims:{length:'182.5"',width:'70.1"',height:'56.5"',wheelbase:'105.1"'},
-  trims:[
-    {name:'LE',price:22325,features:['2.0L 4-cyl (169 hp)','CVT','8" Toyota Audio Multimedia','Toyota Safety Sense 3.0','LED headlights','32/41 MPG']},
-    {name:'SE',price:24345,features:['Sport exterior','Paddle shifters','Sport mesh grille','18" wheels','Heated front seats']},
-    {name:'XLE',price:25545,features:['Leather-trimmed seats','SofTex dash trim','Power driver seat','Wireless charging','Dual-zone climate']},
-    {name:'XSE',price:26375,features:['Sport-tuned suspension','19" wheels','Black-chrome exterior trim','Two-tone paint available']},
-    {name:'Hybrid LE',price:25050,features:['1.8L Hybrid (134 hp combined)','53/46 MPG','AWD available','Pre-collision w/ pedestrian detection']},
-    {name:'Hybrid XLE',price:28075,features:['Leather-trimmed seats','Wireless charging','Power driver seat','50 MPG combined']},
-  ]},
- {id:'t-corollacross',brand:'Toyota',model:'Corolla Cross',year:2025,body:'Crossover',segment:'Subcompact',msrp:24470,
-  ext:['/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_2_500.jpg'],
-  int:['/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_i_oem_1_500.jpg','/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_d_oem_1_500.jpg'],
-  dims:{length:'173.8"',width:'71.5"',height:'64.6"',wheelbase:'103.9"'},
-  trims:[
-    {name:'LE',price:24470,features:['2.0L 4-cyl (169 hp)','CVT','FWD or AWD','8" touchscreen','Toyota Safety Sense 3.0']},
-    {name:'XLE',price:27615,features:['8" multimedia display','Heated front seats','SofTex leatherette','Roof rails','Power rear door']},
-    {name:'Hybrid S',price:27650,features:['2.0L Hybrid (196 hp)','AWD standard','42 MPG combined','Sport mode']},
-    {name:'Hybrid XLE',price:30650,features:['Leather trim','Wireless charging','Heated seats','Panoramic moonroof available']},
-  ]},
- {id:'t-chr',brand:'Toyota',model:'C-HR',year:2025,body:'Crossover',segment:'Subcompact',msrp:29825,
-  ext:['/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_fq_oem_2_500.jpg'],
-  int:['/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_i_oem_1_500.jpg','/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_d_oem_1_500.jpg'],
-  dims:{length:'175.6"',width:'72.0"',height:'60.9"',wheelbase:'104.7"'},
-  trims:[
-    {name:'LE',price:29825,features:['2.0L Hybrid (196 hp combined)','Hybrid-only powertrain','AWD standard','8" touchscreen','Toyota Safety Sense 3.0','LED headlights & DRL']},
-    {name:'XLE',price:32020,features:['12.3" touchscreen','Wireless CarPlay / Android Auto','Heated front seats','Wireless charging','SofTex leatherette']},
-    {name:'Limited',price:37270,features:['Panoramic moonroof','JBL 8-speaker audio','Ventilated seats','Head-up display','Adaptive LED headlights']},
-  ]},
- {id:'t-camry',brand:'Toyota',model:'Camry',year:2025,body:'Sedan',segment:'Mid-Size',msrp:28950,
-  ext:['/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_1_500.jpg','/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_2_500.jpg'],
-  int:['/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_i_oem_1_500.jpg','/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_d_oem_1_500.jpg'],
-  dims:{length:'194.1"',width:'72.4"',height:'56.9"',wheelbase:'111.4"'},
-  trims:[
-    {name:'LE',price:28950,features:['2.5L Hybrid (225 hp combined)','eCVT','FWD or AWD','8" touchscreen','Toyota Safety Sense 3.0','51 MPG combined FWD']},
-    {name:'SE',price:30250,features:['Sport mesh grille','Sport suspension','18" wheels','Heated front seats','8-speaker audio']},
-    {name:'XLE',price:32500,features:['Leather-trimmed seats','Wireless CarPlay / Android Auto','Panoramic sunroof','Dual-zone climate']},
-    {name:'XSE',price:33700,features:['Sport-tuned suspension','19" black wheels','Black-chrome exterior trim']},
-    {name:'XSE V6',price:34800,features:['3.5L V6 (301 hp)','Paddle shifters','20" wheels','Sport interior trim']},
-  ]},
- {id:'t-rav4',brand:'Toyota',model:'RAV4 Hybrid',year:2025,body:'SUV',segment:'Compact',msrp:32125,
-  ext:['/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_2_500.jpg'],
-  int:['/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_i_oem_1_500.jpg','/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_d_oem_1_500.jpg'],
-  dims:{length:'180.9"',width:'73.0"',height:'67.1"',wheelbase:'105.9"'},
-  trims:[
-    {name:'LE Hybrid',price:32125,features:['2.5L Hybrid (219 hp combined)','AWD standard','8" touchscreen','Toyota Safety Sense 2.5+','3,500-lb towing capacity']},
-    {name:'XLE Hybrid',price:34450,features:['Heated front seats','Power tailgate','Dual-zone climate','SofTex seats']},
-    {name:'XSE Hybrid',price:36450,features:['Sport suspension','18" black wheels','Sport front fascia','Two-tone paint available']},
-    {name:'Woodland Hybrid',price:38350,features:['Adventure-ready AWD','All-terrain tires','Roof rails','200mm water wading','Black cladding']},
-    {name:'Limited Hybrid',price:40275,features:['Ventilated front seats','Heated rear seats','9" touchscreen','JBL 9-speaker audio','Panoramic roof']},
-  ]},
- {id:'t-rav4prime',brand:'Toyota',model:'RAV4 Plug-in Hybrid',year:2026,body:'SUV',segment:'Compact',msrp:42950,
-  ext:['https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/beeee6e8-3f75-4259-89c5-7fb158fc7d1a/2026+Toyota+RAV4+3_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/ec983d59-ff64-4947-bc9f-7516be144243/2026+Toyota+RAV4+7_717.jpg'],
-  int:['https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/beeee6e8-3f75-4259-89c5-7fb158fc7d1a/2026+Toyota+RAV4+3_1280.jpg'],
-  dims:{length:'182.4"',width:'73.0"',height:'67.5"',wheelbase:'105.9"'},
-  trims:[
-    {name:'SE',price:42950,features:['2.5L PHEV (324 hp combined)','AWD standard','52 miles EV range','12.3" digital gauge cluster','Toyota Safety Sense 4.0','3,500-lb towing capacity','7-kW Level 2 onboard charger','0-60 mph: 5.4 seconds']},
-    {name:'Woodland',price:46700,features:['All-terrain tires & 18" matte gray wheels','8.5" ground clearance','Rigid Industries LED fog lights','DC fast charging (CCS) — 10–80% in ~30 min','11-kW onboard charger','Roof rack with crossbars','49 miles EV range','Rugged Urban Rock exclusive color']},
-    {name:'XSE',price:48620,features:['Sporty dark chrome exterior accents','12.9" Toyota Audio Multimedia touchscreen','Heated & ventilated front seats','Hands-free power liftgate','Panoramic moonroof','DC fast charging (CCS)','11-kW onboard charger','52 miles EV range']},
-    {name:'GR Sport',price:49950,features:['GR-tuned suspension & steering (GAZOO Racing)','GR-tuned front & rear crossmember braces','Sport bumpers, rear wing & wider stance','Summer performance tires on 20" black wheels','5.4-sec 0-60 mph (quickest RAV4 ever)','Exclusive Supersonic Red w/ Black roof option','48 miles EV range','Paddle shifters']},
-  ]},
- {id:'t-bz4x',brand:'Toyota',model:'bZ4X',year:2025,body:'SUV',segment:'Mid-Size',msrp:43490,
-  ext:['/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_2_500.jpg'],
-  int:['/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_i_oem_1_500.jpg','/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_d_oem_1_500.jpg'],
-  dims:{length:'184.6"',width:'73.2"',height:'64.6"',wheelbase:'112.2"'},
-  trims:[
-    {name:'XLE FWD',price:43490,features:['201-hp electric motor (FWD)','252-mile EPA range','12.3" touchscreen','Toyota Safety Sense 3.0','DC fast charging std']},
-    {name:'XLE AWD',price:48450,features:['218-hp dual motor AWD','222-mile EPA range','Wireless charging','Heated front seats']},
-    {name:'Limited AWD',price:52700,features:['Heated & ventilated seats','Panoramic roof','JBL audio','Premium interior trim']},
-  ]},
- {id:'t-highlander',brand:'Toyota',model:'Highlander',year:2025,body:'SUV',segment:'Mid-Size',msrp:40860,
-  ext:['/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_2_500.jpg'],
-  int:['/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_i_oem_1_500.jpg','/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_d_oem_1_500.jpg'],
-  dims:{length:'194.9"',width:'76.0"',height:'68.1"',wheelbase:'112.2"'},
-  trims:[
-    {name:'LE',price:40860,features:['2.4L Turbo 4-cyl (265 hp)','8-speed auto','AWD standard','8" touchscreen','3-row / 8-passenger','Toyota Safety Sense 2.5+']},
-    {name:'XLE',price:44860,features:['Leather-trimmed seats','Hands-free power rear door','Panoramic moonroof','Wireless charging','Captain chairs']},
-    {name:'Limited',price:50760,features:['Ventilated seats','JBL 11-speaker audio','Heated 2nd-row seats','14" touchscreen','4-zone climate']},
-    {name:'Platinum',price:55320,features:['Premium leather','Heated 3rd row','Rear entertainment','HUD','Hands-free liftgate']},
-  ]},
- {id:'t-grandhighlander',brand:'Toyota',model:'Grand Highlander',year:2025,body:'SUV',segment:'Mid-Size',msrp:42310,
-  ext:['/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_2_500.jpg'],
-  int:['/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_i_oem_1_500.jpg','/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_d_oem_1_500.jpg'],
-  dims:{length:'200.6"',width:'78.1"',height:'70.7"',wheelbase:'116.1"'},
-  trims:[
-    {name:'LE',price:42310,features:['2.4L Turbo 4-cyl (265 hp)','AWD available','12.3" touchscreen','3-row / 8-passenger','Toyota Safety Sense 3.0']},
-    {name:'XLE',price:45360,features:['Leather-trimmed seats','Dual moonroof','Power liftgate','Heated front seats','Wireless charging']},
-    {name:'Hybrid Max XLE',price:52060,features:['2.5L Hybrid Max (362 hp combined)','Multi-stage hybrid','Standard AWD','Advanced towing mode']},
-    {name:'Platinum',price:58460,features:['JBL 11-speaker audio','Ventilated seats','14" touchscreen','Head-up display','Panoramic moonroof']},
-  ]},
- {id:'t-crownsignia',brand:'Toyota',model:'Crown Signia',year:2025,body:'Crossover',segment:'Mid-Size',msrp:40230,
-  ext:['/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_2_500.jpg'],
-  int:['/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_i_oem_1_500.jpg','/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_d_oem_1_500.jpg'],
-  dims:{length:'192.5"',width:'74.4"',height:'66.3"',wheelbase:'112.2"'},
-  trims:[
-    {name:'XLE',price:40230,features:['2.5L Hybrid (243 hp combined)','AWD standard','12.3" touchscreen','Toyota Safety Sense 3.0','37 MPG combined','Panoramic glass roof']},
-    {name:'Limited',price:46030,features:['JBL 9-speaker audio','Ventilated seats','Head-up display','Heated rear seats','Premium leather','Advanced Park']},
-  ]},
- {id:'t-4runner',brand:'Toyota',model:'4Runner',year:2025,body:'SUV',segment:'Mid-Size',msrp:41270,
-  ext:['/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_2_500.jpg'],
-  int:['/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_i_oem_1_500.jpg','/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_d_oem_1_500.jpg'],
-  dims:{length:'191.7"',width:'76.0"',height:'72.0"',wheelbase:'109.8"'},
-  trims:[
-    {name:'SR5',price:41270,features:['2.4L Turbo 4-cyl (278 hp)','8-speed auto','RWD or 4WD','8" touchscreen','Toyota Safety Sense 3.0','Multi-terrain Select']},
-    {name:'TRD Sport',price:45900,features:['TRD-tuned suspension','TRD-stamped components','Hood scoop','Performance exhaust note']},
-    {name:'TRD Off-Road',price:46900,features:['Kinetic Dynamic Suspension System','Electronic locking rear diff','Crawl Control','ATRAC terrain traction']},
-    {name:'TRD Pro',price:58700,features:['Fox suspension shocks','Rock rails','Skid plates','TRD Pro Exhaust','Wireless charging']},
-    {name:'Limited',price:52000,features:['Premium leather','14" touchscreen','Adaptive headlights','Heated & ventilated seats','JBL audio']},
-  ]},
- {id:'t-sequoia',brand:'Toyota',model:'Sequoia',year:2025,body:'SUV',segment:'Full-Size',msrp:62295,
-  ext:['/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_2_500.jpg'],
-  int:['/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_i_oem_1_500.jpg','/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_d_oem_1_500.jpg'],
-  dims:{length:'214.4"',width:'80.0"',height:'74.0"',wheelbase:'122.0"'},
-  trims:[
-    {name:'SR5',price:62295,features:['3.5L Twin-Turbo V6 Hybrid (437 hp)','Hybrid-only','3-row / 8-passenger','14" touchscreen','Toyota Safety Sense 2.5+','9,000-lb towing']},
-    {name:'Limited',price:71795,features:['Semi-aniline leather','Tri-zone climate','JBL 14-speaker audio','Wireless charging','Power running boards']},
-    {name:'Platinum',price:78595,features:['Four-zone climate','HUD','Heated & ventilated 2nd row','Mark Levinson audio','22" wheels']},
-    {name:'TRD Pro',price:80295,features:['Fox internal bypass shocks','Multi-terrain select','KDSS standard','TRD Pro grille','TRD exhaust']},
-    {name:'Capstone',price:89095,features:["Semi-aniline quilted leather","24-speaker Mark Levinson audio","Power running boards","Rear-seat entertainment","Captain's chairs 2nd row"]},
-  ]},
- {id:'t-landcruiser',brand:'Toyota',model:'Land Cruiser',year:2025,body:'SUV',segment:'Full-Size',msrp:56450,
-  ext:['/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_1_500.jpg','/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_2_500.jpg'],
-  int:['/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_i_oem_1_500.jpg','/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_d_oem_1_500.jpg'],
-  dims:{length:'192.3"',width:'77.6"',height:'75.4"',wheelbase:'112.2"'},
-  trims:[
-    {name:'Land Cruiser',price:56450,features:['2.4L Twin-Turbo Hybrid (326 hp)','4WD standard','Multi-terrain select','KDSS stabilizer','14" touchscreen','Toyota Safety Sense 3.0']},
-    {name:'1958 Edition',price:59550,features:['Heritage-inspired styling','Unique 18" wheels','Retro badging','Off-road skid plates','Electronic locking differential']},
-    {name:'First Edition',price:68000,features:['Premium leather','Heated & ventilated seats','JBL 14-speaker audio','Panoramic roof','Head-up display']},
-  ]},
+const DEFAULT_CARS = [
+  {
+    "id": "n-versa",
+    "brand": "Nissan",
+    "model": "Versa",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Subcompact",
+    "msrp": 17390,
+    "ext": [
+      "/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg",
+      "/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_i_oem_1_500.jpg",
+      "/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "175.0\"",
+      "width": "67.3\"",
+      "height": "57.7\"",
+      "wheelbase": "103.1\""
+    },
+    "trims": [
+      {
+        "name": "S",
+        "price": 17390,
+        "features": [
+          "1.6L 4-cyl (122 hp)",
+          "5-speed manual",
+          "15\" steel wheels",
+          "7\" touchscreen",
+          "Bluetooth",
+          "Forward Collision Warning",
+          "35 MPG combined"
+        ]
+      },
+      {
+        "name": "S CVT",
+        "price": 19190,
+        "features": [
+          "CVT automatic",
+          "Automatic Emergency Braking",
+          "Rear Cross Traffic Alert",
+          "Apple CarPlay / Android Auto"
+        ]
+      },
+      {
+        "name": "SV",
+        "price": 20690,
+        "features": [
+          "16\" aluminum-alloy wheels",
+          "Heated front seats",
+          "ProPilot Assist",
+          "Blind Spot Warning",
+          "8\" display"
+        ]
+      },
+      {
+        "name": "SR",
+        "price": 21390,
+        "features": [
+          "17\" machine-finished wheels",
+          "Auto temp control",
+          "Sport cloth seats",
+          "NissanConnect Services",
+          "8-speaker audio"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "n-sentra",
+    "brand": "Nissan",
+    "model": "Sentra",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Compact",
+    "msrp": 22730,
+    "ext": [
+      "/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_1_500.jpg",
+      "/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_i_oem_1_500.jpg",
+      "/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "182.7\"",
+      "width": "70.8\"",
+      "height": "57.3\"",
+      "wheelbase": "105.1\""
+    },
+    "trims": [
+      {
+        "name": "S",
+        "price": 22730,
+        "features": [
+          "2.0L 4-cyl (149 hp)",
+          "CVT",
+          "8\" touchscreen",
+          "Safety Shield 360",
+          "Apple CarPlay / Android Auto"
+        ]
+      },
+      {
+        "name": "SV",
+        "price": 23480,
+        "features": [
+          "17\" aluminum wheels",
+          "Heated front seats",
+          "Leather-wrapped wheel",
+          "ProPilot Assist"
+        ]
+      },
+      {
+        "name": "SR",
+        "price": 25730,
+        "features": [
+          "Sport exterior",
+          "Sport-tuned suspension",
+          "LED headlights",
+          "NissanConnect navigation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "n-altima",
+    "brand": "Nissan",
+    "model": "Altima",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Mid-Size",
+    "msrp": 27000,
+    "ext": [
+      "/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_fq_oem_1_500.jpg",
+      "/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sv_fq_oem_1_500.jpg"
+    ],
+    "int": [
+      "/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_i_oem_1_500.jpg",
+      "/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "192.5\"",
+      "width": "73.0\"",
+      "height": "57.9\"",
+      "wheelbase": "111.2\""
+    },
+    "trims": [
+      {
+        "name": "S",
+        "price": 27000,
+        "features": [
+          "2.5L 4-cyl (188 hp)",
+          "CVT w/ Sport mode",
+          "8\" touchscreen",
+          "Safety Shield 360",
+          "39 MPG highway"
+        ]
+      },
+      {
+        "name": "SV",
+        "price": 29330,
+        "features": [
+          "Wireless CarPlay / Android Auto",
+          "12.3\" display available",
+          "ProPilot Assist",
+          "Heated seats"
+        ]
+      },
+      {
+        "name": "SL",
+        "price": 32230,
+        "features": [
+          "Leather seating",
+          "Bose 9-speaker audio",
+          "Heated & ventilated seats",
+          "Head-up display"
+        ]
+      },
+      {
+        "name": "SR",
+        "price": 30830,
+        "features": [
+          "Sport-tuned suspension",
+          "Paddle shifters",
+          "19\" sport wheels",
+          "Sport mode"
+        ]
+      },
+      {
+        "name": "Platinum",
+        "price": 35330,
+        "features": [
+          "Semi-aniline leather",
+          "Quilted seating",
+          "Adaptive LED headlights",
+          "Panoramic moonroof"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "n-kicks",
+    "brand": "Nissan",
+    "model": "Kicks",
+    "year": 2026,
+    "body": "SUV",
+    "segment": "Subcompact",
+    "msrp": 21830,
+    "dims": {
+      "length": "171.9\"",
+      "width": "70.9\"",
+      "height": "61.5\"",
+      "wheelbase": "103.1\""
+    },
+    "ext": [
+      "https://www.nissanusa.com/content/dam/Nissan/us/vehicles/kicks/2026/gallery/exterior/lightbox/2026-nissan-kicks-two-tone-color.jpg",
+      "https://www.nissanusa.com/content/dam/Nissan/us/vehicles/kicks/2026/gallery/exterior/lightbox/2026-nissan-kicks-rear-bridge-LB.jpg"
+    ],
+    "int": [
+      "/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_i_oem_1_500.jpg",
+      "/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_d_oem_1_500.jpg"
+    ],
+    "trims": [
+      {
+        "name": "S",
+        "price": 21830,
+        "features": [
+          "2.0L 4-cyl (141 hp)",
+          "7\" touchscreen",
+          "Safety Shield 360",
+          "FWD or AWD",
+          "28/35 MPG"
+        ]
+      },
+      {
+        "name": "SV",
+        "price": 23680,
+        "features": [
+          "17\" alloy wheels",
+          "12.3\" NissanConnect",
+          "Heated front seats",
+          "LED headlights"
+        ]
+      },
+      {
+        "name": "SR",
+        "price": 26180,
+        "features": [
+          "ProPilot Assist",
+          "Bose 10-speaker audio",
+          "Traffic Sign Recognition",
+          "Wireless CarPlay / Android Auto"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "n-rogue",
+    "brand": "Nissan",
+    "model": "Rogue",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Compact",
+    "msrp": 29990,
+    "ext": [
+      "/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_1_500.jpg",
+      "/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_i_oem_1_500.jpg",
+      "/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "182.5\"",
+      "width": "72.4\"",
+      "height": "67.4\"",
+      "wheelbase": "106.5\""
+    },
+    "trims": [
+      {
+        "name": "S",
+        "price": 29990,
+        "features": [
+          "1.5L VC-Turbo (201 hp)",
+          "FWD standard",
+          "Safety Shield 360",
+          "8\" touchscreen",
+          "30 MPG combined"
+        ]
+      },
+      {
+        "name": "SV",
+        "price": 32900,
+        "features": [
+          "AWD available",
+          "Panoramic moonroof",
+          "Heated seats",
+          "12.3\" NissanConnect"
+        ]
+      },
+      {
+        "name": "SL",
+        "price": 38200,
+        "features": [
+          "Leather seating",
+          "Bose audio",
+          "Heated rear seats",
+          "ProPilot Assist",
+          "Around View Monitor"
+        ]
+      },
+      {
+        "name": "Platinum",
+        "price": 41100,
+        "features": [
+          "10.8\" Head-Up Display",
+          "Quilted leather",
+          "Digital rearview mirror"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "n-pathfinder",
+    "brand": "Nissan",
+    "model": "Pathfinder",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Mid-Size",
+    "msrp": 38690,
+    "ext": [
+      "/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_1_500.jpg",
+      "/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_i_oem_1_500.jpg",
+      "/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "196.8\"",
+      "width": "78.0\"",
+      "height": "70.6\"",
+      "wheelbase": "114.2\""
+    },
+    "trims": [
+      {
+        "name": "S",
+        "price": 38690,
+        "features": [
+          "3.5L V6 (284 hp)",
+          "9-speed auto",
+          "8-passenger",
+          "8\" touchscreen",
+          "Safety Shield 360"
+        ]
+      },
+      {
+        "name": "SV",
+        "price": 41390,
+        "features": [
+          "Leather seats",
+          "Heated wheel",
+          "Power driver seat",
+          "ProPilot Assist",
+          "Tri-zone climate"
+        ]
+      },
+      {
+        "name": "SL",
+        "price": 46900,
+        "features": [
+          "6,000-lb tow (w/pkg)",
+          "Panoramic moonroof",
+          "Bose 13-speaker audio",
+          "Hands-free liftgate"
+        ]
+      },
+      {
+        "name": "Rock Creek",
+        "price": 45800,
+        "features": [
+          "Off-road suspension",
+          "All-terrain tires",
+          "Rock Creek cladding",
+          "Hill Descent Control"
+        ]
+      },
+      {
+        "name": "Platinum",
+        "price": 50640,
+        "features": [
+          "Semi-aniline leather",
+          "12.3\" gauge cluster",
+          "Head-up display",
+          "Heated 2nd-row captain chairs"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "k-k4",
+    "brand": "Kia",
+    "model": "K4",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Compact",
+    "msrp": 21990,
+    "ext": [
+      "/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_fq_oem_1_500.jpg",
+      "/kia/k4/2025/oem/2025_kia_k4_sedan_ex_fq_oem_1_500.jpg"
+    ],
+    "int": [
+      "/kia/k4/2025/oem/2025_kia_k4_sedan_ex_detail_oem_1_500.jpg",
+      "/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_detail_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "183.1\"",
+      "width": "71.6\"",
+      "height": "55.9\"",
+      "wheelbase": "107.9\""
+    },
+    "trims": [
+      {
+        "name": "LX",
+        "price": 21990,
+        "features": [
+          "2.0L 4-cyl (147 hp)",
+          "12.3\" dual display",
+          "Lane Keeping Assist",
+          "Forward Collision Avoidance",
+          "10-yr/100k warranty"
+        ]
+      },
+      {
+        "name": "LXS",
+        "price": 22990,
+        "features": [
+          "Blind Spot Collision Warning",
+          "Rear USB-C ports",
+          "Enhanced safety package"
+        ]
+      },
+      {
+        "name": "EX",
+        "price": 23990,
+        "features": [
+          "Digital instrument cluster",
+          "Dual-zone auto climate",
+          "Wireless charging pad",
+          "Leather-trimmed steering wheel"
+        ]
+      },
+      {
+        "name": "GT-Line",
+        "price": 25190,
+        "features": [
+          "Sport-tuned suspension",
+          "Red interior accents",
+          "Sport exhaust",
+          "LED headlights & taillights"
+        ]
+      },
+      {
+        "name": "GT-Line Turbo",
+        "price": 28090,
+        "features": [
+          "1.6L Turbo (190 hp)",
+          "8-speed DCT",
+          "Bose audio",
+          "Ventilated seats",
+          "HUD",
+          "Sport Plus mode"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "k-k5",
+    "brand": "Kia",
+    "model": "K5",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Mid-Size",
+    "msrp": 25590,
+    "ext": [
+      "/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_1_500.jpg",
+      "/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/kia/k5/2025/oem/2025_kia_k5_sedan_gt_i_oem_1_500.jpg",
+      "/kia/k5/2025/oem/2025_kia_k5_sedan_gt_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "191.1\"",
+      "width": "73.2\"",
+      "height": "56.9\"",
+      "wheelbase": "111.8\""
+    },
+    "trims": [
+      {
+        "name": "LX",
+        "price": 25590,
+        "features": [
+          "2.5L 4-cyl (191 hp)",
+          "8-speed auto",
+          "12.3\" touchscreen",
+          "Wireless CarPlay / Android Auto",
+          "Smart parking assist"
+        ]
+      },
+      {
+        "name": "EX",
+        "price": 27490,
+        "features": [
+          "Heated front seats",
+          "Power sunroof",
+          "Wireless charging",
+          "Blind-Spot Avoidance"
+        ]
+      },
+      {
+        "name": "GT-Line AWD",
+        "price": 30390,
+        "features": [
+          "Torque-vectoring AWD",
+          "Sport-tuned suspension",
+          "18\" wheels",
+          "Paddle shifters"
+        ]
+      },
+      {
+        "name": "GT",
+        "price": 35590,
+        "features": [
+          "2.5L Turbo (290 hp)",
+          "0-60 beats BMW 530i",
+          "Launch Control",
+          "19\" staggered wheels",
+          "Bose audio"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "k-seltos",
+    "brand": "Kia",
+    "model": "Seltos",
+    "year": 2025,
+    "body": "Crossover",
+    "segment": "Subcompact",
+    "msrp": 26185,
+    "ext": [
+      "/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_1_500.jpg",
+      "/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_i_oem_1_500.jpg",
+      "/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "172.0\"",
+      "width": "71.0\"",
+      "height": "64.2\"",
+      "wheelbase": "102.4\""
+    },
+    "trims": [
+      {
+        "name": "LX",
+        "price": 26185,
+        "features": [
+          "2.0L 4-cyl (146 hp)",
+          "10.25\" dual screen",
+          "Rear cross-traffic alert",
+          "Lane Keeping Assist"
+        ]
+      },
+      {
+        "name": "EX",
+        "price": 28185,
+        "features": [
+          "AWD available",
+          "Sunroof",
+          "Wireless CarPlay / Android Auto",
+          "Heated front seats",
+          "Highway Drive Assist"
+        ]
+      },
+      {
+        "name": "SX",
+        "price": 32280,
+        "features": [
+          "1.6L Turbo (195 hp)",
+          "DCT",
+          "Bose 7-speaker",
+          "Ventilated seats",
+          "Roof rails",
+          "HUD"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "k-sportage",
+    "brand": "Kia",
+    "model": "Sportage",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Compact",
+    "msrp": 27590,
+    "ext": [
+      "/kia/sportage/2024/oem/2024_kia_sportage_4dr-suv_x-pro_fq_oem_1_500.jpg",
+      "/kia/sportage/2025/izmo/2025_kia_sportage_4dr-suv_ex_pr_izmo_1_500.jpg"
+    ],
+    "int": [
+      "/kia/sportage/2025/oem/2025_kia_sportage_4dr-suv_ex_i_oem_1_500.jpg",
+      "/kia/sportage/2025/oem/2025_kia_sportage_4dr-suv_ex_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "182.3\"",
+      "width": "73.6\"",
+      "height": "65.0\"",
+      "wheelbase": "108.9\""
+    },
+    "trims": [
+      {
+        "name": "LX",
+        "price": 27590,
+        "features": [
+          "2.5L 4-cyl (187 hp)",
+          "12.3\" panoramic display",
+          "IIHS Top Safety Pick+",
+          "Class-leading cargo room"
+        ]
+      },
+      {
+        "name": "EX",
+        "price": 29590,
+        "features": [
+          "AWD available",
+          "Heated steering wheel",
+          "Surround View Monitor",
+          "Highway Drive Assist II",
+          "Wireless charging"
+        ]
+      },
+      {
+        "name": "X-Pro",
+        "price": 33990,
+        "features": [
+          "Off-road suspension",
+          "Hill Descent Control",
+          "Multi-terrain modes",
+          "All-terrain tires",
+          "Skid plates"
+        ]
+      },
+      {
+        "name": "SX Prestige",
+        "price": 39785,
+        "features": [
+          "Panoramic moonroof",
+          "Bose 8-speaker",
+          "Ventilated seats",
+          "Nappa leather",
+          "HUD",
+          "LED ambient lighting"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "k-telluride",
+    "brand": "Kia",
+    "model": "Telluride",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Mid-Size",
+    "msrp": 36390,
+    "ext": [
+      "/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_1_500.jpg",
+      "/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_i_oem_1_500.jpg",
+      "/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "196.9\"",
+      "width": "78.3\"",
+      "height": "68.9\"",
+      "wheelbase": "114.2\""
+    },
+    "trims": [
+      {
+        "name": "LX",
+        "price": 36390,
+        "features": [
+          "3.8L V6 (291 hp)",
+          "8-speed auto",
+          "3-row / 8-passenger",
+          "10.25\" touchscreen",
+          "Kia DriveWise safety suite"
+        ]
+      },
+      {
+        "name": "EX",
+        "price": 40390,
+        "features": [
+          "Heated front & 2nd-row seats",
+          "Panoramic sunroof",
+          "Wireless CarPlay / Android Auto",
+          "Hands-free liftgate"
+        ]
+      },
+      {
+        "name": "X-Pro",
+        "price": 44990,
+        "features": [
+          "AWD w/ torque vectoring",
+          "Locking differential",
+          "Off-road terrain modes",
+          "19\" all-terrain tires",
+          "Skid plates"
+        ]
+      },
+      {
+        "name": "SX Prestige",
+        "price": 52885,
+        "features": [
+          "Nappa leather",
+          "Harman Kardon 10-speaker",
+          "Heated & ventilated seats",
+          "Rear entertainment",
+          "HUD"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h-civic",
+    "brand": "Honda",
+    "model": "Civic",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Compact",
+    "msrp": 24250,
+    "ext": [
+      "/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg",
+      "/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_i_oem_1_500.jpg",
+      "/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "184.0\"",
+      "width": "70.9\"",
+      "height": "55.7\"",
+      "wheelbase": "107.7\""
+    },
+    "trims": [
+      {
+        "name": "LX",
+        "price": 24250,
+        "features": [
+          "2.0L 4-cyl (150 hp)",
+          "CVT",
+          "7\" touchscreen",
+          "Apple CarPlay / Android Auto",
+          "Honda Sensing std",
+          "32/41 MPG"
+        ]
+      },
+      {
+        "name": "Sport",
+        "price": 26250,
+        "features": [
+          "18\" gloss-black alloy wheels",
+          "Paddle shifters",
+          "Blind Spot Info System",
+          "Heated side mirrors",
+          "Sport mode"
+        ]
+      },
+      {
+        "name": "Sport Hybrid",
+        "price": 28750,
+        "features": [
+          "2.0L Hybrid (200 hp)",
+          "One-touch moonroof",
+          "Heated front seats",
+          "Dual-zone climate",
+          "50/47 MPG"
+        ]
+      },
+      {
+        "name": "Sport Touring Hybrid",
+        "price": 31750,
+        "features": [
+          "9\" touchscreen w/ Google built-in",
+          "Leather-trimmed seats",
+          "Bose 12-speaker",
+          "Wireless CarPlay",
+          "Wireless charging"
+        ]
+      },
+      {
+        "name": "Si",
+        "price": 29900,
+        "features": [
+          "1.5L Turbo (200 hp)",
+          "6-speed manual only",
+          "Sport seats w/ bolsters",
+          "Rev-match downshift",
+          "Adaptive dampers"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h-accord",
+    "brand": "Honda",
+    "model": "Accord",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Mid-Size",
+    "msrp": 28745,
+    "ext": [
+      "/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_fq_oem_1_500.jpg",
+      "/honda/accord/2025/oem/2025_honda_accord_sedan_touring-hybrid_fq_oem_1_500.jpg"
+    ],
+    "int": [
+      "/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_i_oem_1_500.jpg",
+      "/honda/accord/2025/oem/2025_honda_accord_sedan_touring-hybrid_i_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "195.7\"",
+      "width": "73.3\"",
+      "height": "57.1\"",
+      "wheelbase": "111.4\""
+    },
+    "trims": [
+      {
+        "name": "LX",
+        "price": 28745,
+        "features": [
+          "1.5L Turbo (192 hp)",
+          "10.2\" touchscreen",
+          "Honda Sensing std",
+          "Wireless CarPlay / Android Auto",
+          "Heated front seats"
+        ]
+      },
+      {
+        "name": "Sport",
+        "price": 30895,
+        "features": [
+          "18\" wheels",
+          "12.3\" display",
+          "Remote start",
+          "Traffic Jam Assist"
+        ]
+      },
+      {
+        "name": "EX-L",
+        "price": 34045,
+        "features": [
+          "Leather-trimmed seats",
+          "Heated rear seats",
+          "Bose 12-speaker audio"
+        ]
+      },
+      {
+        "name": "Sport Hybrid",
+        "price": 32545,
+        "features": [
+          "2.0L Hybrid (204 hp)",
+          "46 MPG combined",
+          "Lane centering assist"
+        ]
+      },
+      {
+        "name": "Touring Hybrid",
+        "price": 37945,
+        "features": [
+          "Nappa leather",
+          "Panoramic moonroof",
+          "HUD",
+          "Wireless charging",
+          "Bose 14-speaker"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h-crv",
+    "brand": "Honda",
+    "model": "CR-V",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Compact",
+    "msrp": 30920,
+    "ext": [
+      "/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_1_500.jpg",
+      "/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_i_oem_1_500.jpg",
+      "/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "184.8\"",
+      "width": "73.0\"",
+      "height": "66.3\"",
+      "wheelbase": "107.3\""
+    },
+    "trims": [
+      {
+        "name": "LX",
+        "price": 30920,
+        "features": [
+          "1.5L Turbo (190 hp)",
+          "9\" touchscreen",
+          "Wireless CarPlay / Android Auto",
+          "Honda Sensing safety suite"
+        ]
+      },
+      {
+        "name": "EX",
+        "price": 33150,
+        "features": [
+          "Panoramic moonroof",
+          "18\" wheels",
+          "Heated front seats",
+          "Remote start",
+          "Power tailgate",
+          "Blind spot monitoring"
+        ]
+      },
+      {
+        "name": "EX-L",
+        "price": 35400,
+        "features": [
+          "Leather-trimmed seats",
+          "8-speaker premium audio",
+          "Power rear liftgate",
+          "Parking sensors",
+          "Wireless charging"
+        ]
+      },
+      {
+        "name": "Sport Hybrid",
+        "price": 36045,
+        "features": [
+          "2.0L Hybrid (204 hp)",
+          "40 MPG combined FWD",
+          "Honda Sensing 360",
+          "Traffic Jam Assist",
+          "EV mode"
+        ]
+      },
+      {
+        "name": "TrailSport Hybrid",
+        "price": 39000,
+        "features": [
+          "Off-road suspension",
+          "All-terrain tires",
+          "AWD standard",
+          "Trail mode",
+          "Rugged exterior cladding"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h-passport",
+    "brand": "Honda",
+    "model": "Passport",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Mid-Size",
+    "msrp": 42400,
+    "ext": [
+      "/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_fq_oem_1_500.jpg",
+      "/honda/passport/2025/oem/2025_honda_passport_4dr-suv_black-edition_fq_oem_1_500.jpg"
+    ],
+    "int": [
+      "/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_i_oem_1_500.jpg",
+      "/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "189.1\"",
+      "width": "78.6\"",
+      "height": "72.2\"",
+      "wheelbase": "110.9\""
+    },
+    "trims": [
+      {
+        "name": "EX-L",
+        "price": 42400,
+        "features": [
+          "3.5L V6 (280 hp)",
+          "9-speed auto",
+          "AWD standard",
+          "Leather seats",
+          "Power moonroof",
+          "10.2\" touchscreen",
+          "5,000-lb towing"
+        ]
+      },
+      {
+        "name": "TrailSport",
+        "price": 45000,
+        "features": [
+          "Off-road suspension",
+          "All-terrain tires",
+          "Skid plates",
+          "Orange stitching accents",
+          "LED fog lights",
+          "Navigation"
+        ]
+      },
+      {
+        "name": "Black Edition",
+        "price": 48470,
+        "features": [
+          "20\" gloss-black wheels",
+          "Black leather interior",
+          "Crystal Black Pearl exclusive",
+          "Wireless charging",
+          "Hands-free liftgate"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h-pilot",
+    "brand": "Honda",
+    "model": "Pilot",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Mid-Size",
+    "msrp": 40275,
+    "ext": [
+      "/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_fq_oem_1_500.jpg",
+      "/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_black-edition_fq_oem_1_500.jpg"
+    ],
+    "int": [
+      "/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_i_oem_1_500.jpg",
+      "/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "196.5\"",
+      "width": "78.6\"",
+      "height": "70.6\"",
+      "wheelbase": "113.8\""
+    },
+    "trims": [
+      {
+        "name": "Sport",
+        "price": 40275,
+        "features": [
+          "3.5L V6 (285 hp)",
+          "10-speed auto",
+          "AWD standard",
+          "9\" touchscreen",
+          "3-row / 8-pass",
+          "Honda Sensing 360"
+        ]
+      },
+      {
+        "name": "EX-L",
+        "price": 44475,
+        "features": [
+          "Leather seats",
+          "Hands-free power liftgate",
+          "2nd-row captain chairs",
+          "Heated front seats",
+          "12\" display"
+        ]
+      },
+      {
+        "name": "TrailSport",
+        "price": 48275,
+        "features": [
+          "Off-road suspension",
+          "ATF tires",
+          "10-mode i-VTM4 AWD",
+          "Roof rails",
+          "G-forces display"
+        ]
+      },
+      {
+        "name": "Black Edition",
+        "price": 50475,
+        "features": [
+          "All-black interior & exterior accents",
+          "Heated & ventilated seats",
+          "12-speaker Bose audio",
+          "HUD"
+        ]
+      },
+      {
+        "name": "Elite",
+        "price": 52275,
+        "features": [
+          "Nappa leather",
+          "Rear entertainment system",
+          "Built-in 4G LTE Wi-Fi",
+          "15.2\" rear screens"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h-ridgeline",
+    "brand": "Honda",
+    "model": "Ridgeline",
+    "year": 2025,
+    "body": "Truck",
+    "segment": "Mid-Size",
+    "msrp": 40150,
+    "ext": [
+      "/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_fq_oem_1_500.jpg",
+      "/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_rq_oem_1_500.jpg"
+    ],
+    "int": [
+      "/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_rtl_i_oem_1_500.jpg",
+      "/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_rtl_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "210.2\"",
+      "width": "78.6\"",
+      "height": "70.8\"",
+      "wheelbase": "125.2\""
+    },
+    "trims": [
+      {
+        "name": "Sport",
+        "price": 40150,
+        "features": [
+          "3.5L V6 (280 hp)",
+          "9-speed auto",
+          "AWD standard",
+          "9\" touchscreen",
+          "In-Bed Trunk®",
+          "Dual-action tailgate",
+          "5,000-lb towing",
+          "Honda Sensing"
+        ]
+      },
+      {
+        "name": "Sport+",
+        "price": 42050,
+        "features": [
+          "Wireless CarPlay / Android Auto",
+          "Wireless phone charger",
+          "2nd-row USB-C ports",
+          "Remote start"
+        ]
+      },
+      {
+        "name": "RTL",
+        "price": 42980,
+        "features": [
+          "Leather-trimmed seats",
+          "Heated front seats",
+          "Driver seat memory",
+          "One-touch power moonroof",
+          "8-speaker audio"
+        ]
+      },
+      {
+        "name": "TrailSport",
+        "price": 45380,
+        "features": [
+          "Off-road suspension",
+          "All-terrain tires",
+          "Orange TrailSport accents",
+          "Truck-bed audio system"
+        ]
+      },
+      {
+        "name": "Black Edition",
+        "price": 46750,
+        "features": [
+          "All-black exterior trim",
+          "Black leather interior",
+          "12-speaker audio",
+          "In-Bed 400W power outlet"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "h-prelude",
+    "brand": "Honda",
+    "model": "Prelude Hybrid",
+    "year": 2026,
+    "body": "Sports Car",
+    "segment": "Compact",
+    "msrp": 35000,
+    "ext": [
+      "/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg",
+      "/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_3_500.jpg"
+    ],
+    "int": [
+      "/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_i_oem_1_500.jpg",
+      "/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "179.9\"",
+      "width": "71.3\"",
+      "height": "53.9\"",
+      "wheelbase": "107.5\""
+    },
+    "trims": [
+      {
+        "name": "Prelude Hybrid",
+        "price": 35000,
+        "features": [
+          "2.0L Hybrid (200 hp) + dual electric motors",
+          "Type R suspension hardware",
+          "Brembo front brakes",
+          "Adaptive dampers",
+          "S+ simulated shift system",
+          "Bose stereo",
+          "Google built-in infotainment",
+          "~mid-40s MPG est."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-corolla",
+    "brand": "Toyota",
+    "model": "Corolla",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Compact",
+    "msrp": 22325,
+    "ext": [
+      "/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_1_500.jpg",
+      "/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_i_oem_1_500.jpg",
+      "/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "182.5\"",
+      "width": "70.1\"",
+      "height": "56.5\"",
+      "wheelbase": "105.1\""
+    },
+    "trims": [
+      {
+        "name": "LE",
+        "price": 22325,
+        "features": [
+          "2.0L 4-cyl (169 hp)",
+          "CVT",
+          "8\" Toyota Audio Multimedia",
+          "Toyota Safety Sense 3.0",
+          "LED headlights",
+          "32/41 MPG"
+        ]
+      },
+      {
+        "name": "SE",
+        "price": 24345,
+        "features": [
+          "Sport exterior",
+          "Paddle shifters",
+          "Sport mesh grille",
+          "18\" wheels",
+          "Heated front seats"
+        ]
+      },
+      {
+        "name": "XLE",
+        "price": 25545,
+        "features": [
+          "Leather-trimmed seats",
+          "SofTex dash trim",
+          "Power driver seat",
+          "Wireless charging",
+          "Dual-zone climate"
+        ]
+      },
+      {
+        "name": "XSE",
+        "price": 26375,
+        "features": [
+          "Sport-tuned suspension",
+          "19\" wheels",
+          "Black-chrome exterior trim",
+          "Two-tone paint available"
+        ]
+      },
+      {
+        "name": "Hybrid LE",
+        "price": 25050,
+        "features": [
+          "1.8L Hybrid (134 hp combined)",
+          "53/46 MPG",
+          "AWD available",
+          "Pre-collision w/ pedestrian detection"
+        ]
+      },
+      {
+        "name": "Hybrid XLE",
+        "price": 28075,
+        "features": [
+          "Leather-trimmed seats",
+          "Wireless charging",
+          "Power driver seat",
+          "50 MPG combined"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-corollacross",
+    "brand": "Toyota",
+    "model": "Corolla Cross",
+    "year": 2025,
+    "body": "Crossover",
+    "segment": "Subcompact",
+    "msrp": 24470,
+    "ext": [
+      "/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_1_500.jpg",
+      "/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_i_oem_1_500.jpg",
+      "/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "173.8\"",
+      "width": "71.5\"",
+      "height": "64.6\"",
+      "wheelbase": "103.9\""
+    },
+    "trims": [
+      {
+        "name": "LE",
+        "price": 24470,
+        "features": [
+          "2.0L 4-cyl (169 hp)",
+          "CVT",
+          "FWD or AWD",
+          "8\" touchscreen",
+          "Toyota Safety Sense 3.0"
+        ]
+      },
+      {
+        "name": "XLE",
+        "price": 27615,
+        "features": [
+          "8\" multimedia display",
+          "Heated front seats",
+          "SofTex leatherette",
+          "Roof rails",
+          "Power rear door"
+        ]
+      },
+      {
+        "name": "Hybrid S",
+        "price": 27650,
+        "features": [
+          "2.0L Hybrid (196 hp)",
+          "AWD standard",
+          "42 MPG combined",
+          "Sport mode"
+        ]
+      },
+      {
+        "name": "Hybrid XLE",
+        "price": 30650,
+        "features": [
+          "Leather trim",
+          "Wireless charging",
+          "Heated seats",
+          "Panoramic moonroof available"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-chr",
+    "brand": "Toyota",
+    "model": "C-HR",
+    "year": 2025,
+    "body": "Crossover",
+    "segment": "Subcompact",
+    "msrp": 29825,
+    "ext": [
+      "/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_fq_oem_1_500.jpg",
+      "/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_i_oem_1_500.jpg",
+      "/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "175.6\"",
+      "width": "72.0\"",
+      "height": "60.9\"",
+      "wheelbase": "104.7\""
+    },
+    "trims": [
+      {
+        "name": "LE",
+        "price": 29825,
+        "features": [
+          "2.0L Hybrid (196 hp combined)",
+          "Hybrid-only powertrain",
+          "AWD standard",
+          "8\" touchscreen",
+          "Toyota Safety Sense 3.0",
+          "LED headlights & DRL"
+        ]
+      },
+      {
+        "name": "XLE",
+        "price": 32020,
+        "features": [
+          "12.3\" touchscreen",
+          "Wireless CarPlay / Android Auto",
+          "Heated front seats",
+          "Wireless charging",
+          "SofTex leatherette"
+        ]
+      },
+      {
+        "name": "Limited",
+        "price": 37270,
+        "features": [
+          "Panoramic moonroof",
+          "JBL 8-speaker audio",
+          "Ventilated seats",
+          "Head-up display",
+          "Adaptive LED headlights"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-camry",
+    "brand": "Toyota",
+    "model": "Camry",
+    "year": 2025,
+    "body": "Sedan",
+    "segment": "Mid-Size",
+    "msrp": 28950,
+    "ext": [
+      "/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_1_500.jpg",
+      "/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_i_oem_1_500.jpg",
+      "/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "194.1\"",
+      "width": "72.4\"",
+      "height": "56.9\"",
+      "wheelbase": "111.4\""
+    },
+    "trims": [
+      {
+        "name": "LE",
+        "price": 28950,
+        "features": [
+          "2.5L Hybrid (225 hp combined)",
+          "eCVT",
+          "FWD or AWD",
+          "8\" touchscreen",
+          "Toyota Safety Sense 3.0",
+          "51 MPG combined FWD"
+        ]
+      },
+      {
+        "name": "SE",
+        "price": 30250,
+        "features": [
+          "Sport mesh grille",
+          "Sport suspension",
+          "18\" wheels",
+          "Heated front seats",
+          "8-speaker audio"
+        ]
+      },
+      {
+        "name": "XLE",
+        "price": 32500,
+        "features": [
+          "Leather-trimmed seats",
+          "Wireless CarPlay / Android Auto",
+          "Panoramic sunroof",
+          "Dual-zone climate"
+        ]
+      },
+      {
+        "name": "XSE",
+        "price": 33700,
+        "features": [
+          "Sport-tuned suspension",
+          "19\" black wheels",
+          "Black-chrome exterior trim"
+        ]
+      },
+      {
+        "name": "XSE V6",
+        "price": 34800,
+        "features": [
+          "3.5L V6 (301 hp)",
+          "Paddle shifters",
+          "20\" wheels",
+          "Sport interior trim"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-rav4",
+    "brand": "Toyota",
+    "model": "RAV4 Hybrid",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Compact",
+    "msrp": 32125,
+    "ext": [
+      "/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_1_500.jpg",
+      "/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_i_oem_1_500.jpg",
+      "/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "180.9\"",
+      "width": "73.0\"",
+      "height": "67.1\"",
+      "wheelbase": "105.9\""
+    },
+    "trims": [
+      {
+        "name": "LE Hybrid",
+        "price": 32125,
+        "features": [
+          "2.5L Hybrid (219 hp combined)",
+          "AWD standard",
+          "8\" touchscreen",
+          "Toyota Safety Sense 2.5+",
+          "3,500-lb towing capacity"
+        ]
+      },
+      {
+        "name": "XLE Hybrid",
+        "price": 34450,
+        "features": [
+          "Heated front seats",
+          "Power tailgate",
+          "Dual-zone climate",
+          "SofTex seats"
+        ]
+      },
+      {
+        "name": "XSE Hybrid",
+        "price": 36450,
+        "features": [
+          "Sport suspension",
+          "18\" black wheels",
+          "Sport front fascia",
+          "Two-tone paint available"
+        ]
+      },
+      {
+        "name": "Woodland Hybrid",
+        "price": 38350,
+        "features": [
+          "Adventure-ready AWD",
+          "All-terrain tires",
+          "Roof rails",
+          "200mm water wading",
+          "Black cladding"
+        ]
+      },
+      {
+        "name": "Limited Hybrid",
+        "price": 40275,
+        "features": [
+          "Ventilated front seats",
+          "Heated rear seats",
+          "9\" touchscreen",
+          "JBL 9-speaker audio",
+          "Panoramic roof"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-rav4prime",
+    "brand": "Toyota",
+    "model": "RAV4 Plug-in Hybrid",
+    "year": 2026,
+    "body": "SUV",
+    "segment": "Compact",
+    "msrp": 42950,
+    "ext": [
+      "https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg",
+      "https://www.edmunds.com/assets/m/cs/cms/beeee6e8-3f75-4259-89c5-7fb158fc7d1a/2026+Toyota+RAV4+3_1280.jpg",
+      "https://www.edmunds.com/assets/m/cs/cms/ec983d59-ff64-4947-bc9f-7516be144243/2026+Toyota+RAV4+7_717.jpg"
+    ],
+    "int": [
+      "https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg",
+      "https://www.edmunds.com/assets/m/cs/cms/beeee6e8-3f75-4259-89c5-7fb158fc7d1a/2026+Toyota+RAV4+3_1280.jpg"
+    ],
+    "dims": {
+      "length": "182.4\"",
+      "width": "73.0\"",
+      "height": "67.5\"",
+      "wheelbase": "105.9\""
+    },
+    "trims": [
+      {
+        "name": "SE",
+        "price": 42950,
+        "features": [
+          "2.5L PHEV (324 hp combined)",
+          "AWD standard",
+          "52 miles EV range",
+          "12.3\" digital gauge cluster",
+          "Toyota Safety Sense 4.0",
+          "3,500-lb towing capacity",
+          "7-kW Level 2 onboard charger",
+          "0-60 mph: 5.4 seconds"
+        ]
+      },
+      {
+        "name": "Woodland",
+        "price": 46700,
+        "features": [
+          "All-terrain tires & 18\" matte gray wheels",
+          "8.5\" ground clearance",
+          "Rigid Industries LED fog lights",
+          "DC fast charging (CCS) — 10–80% in ~30 min",
+          "11-kW onboard charger",
+          "Roof rack with crossbars",
+          "49 miles EV range",
+          "Rugged Urban Rock exclusive color"
+        ]
+      },
+      {
+        "name": "XSE",
+        "price": 48620,
+        "features": [
+          "Sporty dark chrome exterior accents",
+          "12.9\" Toyota Audio Multimedia touchscreen",
+          "Heated & ventilated front seats",
+          "Hands-free power liftgate",
+          "Panoramic moonroof",
+          "DC fast charging (CCS)",
+          "11-kW onboard charger",
+          "52 miles EV range"
+        ]
+      },
+      {
+        "name": "GR Sport",
+        "price": 49950,
+        "features": [
+          "GR-tuned suspension & steering (GAZOO Racing)",
+          "GR-tuned front & rear crossmember braces",
+          "Sport bumpers, rear wing & wider stance",
+          "Summer performance tires on 20\" black wheels",
+          "5.4-sec 0-60 mph (quickest RAV4 ever)",
+          "Exclusive Supersonic Red w/ Black roof option",
+          "48 miles EV range",
+          "Paddle shifters"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-bz4x",
+    "brand": "Toyota",
+    "model": "bZ4X",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Mid-Size",
+    "msrp": 43490,
+    "ext": [
+      "/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_1_500.jpg",
+      "/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_i_oem_1_500.jpg",
+      "/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "184.6\"",
+      "width": "73.2\"",
+      "height": "64.6\"",
+      "wheelbase": "112.2\""
+    },
+    "trims": [
+      {
+        "name": "XLE FWD",
+        "price": 43490,
+        "features": [
+          "201-hp electric motor (FWD)",
+          "252-mile EPA range",
+          "12.3\" touchscreen",
+          "Toyota Safety Sense 3.0",
+          "DC fast charging std"
+        ]
+      },
+      {
+        "name": "XLE AWD",
+        "price": 48450,
+        "features": [
+          "218-hp dual motor AWD",
+          "222-mile EPA range",
+          "Wireless charging",
+          "Heated front seats"
+        ]
+      },
+      {
+        "name": "Limited AWD",
+        "price": 52700,
+        "features": [
+          "Heated & ventilated seats",
+          "Panoramic roof",
+          "JBL audio",
+          "Premium interior trim"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-highlander",
+    "brand": "Toyota",
+    "model": "Highlander",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Mid-Size",
+    "msrp": 40860,
+    "ext": [
+      "/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_1_500.jpg",
+      "/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_i_oem_1_500.jpg",
+      "/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "194.9\"",
+      "width": "76.0\"",
+      "height": "68.1\"",
+      "wheelbase": "112.2\""
+    },
+    "trims": [
+      {
+        "name": "LE",
+        "price": 40860,
+        "features": [
+          "2.4L Turbo 4-cyl (265 hp)",
+          "8-speed auto",
+          "AWD standard",
+          "8\" touchscreen",
+          "3-row / 8-passenger",
+          "Toyota Safety Sense 2.5+"
+        ]
+      },
+      {
+        "name": "XLE",
+        "price": 44860,
+        "features": [
+          "Leather-trimmed seats",
+          "Hands-free power rear door",
+          "Panoramic moonroof",
+          "Wireless charging",
+          "Captain chairs"
+        ]
+      },
+      {
+        "name": "Limited",
+        "price": 50760,
+        "features": [
+          "Ventilated seats",
+          "JBL 11-speaker audio",
+          "Heated 2nd-row seats",
+          "14\" touchscreen",
+          "4-zone climate"
+        ]
+      },
+      {
+        "name": "Platinum",
+        "price": 55320,
+        "features": [
+          "Premium leather",
+          "Heated 3rd row",
+          "Rear entertainment",
+          "HUD",
+          "Hands-free liftgate"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-grandhighlander",
+    "brand": "Toyota",
+    "model": "Grand Highlander",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Mid-Size",
+    "msrp": 42310,
+    "ext": [
+      "/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_1_500.jpg",
+      "/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_i_oem_1_500.jpg",
+      "/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "200.6\"",
+      "width": "78.1\"",
+      "height": "70.7\"",
+      "wheelbase": "116.1\""
+    },
+    "trims": [
+      {
+        "name": "LE",
+        "price": 42310,
+        "features": [
+          "2.4L Turbo 4-cyl (265 hp)",
+          "AWD available",
+          "12.3\" touchscreen",
+          "3-row / 8-passenger",
+          "Toyota Safety Sense 3.0"
+        ]
+      },
+      {
+        "name": "XLE",
+        "price": 45360,
+        "features": [
+          "Leather-trimmed seats",
+          "Dual moonroof",
+          "Power liftgate",
+          "Heated front seats",
+          "Wireless charging"
+        ]
+      },
+      {
+        "name": "Hybrid Max XLE",
+        "price": 52060,
+        "features": [
+          "2.5L Hybrid Max (362 hp combined)",
+          "Multi-stage hybrid",
+          "Standard AWD",
+          "Advanced towing mode"
+        ]
+      },
+      {
+        "name": "Platinum",
+        "price": 58460,
+        "features": [
+          "JBL 11-speaker audio",
+          "Ventilated seats",
+          "14\" touchscreen",
+          "Head-up display",
+          "Panoramic moonroof"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-crownsignia",
+    "brand": "Toyota",
+    "model": "Crown Signia",
+    "year": 2025,
+    "body": "Crossover",
+    "segment": "Mid-Size",
+    "msrp": 40230,
+    "ext": [
+      "/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_1_500.jpg",
+      "/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_i_oem_1_500.jpg",
+      "/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "192.5\"",
+      "width": "74.4\"",
+      "height": "66.3\"",
+      "wheelbase": "112.2\""
+    },
+    "trims": [
+      {
+        "name": "XLE",
+        "price": 40230,
+        "features": [
+          "2.5L Hybrid (243 hp combined)",
+          "AWD standard",
+          "12.3\" touchscreen",
+          "Toyota Safety Sense 3.0",
+          "37 MPG combined",
+          "Panoramic glass roof"
+        ]
+      },
+      {
+        "name": "Limited",
+        "price": 46030,
+        "features": [
+          "JBL 9-speaker audio",
+          "Ventilated seats",
+          "Head-up display",
+          "Heated rear seats",
+          "Premium leather",
+          "Advanced Park"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-4runner",
+    "brand": "Toyota",
+    "model": "4Runner",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Mid-Size",
+    "msrp": 41270,
+    "ext": [
+      "/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_1_500.jpg",
+      "/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_i_oem_1_500.jpg",
+      "/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "191.7\"",
+      "width": "76.0\"",
+      "height": "72.0\"",
+      "wheelbase": "109.8\""
+    },
+    "trims": [
+      {
+        "name": "SR5",
+        "price": 41270,
+        "features": [
+          "2.4L Turbo 4-cyl (278 hp)",
+          "8-speed auto",
+          "RWD or 4WD",
+          "8\" touchscreen",
+          "Toyota Safety Sense 3.0",
+          "Multi-terrain Select"
+        ]
+      },
+      {
+        "name": "TRD Sport",
+        "price": 45900,
+        "features": [
+          "TRD-tuned suspension",
+          "TRD-stamped components",
+          "Hood scoop",
+          "Performance exhaust note"
+        ]
+      },
+      {
+        "name": "TRD Off-Road",
+        "price": 46900,
+        "features": [
+          "Kinetic Dynamic Suspension System",
+          "Electronic locking rear diff",
+          "Crawl Control",
+          "ATRAC terrain traction"
+        ]
+      },
+      {
+        "name": "TRD Pro",
+        "price": 58700,
+        "features": [
+          "Fox suspension shocks",
+          "Rock rails",
+          "Skid plates",
+          "TRD Pro Exhaust",
+          "Wireless charging"
+        ]
+      },
+      {
+        "name": "Limited",
+        "price": 52000,
+        "features": [
+          "Premium leather",
+          "14\" touchscreen",
+          "Adaptive headlights",
+          "Heated & ventilated seats",
+          "JBL audio"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-sequoia",
+    "brand": "Toyota",
+    "model": "Sequoia",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Full-Size",
+    "msrp": 62295,
+    "ext": [
+      "/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_1_500.jpg",
+      "/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_i_oem_1_500.jpg",
+      "/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "214.4\"",
+      "width": "80.0\"",
+      "height": "74.0\"",
+      "wheelbase": "122.0\""
+    },
+    "trims": [
+      {
+        "name": "SR5",
+        "price": 62295,
+        "features": [
+          "3.5L Twin-Turbo V6 Hybrid (437 hp)",
+          "Hybrid-only",
+          "3-row / 8-passenger",
+          "14\" touchscreen",
+          "Toyota Safety Sense 2.5+",
+          "9,000-lb towing"
+        ]
+      },
+      {
+        "name": "Limited",
+        "price": 71795,
+        "features": [
+          "Semi-aniline leather",
+          "Tri-zone climate",
+          "JBL 14-speaker audio",
+          "Wireless charging",
+          "Power running boards"
+        ]
+      },
+      {
+        "name": "Platinum",
+        "price": 78595,
+        "features": [
+          "Four-zone climate",
+          "HUD",
+          "Heated & ventilated 2nd row",
+          "Mark Levinson audio",
+          "22\" wheels"
+        ]
+      },
+      {
+        "name": "TRD Pro",
+        "price": 80295,
+        "features": [
+          "Fox internal bypass shocks",
+          "Multi-terrain select",
+          "KDSS standard",
+          "TRD Pro grille",
+          "TRD exhaust"
+        ]
+      },
+      {
+        "name": "Capstone",
+        "price": 89095,
+        "features": [
+          "Semi-aniline quilted leather",
+          "24-speaker Mark Levinson audio",
+          "Power running boards",
+          "Rear-seat entertainment",
+          "Captain's chairs 2nd row"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "t-landcruiser",
+    "brand": "Toyota",
+    "model": "Land Cruiser",
+    "year": 2025,
+    "body": "SUV",
+    "segment": "Full-Size",
+    "msrp": 56450,
+    "ext": [
+      "/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_1_500.jpg",
+      "/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_2_500.jpg"
+    ],
+    "int": [
+      "/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_i_oem_1_500.jpg",
+      "/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_d_oem_1_500.jpg"
+    ],
+    "dims": {
+      "length": "192.3\"",
+      "width": "77.6\"",
+      "height": "75.4\"",
+      "wheelbase": "112.2\""
+    },
+    "trims": [
+      {
+        "name": "Land Cruiser",
+        "price": 56450,
+        "features": [
+          "2.4L Twin-Turbo Hybrid (326 hp)",
+          "4WD standard",
+          "Multi-terrain select",
+          "KDSS stabilizer",
+          "14\" touchscreen",
+          "Toyota Safety Sense 3.0"
+        ]
+      },
+      {
+        "name": "1958 Edition",
+        "price": 59550,
+        "features": [
+          "Heritage-inspired styling",
+          "Unique 18\" wheels",
+          "Retro badging",
+          "Off-road skid plates",
+          "Electronic locking differential"
+        ]
+      },
+      {
+        "name": "First Edition",
+        "price": 68000,
+        "features": [
+          "Premium leather",
+          "Heated & ventilated seats",
+          "JBL 14-speaker audio",
+          "Panoramic roof",
+          "Head-up display"
+        ]
+      }
+    ]
+  }
 ];
 
 // ── FALLBACK image (used if OEM CDN returns 404)
 const FALLBACK = 'https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg';
 
 function img(path){ if(!path) return FALLBACK; return path.startsWith('http') ? path : CDN + path; }
+
+// ── PERSISTENCE ──────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'automatch_cars_v1';
+
+// Boot: load saved data or fall back to defaults
+// Use `let` so resetToDefaults() can splice/push freely
+function _loadSaved(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e){ console.warn('AutoMatch: could not load saved cars', e); }
+  return null;
+}
+const _boot = _loadSaved();
+const CARS = _boot ? _boot : DEFAULT_CARS.map(c=>Object.assign({},c));
+if(_boot) console.log('AutoMatch: loaded', CARS.length, 'cars from localStorage');
+
+function saveCars(){
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(CARS));
+  } catch(e){ console.warn('AutoMatch: could not save cars', e); }
+}
+
+function resetToDefaults(){
+  if(!confirm('Reset all cars to the original defaults? Any additions or edits you have made will be lost.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  CARS.splice(0, CARS.length, ...DEFAULT_CARS.map(c=>Object.assign({},c)));
+  doFilter();
+  renderAdmEditList();
+  const msg = document.getElementById('admResetMsg');
+  if(msg){ msg.style.display='block'; setTimeout(()=>msg.style.display='none', 3000); }
+}
 
 // ── SIZE ORDER for segment-based sorting
 const SEG_ORDER={'Subcompact':1,'Compact':2,'Mid-Size':3,'Full-Size':4};
@@ -1120,8 +3482,7 @@ function goHome(){
     <div class="adm-gate-logo">AutoMatch <span>Admin</span></div>
     <p class="adm-gate-sub">Enter your password to access the car management panel.</p>
     <div class="adm-input-wrap">
-      <input type="password" id="adminPwInput" class="adm-input" placeholder="Password"
-        onkeydown="if(event.key==='Enter')checkAdminPw()">
+      <input type="password" id="adminPwInput" class="adm-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkAdminPw()">
       <div id="adminPwError" class="adm-pw-error" style="display:none">Incorrect password. Try again.</div>
     </div>
     <div class="adm-gate-actions">
@@ -1132,7 +3493,7 @@ function goHome(){
 </div>
 
 <!-- Main Admin Panel -->
-<div id="adminPanel" class="adm-overlay" onclick="if(event.target===this)closeAdmin()">
+<div id="adminPanel" class="adm-overlay open" onclick="if(event.target===this)closeAdmin()">
   <div class="adm-panel">
 
     <!-- Header -->
@@ -1141,17 +3502,22 @@ function goHome(){
         <div class="adm-header-title">AutoMatch <span>Admin</span></div>
         <div class="adm-header-sub">Add or edit car listings</div>
       </div>
-      <button class="adm-close" onclick="closeAdmin()">✕</button>
+      <div class="adm-header-actions">
+        <button class="adm-header-btn" onclick="admExportHtml()" title="Download index.html with current car data baked in">⬇ Export HTML</button>
+        <button class="adm-header-btn adm-header-btn-danger" onclick="resetToDefaults()" title="Revert all cars to original defaults">↺ Reset</button>
+        <div id="admResetMsg" class="adm-reset-msg" style="display:none">✓ Reset to defaults</div>
+        <button class="adm-close" onclick="closeAdmin()">✕</button>
+      </div>
     </div>
 
     <!-- Tab bar -->
     <div class="adm-tabs">
-      <button class="adm-tab active" onclick="switchAdmTab('add',this)">＋ Add New Car</button>
-      <button class="adm-tab" onclick="switchAdmTab('edit',this)">✎ Edit Existing</button>
+      <button class="adm-tab" onclick="switchAdmTab('add',this)">＋ Add New Car</button>
+      <button class="adm-tab active" onclick="switchAdmTab('edit',this)">✎ Edit Existing</button>
     </div>
 
     <!-- ADD TAB -->
-    <div id="admTabAdd" class="adm-tab-body">
+    <div id="admTabAdd" class="adm-tab-body" style="display: none;">
       <div class="adm-section-title">Step 1 — Add your sources</div>
 
       <div class="adm-field-grid">
@@ -1205,10 +3571,10 @@ function goHome(){
             </select>
           </div>
           <div class="adm-field"><label class="adm-label">Base MSRP ($)</label><input id="cf-msrp" class="adm-input" type="number"></div>
-          <div class="adm-field"><label class="adm-label">Length</label><input id="cf-length" class="adm-input" placeholder='e.g. 182.4"'></div>
-          <div class="adm-field"><label class="adm-label">Width</label><input id="cf-width" class="adm-input" placeholder='e.g. 73.0"'></div>
-          <div class="adm-field"><label class="adm-label">Height</label><input id="cf-height" class="adm-input" placeholder='e.g. 67.5"'></div>
-          <div class="adm-field"><label class="adm-label">Wheelbase</label><input id="cf-wheelbase" class="adm-input" placeholder='e.g. 105.9"'></div>
+          <div class="adm-field"><label class="adm-label">Length</label><input id="cf-length" class="adm-input" placeholder="e.g. 182.4&quot;"></div>
+          <div class="adm-field"><label class="adm-label">Width</label><input id="cf-width" class="adm-input" placeholder="e.g. 73.0&quot;"></div>
+          <div class="adm-field"><label class="adm-label">Height</label><input id="cf-height" class="adm-input" placeholder="e.g. 67.5&quot;"></div>
+          <div class="adm-field"><label class="adm-label">Wheelbase</label><input id="cf-wheelbase" class="adm-input" placeholder="e.g. 105.9&quot;"></div>
         </div>
 
         <div class="adm-field" style="margin-top:1rem">
@@ -1238,17 +3604,358 @@ function goHome(){
     </div>
 
     <!-- EDIT TAB -->
-    <div id="admTabEdit" class="adm-tab-body" style="display:none">
+    <div id="admTabEdit" class="adm-tab-body" style="display: block;">
       <div class="adm-section-title">Select a car to edit</div>
       <div class="adm-search-wrap">
         <input id="admEditSearch" class="adm-input" placeholder="Search by name…" oninput="renderAdmEditList()">
       </div>
-      <div id="admEditList" class="adm-edit-list"></div>
+      <div id="admEditList" class="adm-edit-list">
+    <div class="adm-edit-row" onclick="admOpenEdit('n-versa')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Nissan Versa</div>
+          <div class="adm-edit-meta">2025 · Sedan · Subcompact · $17,390</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('n-sentra')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Nissan Sentra</div>
+          <div class="adm-edit-meta">2025 · Sedan · Compact · $22,730</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('n-altima')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Nissan Altima</div>
+          <div class="adm-edit-meta">2025 · Sedan · Mid-Size · $27,000</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('n-kicks')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://www.nissanusa.com/content/dam/Nissan/us/vehicles/kicks/2026/gallery/exterior/lightbox/2026-nissan-kicks-two-tone-color.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Nissan Kicks</div>
+          <div class="adm-edit-meta">2026 · SUV · Subcompact · $21,830</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('n-rogue')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Nissan Rogue</div>
+          <div class="adm-edit-meta">2025 · SUV · Compact · $29,990</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('n-pathfinder')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Nissan Pathfinder</div>
+          <div class="adm-edit-meta">2025 · SUV · Mid-Size · $38,690</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('k-k4')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Kia K4</div>
+          <div class="adm-edit-meta">2025 · Sedan · Compact · $21,990</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('k-k5')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Kia K5</div>
+          <div class="adm-edit-meta">2025 · Sedan · Mid-Size · $25,590</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('k-seltos')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Kia Seltos</div>
+          <div class="adm-edit-meta">2025 · Crossover · Subcompact · $26,185</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('k-sportage')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/kia/sportage/2024/oem/2024_kia_sportage_4dr-suv_x-pro_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Kia Sportage</div>
+          <div class="adm-edit-meta">2025 · SUV · Compact · $27,590</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('k-telluride')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Kia Telluride</div>
+          <div class="adm-edit-meta">2025 · SUV · Mid-Size · $36,390</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('h-civic')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Honda Civic</div>
+          <div class="adm-edit-meta">2025 · Sedan · Compact · $24,250</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('h-accord')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Honda Accord</div>
+          <div class="adm-edit-meta">2025 · Sedan · Mid-Size · $28,745</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('h-crv')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Honda CR-V</div>
+          <div class="adm-edit-meta">2025 · SUV · Compact · $30,920</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('h-passport')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Honda Passport</div>
+          <div class="adm-edit-meta">2025 · SUV · Mid-Size · $42,400</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('h-pilot')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Honda Pilot</div>
+          <div class="adm-edit-meta">2025 · SUV · Mid-Size · $40,275</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('h-ridgeline')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Honda Ridgeline</div>
+          <div class="adm-edit-meta">2025 · Truck · Mid-Size · $40,150</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('h-prelude')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Honda Prelude Hybrid</div>
+          <div class="adm-edit-meta">2026 · Sports Car · Compact · $35,000</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-corolla')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota Corolla</div>
+          <div class="adm-edit-meta">2025 · Sedan · Compact · $22,325</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-corollacross')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota Corolla Cross</div>
+          <div class="adm-edit-meta">2025 · Crossover · Subcompact · $24,470</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-chr')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota C-HR</div>
+          <div class="adm-edit-meta">2025 · Crossover · Subcompact · $29,825</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-camry')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota Camry</div>
+          <div class="adm-edit-meta">2025 · Sedan · Mid-Size · $28,950</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-rav4')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota RAV4 Hybrid</div>
+          <div class="adm-edit-meta">2025 · SUV · Compact · $32,125</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-rav4prime')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota RAV4 Plug-in Hybrid</div>
+          <div class="adm-edit-meta">2026 · SUV · Compact · $42,950</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-bz4x')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota bZ4X</div>
+          <div class="adm-edit-meta">2025 · SUV · Mid-Size · $43,490</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-highlander')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota Highlander</div>
+          <div class="adm-edit-meta">2025 · SUV · Mid-Size · $40,860</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-grandhighlander')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota Grand Highlander</div>
+          <div class="adm-edit-meta">2025 · SUV · Mid-Size · $42,310</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-crownsignia')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota Crown Signia</div>
+          <div class="adm-edit-meta">2025 · Crossover · Mid-Size · $40,230</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-4runner')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota 4Runner</div>
+          <div class="adm-edit-meta">2025 · SUV · Mid-Size · $41,270</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-sequoia')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota Sequoia</div>
+          <div class="adm-edit-meta">2025 · SUV · Full-Size · $62,295</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  
+    <div class="adm-edit-row" onclick="admOpenEdit('t-landcruiser')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="https://media.ed.edmunds-media.com/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_1_500.jpg" alt="" onerror="this.src='https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg'">
+        <div>
+          <div class="adm-edit-name">Toyota Land Cruiser</div>
+          <div class="adm-edit-meta">2025 · SUV · Full-Size · $56,450</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  </div>
 
       <!-- Edit form (same fields, shown when a car is selected) -->
-      <div id="admEditForm" style="display:none">
+      <div id="admEditForm" style="display: none;">
         <div class="adm-divider"></div>
-        <div class="adm-section-title" id="admEditFormTitle">Editing: <span id="admEditCarName"></span></div>
+        <div class="adm-section-title" id="admEditFormTitle">Editing: <span id="admEditCarName">Nissan Kicks</span></div>
         <div class="adm-confirm-grid">
           <div class="adm-field"><label class="adm-label">Brand</label><input id="ef-brand" class="adm-input"></div>
           <div class="adm-field"><label class="adm-label">Model</label><input id="ef-model" class="adm-input"></div>
@@ -1278,7 +3985,7 @@ function goHome(){
           <label class="adm-label">Interior Image URLs <span class="adm-hint-inline">(one per line)</span></label>
           <textarea id="ef-int" class="adm-textarea" rows="3"></textarea>
         </div>
-        <div id="admEditImgPreview" class="adm-img-preview"></div>
+        <div id="admEditImgPreview" class="adm-img-preview"><img src="https://www.nissanusa.com/content/dam/Nissan/us/vehicles/kicks/2026/gallery/exterior/lightbox/2026-nissan-kicks-two-tone-color.jpg" onerror="this.classList.add('broken')" title="https://www.nissanusa.com/content/dam/Nissan/us/vehicles/kicks/2026/gallery/exterior/lightbox/2026-nissan-kicks-two-tone-color.jpg"><img src="https://www.nissanusa.com/content/dam/Nissan/us/vehicles/kicks/2026/gallery/exterior/lightbox/2026-nissan-kicks-rear-bridge-LB.jpg" onerror="this.classList.add('broken')" title="https://www.nissanusa.com/content/dam/Nissan/us/vehicles/kicks/2026/gallery/exterior/lightbox/2026-nissan-kicks-rear-bridge-LB.jpg"><img src="/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_i_oem_1_500.jpg" onerror="this.classList.add('broken')" title="/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_i_oem_1_500.jpg" class="broken"><img src="/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_d_oem_1_500.jpg" onerror="this.classList.add('broken')" title="/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_d_oem_1_500.jpg" class="broken"></div>
         <div class="adm-field">
           <label class="adm-label">Trims <span class="adm-hint-inline">(JSON array)</span></label>
           <textarea id="ef-trims" class="adm-textarea adm-mono" rows="8"></textarea>
@@ -1288,7 +3995,7 @@ function goHome(){
           <button class="adm-btn-ghost" onclick="admCancelEdit()">Cancel</button>
           <button class="adm-btn-primary" onclick="admSaveEdit()">✓ Save Changes</button>
         </div>
-        <div id="admEditMsg" class="adm-publish-msg" style="display:none"></div>
+        <div id="admEditMsg" class="adm-publish-msg success" style="display: none;">✓ Changes saved successfully.</div>
       </div>
     </div>
 
@@ -1350,6 +4057,18 @@ function goHome(){
 }
 .adm-header-title span{color:#e84545;font-style:italic}
 .adm-header-sub{font-size:0.78rem;color:#9898aa;margin-top:2px}
+.adm-header-actions{display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
+.adm-header-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:500;
+  background:#f5f5f8;color:#44444f;border:1px solid rgba(0,0,0,0.1);
+  border-radius:6px;padding:0.3rem 0.7rem;cursor:pointer;
+  transition:background 0.12s,border-color 0.12s;white-space:nowrap;
+}
+.adm-header-btn:hover{background:#ebebf0;border-color:rgba(0,0,0,0.18)}
+.adm-header-btn-danger{color:#e84545;border-color:rgba(232,69,69,0.25)}
+.adm-header-btn-danger:hover{background:rgba(232,69,69,0.06);border-color:rgba(232,69,69,0.4)}
+.adm-reset-msg{font-size:0.72rem;color:#166534;background:#f0fff4;
+  border:1px solid rgba(34,197,94,0.25);border-radius:6px;padding:0.25rem 0.6rem;white-space:nowrap}
 .adm-close{
   width:32px;height:32px;border-radius:50%;border:1px solid rgba(0,0,0,0.1);
   background:transparent;cursor:pointer;font-size:0.85rem;color:#9898aa;
@@ -1636,6 +4355,7 @@ function admPublishCar(){
 
     const newCar = {id, brand, model, year, body, segment, msrp, ext, int:int_, dims, trims};
     CARS.push(newCar);
+    saveCars();
     doFilter();
 
     const msg = document.getElementById('admPublishMsg');
@@ -1747,6 +4467,7 @@ function admSaveEdit(){
       int: document.getElementById('ef-int').value.split('\n').map(s=>s.trim()).filter(Boolean),
       trims
     };
+    saveCars();
     doFilter();
     renderAdmEditList();
 
@@ -1771,6 +4492,7 @@ function admDeleteCar(){
   if(!confirm(`Delete "${c.brand} ${c.model}"? This cannot be undone.`)) return;
   const idx = CARS.findIndex(x=>x.id===admEditingId);
   CARS.splice(idx,1);
+  saveCars();
   doFilter();
   renderAdmEditList();
   admCancelEdit();
@@ -1781,6 +4503,46 @@ function admCancelEdit(){
   document.getElementById('admEditForm').style.display='none';
 }
 
+// ── EXPORT ───────────────────────────────────────────────────────────────────
+function admExportHtml(){
+  const carsJson = JSON.stringify(CARS, null, 2);
+  const source = document.documentElement.outerHTML;
+
+  // Locate the DEFAULT_CARS block using a marker that won't have newline issues
+  const startMarker = 'const DEFAULT_CARS = [';
+  const endMarker   = '];';
+  const si = source.indexOf(startMarker);
+  if(si === -1){ alert('Export failed: could not find DEFAULT_CARS marker.'); return; }
+
+  // Walk forward from si to find the matching closing ];
+  let depth = 0, ei = -1;
+  for(let i = si; i < source.length - 1; i++){
+    if(source[i] === '[') depth++;
+    else if(source[i] === ']'){
+      depth--;
+      if(depth === 0){ ei = i + 1; break; }
+    }
+  }
+  // consume the semicolon if present
+  if(ei !== -1 && source[ei] === ';') ei++;
+
+  if(ei === -1){ alert('Export failed: could not find end of DEFAULT_CARS.'); return; }
+
+  const newBlock = 'const DEFAULT_CARS = ' + carsJson + ';';
+  const exported = source.substring(0, si) + newBlock + source.substring(ei);
+
+  const blob = new Blob([exported], {type: 'text/html'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'index.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 </script>
-</body>
-</html>
+
+
+</body></html>
