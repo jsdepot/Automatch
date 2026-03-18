@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AutoMatch — Car Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ── TOKENS ──────────────────────────────────────────────────────────────── */
+:root{
+  --bg:#f5f5f8;
+  --bg2:#ffffff;
+  --bg3:#eeeef3;
+  --surface:#ffffff;
+  --surface2:#f5f5f8;
+  --surface3:#ebebf0;
+  --ink:#111118;
+  --ink2:#44444f;
+  --ink3:#9898aa;
+  --accent:#e84545;
+  --accent-dim:#e84545;
+  --green:#22c55e;
+  --border:rgba(0,0,0,0.08);
+  --border-light:rgba(0,0,0,0.08);
+  --card-radius:20px;
+  --pill-radius:999px;
+  --trans:0.18s cubic-bezier(.4,0,.2,1);
+  --shadow:0 4px 24px rgba(0,0,0,0.07);
+  --shadow-md:0 8px 40px rgba(0,0,0,0.11);
+  --shadow-lg:0 20px 60px rgba(0,0,0,0.16);
+}
+
+/* ── BASE ────────────────────────────────────────────────────────────────── */
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:15px}
+
+/* ── HEADER — stays dark for contrast ───────────────────────────────────── */
+header{
+  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f0f13 100%);
+  padding:1.5rem 2.5rem 1.25rem;
+  display:flex;align-items:center;gap:2rem;
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.logo{font-family:'DM Serif Display',serif;font-size:1.7rem;letter-spacing:-0.04em;color:#fff;flex-shrink:0;line-height:1}
+.logo span{color:var(--accent);font-style:italic}
+.logo-sub{font-size:0.65rem;color:rgba(255,255,255,0.4);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px}
+.tagline{font-size:0.72rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;margin-left:auto;white-space:nowrap}
+.hdr-btn{
+  background:var(--accent);color:#fff;border:none;
+  padding:0.55rem 1.4rem;border-radius:var(--pill-radius);
+  font-size:0.82rem;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:var(--trans);
+  flex-shrink:0;letter-spacing:0.02em;
+  box-shadow:0 4px 18px rgba(232,69,69,0.35);
+}
+.hdr-btn:hover{background:#c93838;box-shadow:0 4px 24px rgba(232,69,69,0.5);transform:translateY(-1px)}
+
+/* ── CONTROL BAR — white surface ─────────────────────────────────────────── */
+.search-bar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0.9rem 2.5rem;
+  display:flex;align-items:center;gap:1rem;
+  flex-wrap:wrap;position:sticky;top:75px;z-index:90;
+  box-shadow:0 2px 12px rgba(0,0,0,0.05);
+}
+.srch-wrap{position:relative;min-width:200px;max-width:280px;flex:1}
+.srch-wrap input{
+  width:100%;padding:0.6rem 1rem 0.6rem 2.4rem;
+  border:1.5px solid var(--border);border-radius:var(--pill-radius);
+  font-size:0.84rem;font-family:'DM Sans',sans-serif;
+  background:var(--surface2);color:var(--ink);outline:none;transition:var(--trans);
+}
+.srch-wrap input::placeholder{color:var(--ink3)}
+.srch-wrap input:focus{border-color:#aaa;background:var(--surface)}
+.srch-icon{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:14px;pointer-events:none}
+
+/* pill filter groups */
+.control-group{display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap}
+.ctrl-lbl{font-size:0.65rem;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em;flex-shrink:0}
+select{
+  padding:0.5rem 1.75rem 0.5rem 0.9rem;
+  border:1.5px solid var(--border);
+  border-radius:var(--pill-radius);
+  font-size:0.8rem;font-family:'DM Sans',sans-serif;
+  background:var(--surface2);color:var(--ink);
+  cursor:pointer;outline:none;transition:var(--trans);
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(0,0,0,0.35)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 0.65rem center;
+}
+select:hover{border-color:#aaa}
+select option{background:var(--surface);color:var(--ink)}
+
+.divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+
+/* pill sort buttons */
+.sort-wrap{display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}
+.sort-btn{
+  padding:0.45rem 0.9rem;
+  border:1.5px solid var(--border);border-radius:var(--pill-radius);
+  font-size:0.76rem;font-family:'DM Sans',sans-serif;
+  background:var(--surface2);color:var(--ink2);
+  cursor:pointer;transition:var(--trans);white-space:nowrap;user-select:none;font-weight:500;
+}
+.sort-btn:hover{background:var(--surface3);border-color:#bbb;color:var(--ink)}
+.sort-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+.res-cnt{margin-left:auto;font-size:0.75rem;color:var(--ink3);white-space:nowrap}
+.res-cnt b{color:var(--accent)}
+
+/* ── MAIN GRID ───────────────────────────────────────────────────────────── */
+.main{padding:2rem 2.5rem 5rem;max-width:1440px;margin:0 auto}
+.car-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+
+/* ── CAR CARDS ───────────────────────────────────────────────────────────── */
+.car-card{
+  background:var(--surface);border-radius:var(--card-radius);
+  overflow:hidden;cursor:pointer;
+  transition:transform var(--trans),box-shadow var(--trans);
+  display:flex;flex-direction:column;
+  box-shadow:var(--shadow);
+}
+.car-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+
+.img-wrap{overflow:hidden;position:relative;background:var(--surface3)}
+.card-img{width:100%;height:200px;object-fit:cover;display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1)}
+.car-card:hover .card-img{transform:scale(1.07)}
+
+/* floating price badge on image */
+.price-badge{
+  position:absolute;bottom:12px;left:12px;
+  background:rgba(15,15,19,0.82);
+  color:#fff;font-size:0.78rem;font-weight:600;
+  padding:5px 11px;border-radius:var(--pill-radius);
+  backdrop-filter:blur(8px);letter-spacing:0.01em;
+}
+.price-badge span{color:var(--accent-dim)}
+
+.brand-bdg{
+  position:absolute;top:12px;left:12px;
+  background:rgba(15,15,19,0.7);color:rgba(255,255,255,0.9);
+  font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;
+  padding:4px 9px;border-radius:var(--pill-radius);
+  backdrop-filter:blur(6px);
+}
+.cmp-chk{
+  position:absolute;top:12px;right:12px;
+  width:30px;height:30px;
+  background:rgba(255,255,255,0.92);
+  border:none;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:var(--trans);cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+.cmp-chk:hover{background:#fff;transform:scale(1.1)}
+.cmp-chk.on{background:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(232,69,69,0.4)}
+
+.card-body{padding:1rem 1.1rem 1.15rem;flex:1;display:flex;flex-direction:column;gap:0.18rem;background:var(--surface)}
+.card-model{font-family:'DM Serif Display',serif;font-size:1.2rem;line-height:1.2;letter-spacing:-0.02em;color:var(--ink)}
+.card-sub{font-size:0.75rem;color:var(--ink3);margin-top:1px}
+.card-footer{display:flex;align-items:center;gap:0.5rem;margin-top:0.75rem;flex-wrap:wrap}
+.seg-pill{
+  font-size:0.65rem;font-weight:500;
+  background:var(--surface2);color:var(--ink2);
+  padding:4px 10px;border-radius:var(--pill-radius);
+  border:1px solid var(--border-light);white-space:nowrap;
+}
+.body-pill{
+  font-size:0.65rem;font-weight:500;
+  background:#ffeaea;color:#d63535;
+  padding:4px 10px;border-radius:var(--pill-radius);
+  white-space:nowrap;border:1px solid rgba(214,53,53,0.15);
+}
+.ctag{font-size:0.65rem;color:var(--ink3);background:var(--surface2);padding:3px 8px;border-radius:var(--pill-radius)}
+
+/* ── MODAL ───────────────────────────────────────────────────────────────── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;overflow-y:auto;padding:2rem 1rem;backdrop-filter:blur(4px)}
+.overlay.open{display:flex;align-items:flex-start;justify-content:center}
+.modal{background:var(--surface);border-radius:24px;width:100%;max-width:820px;overflow:hidden;position:relative;margin:auto;box-shadow:var(--shadow-lg)}
+.m-hero{width:100%;height:320px;object-fit:cover;background:var(--surface3);display:block}
+.m-hero-overlay{position:absolute;top:0;left:0;right:0;height:320px;background:linear-gradient(to bottom,rgba(0,0,0,0) 50%,rgba(0,0,0,0.55) 100%);pointer-events:none}
+.m-close{
+  position:absolute;top:16px;right:16px;
+  background:rgba(15,15,19,0.7);color:#fff;
+  border:none;width:36px;height:36px;border-radius:50%;
+  font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  z-index:5;backdrop-filter:blur(8px);transition:var(--trans);
+}
+.m-close:hover{background:rgba(15,15,19,0.92);transform:scale(1.08)}
+.m-body{padding:1.75rem 2rem 2.25rem}
+
+.m-brand-lbl{font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.2rem}
+.m-title{font-family:'DM Serif Display',serif;font-size:2rem;letter-spacing:-0.03em;line-height:1.1;margin-bottom:0.5rem;color:var(--ink)}
+
+.m-badges{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.m-price-badge{background:var(--accent);color:#fff;font-size:0.95rem;font-weight:700;padding:6px 16px;border-radius:var(--pill-radius);letter-spacing:0.01em}
+.m-yr-badge{background:var(--surface2);color:var(--ink2);font-size:0.78rem;font-weight:500;padding:6px 14px;border-radius:var(--pill-radius);border:1px solid var(--border-light)}
+.m-seg-badge{background:#ffe8e8;color:#c93838;font-size:0.78rem;font-weight:500;padding:6px 14px;border-radius:var(--pill-radius)}
+
+.sec-lbl{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink3);font-weight:600;margin-bottom:0.75rem;margin-top:1.5rem}
+
+/* gallery tabs as pills */
+.gal-tabs{display:flex;gap:0.4rem;margin-bottom:0.65rem;background:var(--surface2);padding:4px;border-radius:var(--pill-radius);width:fit-content}
+.gal-tab{padding:0.4rem 1.1rem;font-size:0.78rem;cursor:pointer;background:transparent;border:none;font-family:'DM Sans',sans-serif;color:var(--ink3);transition:var(--trans);border-radius:var(--pill-radius);font-weight:500}
+.gal-tab:hover{color:var(--ink)}
+.gal-tab.active{background:var(--ink);color:#fff}
+
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem}
+.gallery img{width:100%;height:130px;object-fit:cover;border-radius:12px;cursor:pointer;transition:transform var(--trans),opacity var(--trans)}
+.gallery img:hover{transform:scale(1.03);opacity:0.92}
+
+/* ── FULLSCREEN LIGHTBOX ─────────────────────────────────────────────────── */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.lightbox.open{display:flex}
+.lb-wrap{position:relative;max-width:92vw;max-height:90vh;display:flex;align-items:center;justify-content:center}
+.lb-img{max-width:92vw;max-height:88vh;object-fit:contain;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,0.6);transition:opacity 0.12s ease}
+.lb-close{position:fixed;top:18px;right:22px;background:rgba(255,255,255,0.12);color:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:var(--trans)}
+.lb-close:hover{background:rgba(255,255,255,0.25)}
+.lb-prev,.lb-next{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);color:#fff;border:none;width:46px;height:46px;border-radius:50%;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:var(--trans);user-select:none}
+.lb-prev{left:18px}.lb-next{right:18px}
+.lb-prev:hover,.lb-next:hover{background:rgba(255,255,255,0.22)}
+.lb-counter{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.6);font-size:0.8rem;letter-spacing:0.06em}
+.lb-caption{position:fixed;bottom:44px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.75);font-size:0.82rem;font-weight:500;white-space:nowrap;letter-spacing:0.02em}
+
+/* dims */
+.dims-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.65rem}
+.dim-box{background:var(--surface2);border-radius:14px;padding:0.85rem;text-align:center;border:1px solid var(--border-light)}
+.dim-val{font-size:1rem;font-weight:600;color:var(--ink)}
+.dim-key{font-size:0.63rem;color:var(--ink3);margin-top:3px;text-transform:uppercase;letter-spacing:0.06em}
+
+/* trim accordion */
+.trim-list{display:flex;flex-direction:column;gap:0.5rem}
+.trim-item{border:1.5px solid var(--border-light);border-radius:14px;overflow:hidden;transition:border-color var(--trans)}
+.trim-item.open{border-color:var(--accent)}
+.trim-hdr{display:flex;align-items:center;padding:0.8rem 1rem;cursor:pointer;gap:1rem;background:var(--surface);transition:background var(--trans)}
+.trim-hdr:hover{background:var(--surface2)}
+.trim-nm{font-weight:600;font-size:0.88rem;flex:1;color:var(--ink)}
+.trim-pr{font-size:0.84rem;font-weight:700;color:var(--accent);flex-shrink:0}
+.trim-arr{font-size:0.72rem;color:var(--ink3);transition:transform 0.2s;flex-shrink:0}
+.trim-item.open .trim-arr{transform:rotate(180deg)}
+.trim-bd{display:none;padding:0.75rem 1rem 0.9rem;background:var(--surface2);border-top:1px solid var(--border-light)}
+.trim-item.open .trim-bd{display:block}
+.trim-feats{list-style:none;display:flex;flex-direction:column;gap:0.32rem}
+.trim-feats li{font-size:0.79rem;color:var(--ink2);display:flex;gap:0.5rem;align-items:flex-start;line-height:1.45}
+.trim-feats li::before{content:"✓";color:var(--green);font-weight:700;flex-shrink:0;font-size:0.72rem;margin-top:2px}
+
+.add-cmp-btn{
+  margin-top:1.5rem;width:100%;padding:0.9rem;
+  background:var(--ink);color:#fff;border:none;
+  border-radius:var(--pill-radius);font-size:0.88rem;font-weight:600;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--trans);
+  letter-spacing:0.02em;
+}
+.add-cmp-btn:hover{background:#222230;transform:translateY(-1px)}
+.add-cmp-btn.added{background:var(--green);color:#fff}
+
+/* ── COMPARE BOTTOM BAR ──────────────────────────────────────────────────── */
+.cmp-panel{
+  display:none;position:fixed;bottom:0;left:0;right:0;
+  background:rgba(15,15,19,0.95);color:#fff;
+  padding:0.9rem 2.5rem;z-index:150;
+  align-items:center;gap:0.8rem;flex-wrap:wrap;
+  backdrop-filter:blur(12px);border-top:1px solid var(--border);
+}
+.cmp-panel.vis{display:flex}
+.cmp-plbl{font-size:0.65rem;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;flex-shrink:0}
+.cmp-slots{display:flex;gap:0.55rem;flex:1;flex-wrap:wrap}
+.cmp-slot{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:var(--pill-radius);
+  padding:0.4rem 1rem;font-size:0.79rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.slot-nm{flex:1;opacity:0.9}
+.slot-rm{cursor:pointer;opacity:0.45;font-size:0.75rem;transition:var(--trans)}
+.slot-rm:hover{opacity:1;color:#ff6b6b}
+.cmp-go{
+  background:var(--accent);color:#fff;border:none;
+  padding:0.65rem 1.75rem;border-radius:var(--pill-radius);
+  font-size:0.84rem;font-weight:700;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:var(--trans);flex-shrink:0;
+  box-shadow:0 4px 18px rgba(232,69,69,0.35);letter-spacing:0.02em;
+}
+.cmp-go:hover{background:#c93838;transform:translateY(-1px)}
+.cmp-go:disabled{opacity:0.35;cursor:not-allowed;box-shadow:none;transform:none}
+
+/* ── COMPARE VIEW ────────────────────────────────────────────────────────── */
+.cmp-view{display:none;padding:2rem 2.5rem 5rem;max-width:1440px;margin:0 auto}
+.cmp-view.open{display:block}
+.back-btn{
+  background:transparent;border:1.5px solid var(--border);
+  padding:0.5rem 1.1rem;border-radius:var(--pill-radius);
+  font-size:0.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;
+  color:var(--ink2);margin-bottom:1.5rem;transition:var(--trans);
+}
+.back-btn:hover{border-color:#aaa;color:var(--ink)}
+.cmp-hd{font-family:'DM Serif Display',serif;font-size:1.75rem;letter-spacing:-0.02em;margin-bottom:0.3rem;color:var(--ink)}
+.cmp-sub{font-size:0.8rem;color:var(--ink3);margin-bottom:1.4rem}
+
+.cmp-cols{display:grid;gap:1.25rem}
+.cmp-cols.n2{grid-template-columns:repeat(2,1fr)}
+.cmp-cols.n3{grid-template-columns:repeat(3,1fr)}
+.cmp-cols.n4{grid-template-columns:repeat(4,1fr)}
+
+.cmp-col{background:var(--surface);border-radius:var(--card-radius);overflow:hidden;box-shadow:var(--shadow)}
+.cmp-col-img{width:100%;height:160px;object-fit:cover;background:var(--surface3);display:block}
+.cmp-col-body{padding:1rem 1.1rem 1.15rem}
+.cmp-col-brand{font-size:0.63rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink3)}
+.cmp-col-nm{font-family:'DM Serif Display',serif;font-size:1.1rem;margin:0.2rem 0;color:var(--ink)}
+.cmp-col-price{font-size:0.88rem;font-weight:700;color:var(--accent);margin-bottom:0.75rem}
+.ts-row{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem}
+.ts-row label{font-size:0.65rem;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;flex-shrink:0}
+.ts-row select{
+  flex:1;font-size:0.79rem;padding:0.42rem 1.6rem 0.42rem 0.75rem;
+  border:1px solid var(--border-light);border-radius:var(--pill-radius);
+  background:var(--surface2);color:var(--ink);cursor:pointer;outline:none;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(0,0,0,0.35)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 0.6rem center;
+}
+.cmp-feats{list-style:none;display:flex;flex-direction:column;gap:0.28rem;margin-bottom:0.9rem}
+.cmp-feats li{font-size:0.75rem;color:var(--ink2);display:flex;gap:0.4rem;align-items:flex-start;line-height:1.4}
+.cmp-feats li::before{content:"✓";color:var(--green);font-weight:700;font-size:0.68rem;flex-shrink:0;margin-top:2px}
+.spec-tbl{width:100%;font-size:0.75rem;border-top:1px solid var(--border-light);margin-top:0.5rem}
+.spec-tbl tr{border-bottom:1px solid var(--surface3)}
+.spec-tbl td{padding:0.38rem 0.05rem;vertical-align:top}
+.spec-tbl td:first-child{color:var(--ink3);width:44%;padding-right:0.4rem}
+.spec-tbl td.same{color:#16a34a;font-weight:600}
+.spec-tbl td.diff{color:var(--accent);font-weight:600}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────────────── */
+@media(max-width:640px){
+  header{padding:1.1rem 1.25rem}
+  .search-bar{padding:0.75rem 1.25rem;top:72px}
+  .main,.cmp-view{padding:1.25rem 1.25rem 5rem}
+  .dims-grid{grid-template-columns:repeat(2,1fr)}
+  .cmp-cols.n2,.cmp-cols.n3,.cmp-cols.n4{grid-template-columns:1fr}
+  .m-body{padding:1.2rem 1.25rem 1.75rem}
+  .m-hero,.m-hero-overlay{height:220px}
+  .m-title{font-size:1.6rem}
+  .cmp-panel{padding:0.75rem 1.25rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo" onclick="goHome()" style="cursor:pointer" title="Back to home">Auto<span>Match</span></div>
+    <div class="logo-sub">2025–2026 New Car Explorer</div>
+  </div>
+  <div class="tagline" style="display:none">placeholder</div>
+  <button class="hdr-btn" onclick="openCmpView()">⊕ Compare</button>
+</header>
+<div class="search-bar">
+  <div class="srch-wrap">
+    <span class="srch-icon">⌕</span>
+    <input type="text" id="srch" placeholder="Search make or model…" oninput="doFilter()">
+  </div>
+  <div class="control-group">
+    <span class="ctrl-lbl">Brand</span>
+    <select id="fBrand" onchange="doFilter()">
+      <option value="">All</option>
+      <option>Nissan</option><option>Kia</option><option>Honda</option><option>Toyota</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <span class="ctrl-lbl">Body</span>
+    <select id="fBody" onchange="doFilter()">
+      <option value="">All</option>
+      <option>Sedan</option><option>SUV</option><option>Crossover</option><option>Truck</option><option>Sports Car</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <span class="ctrl-lbl">Size</span>
+    <select id="fSeg" onchange="doFilter()">
+      <option value="">All</option>
+      <option>Subcompact</option><option>Compact</option><option>Mid-Size</option><option>Full-Size</option>
+    </select>
+  </div>
+  <div class="divider"></div>
+  <div class="sort-wrap">
+    <span class="ctrl-lbl">Sort</span>
+    <button class="sort-btn" id="sb-price-asc"  onclick="setSort('price','asc')">Price ↑</button>
+    <button class="sort-btn" id="sb-price-desc" onclick="setSort('price','desc')">Price ↓</button>
+    <button class="sort-btn" id="sb-size-asc"   onclick="setSort('size','asc')">Size ↑</button>
+    <button class="sort-btn" id="sb-size-desc"  onclick="setSort('size','desc')">Size ↓</button>
+    <button class="sort-btn" id="sb-model-asc"  onclick="setSort('model','asc')">A–Z Model</button>
+    <button class="sort-btn" id="sb-brand-asc"  onclick="setSort('brand','asc')">A–Z Make</button>
+  </div>
+  <div class="res-cnt"><b id="cnt">0</b> vehicles</div>
+</div>
+<div id="mainView"><div class="main"><div class="car-grid" id="grid"></div></div></div>
+<div class="cmp-view" id="cmpView">
+  <button class="back-btn" onclick="closeCmpView()">← All vehicles</button>
+  <div class="cmp-hd">Side-by-side comparison</div>
+  <div class="cmp-sub">Select a trim per vehicle · <span style="color:#22c55e">green = shared</span> · <span style="color:#ff6b6b">orange = different</span></div>
+  <div class="cmp-cols" id="cmpCols"></div>
+</div>
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="m-close" onclick="closeModal(null)">✕</button>
+    <img id="mHero" class="m-hero" src="" alt="" title="Click to expand" style="cursor:zoom-in" onclick="openLbSingle(this.src, activeCar ? activeCar.brand+' '+activeCar.model+' – Exterior' : '')">
+    <div class="m-hero-overlay"></div>
+    <div class="m-body">
+      <div class="m-brand-lbl" id="mBrand"></div>
+      <div class="m-title" id="mTitle"></div>
+      <div class="m-badges">
+        <span class="m-price-badge" id="mPrice"></span>
+        <span class="m-yr-badge" id="mYear"></span>
+        <span class="m-seg-badge" id="mSeg"></span>
+      </div>
+      <div class="sec-lbl">Gallery</div>
+      <div class="gal-tabs">
+        <button class="gal-tab active" onclick="switchGal('ext',this)">Exterior</button>
+        <button class="gal-tab" onclick="switchGal('int',this)">Interior</button>
+      </div>
+      <div class="gallery" id="mGal"></div>
+      <div class="sec-lbl">Dimensions</div>
+      <div class="dims-grid" id="mDims"></div>
+      <div class="sec-lbl">Trim Levels</div>
+      <div class="trim-list" id="mTrims"></div>
+      <button class="add-cmp-btn" id="addBtn" onclick="addToCmp()">+ Add to Comparison</button>
+    </div>
+  </div>
+</div>
+<div class="cmp-panel" id="cmpPanel">
+  <span class="cmp-plbl">Compare</span>
+  <div class="cmp-slots" id="cmpSlots"></div>
+  <button class="cmp-go" id="cmpGo" onclick="openCmpView()" disabled>Compare Now →</button>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="lbClickOutside(event)">
+  <div class="lb-wrap">
+    <img class="lb-img" id="lbImg" src="" alt="">
+  </div>
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <button class="lb-prev" onclick="lbNav(-1)">&#8249;</button>
+  <button class="lb-next" onclick="lbNav(1)">&#8250;</button>
+  <div class="lb-caption" id="lbCaption"></div>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<script>
+// BASE CDN
+const CDN = 'https://media.ed.edmunds-media.com';
+
+// Each car has: ext[] = exterior OEM image paths, int[] = interior image paths
+// All paths are relative to CDN base
+const CARS = [
+ // ─── NISSAN ────────────────────────────────────────────────────────────────
+ {id:'n-versa',brand:'Nissan',model:'Versa',year:2025,body:'Sedan',segment:'Subcompact',msrp:17390,
+  ext:['/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg','/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_2_500.jpg'],
+  int:['/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_i_oem_1_500.jpg','/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_d_oem_1_500.jpg'],
+  dims:{length:'175.0"',width:'67.3"',height:'57.7"',wheelbase:'103.1"'},
+  trims:[
+    {name:'S',price:17390,features:['1.6L 4-cyl (122 hp)','5-speed manual','15" steel wheels','7" touchscreen','Bluetooth','Forward Collision Warning','35 MPG combined']},
+    {name:'S CVT',price:19190,features:['CVT automatic','Automatic Emergency Braking','Rear Cross Traffic Alert','Apple CarPlay / Android Auto']},
+    {name:'SV',price:20690,features:['16" aluminum-alloy wheels','Heated front seats','ProPilot Assist','Blind Spot Warning','8" display']},
+    {name:'SR',price:21390,features:['17" machine-finished wheels','Auto temp control','Sport cloth seats','NissanConnect Services','8-speaker audio']},
+  ]},
+ {id:'n-sentra',brand:'Nissan',model:'Sentra',year:2025,body:'Sedan',segment:'Compact',msrp:22730,
+  ext:['/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_1_500.jpg','/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_2_500.jpg'],
+  int:['/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_i_oem_1_500.jpg','/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_d_oem_1_500.jpg'],
+  dims:{length:'182.7"',width:'70.8"',height:'57.3"',wheelbase:'105.1"'},
+  trims:[
+    {name:'S',price:22730,features:['2.0L 4-cyl (149 hp)','CVT','8" touchscreen','Safety Shield 360','Apple CarPlay / Android Auto']},
+    {name:'SV',price:23480,features:['17" aluminum wheels','Heated front seats','Leather-wrapped wheel','ProPilot Assist']},
+    {name:'SR',price:25730,features:['Sport exterior','Sport-tuned suspension','LED headlights','NissanConnect navigation']},
+  ]},
+ {id:'n-altima',brand:'Nissan',model:'Altima',year:2025,body:'Sedan',segment:'Mid-Size',msrp:27000,
+  ext:['/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_fq_oem_1_500.jpg','/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sv_fq_oem_1_500.jpg'],
+  int:['/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_i_oem_1_500.jpg','/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_d_oem_1_500.jpg'],
+  dims:{length:'192.5"',width:'73.0"',height:'57.9"',wheelbase:'111.2"'},
+  trims:[
+    {name:'S',price:27000,features:['2.5L 4-cyl (188 hp)','CVT w/ Sport mode','8" touchscreen','Safety Shield 360','39 MPG highway']},
+    {name:'SV',price:29330,features:['Wireless CarPlay / Android Auto','12.3" display available','ProPilot Assist','Heated seats']},
+    {name:'SL',price:32230,features:['Leather seating','Bose 9-speaker audio','Heated & ventilated seats','Head-up display']},
+    {name:'SR',price:30830,features:['Sport-tuned suspension','Paddle shifters','19" sport wheels','Sport mode']},
+    {name:'Platinum',price:35330,features:['Semi-aniline leather','Quilted seating','Adaptive LED headlights','Panoramic moonroof']},
+  ]},
+ {id:'n-kicks',brand:'Nissan',model:'Kicks',year:2025,body:'Crossover',segment:'Subcompact',msrp:21830,
+  ext:['/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_fq_oem_1_500.jpg','/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_fq_oem_2_500.jpg'],
+  int:['/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_i_oem_1_500.jpg','/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_d_oem_1_500.jpg'],
+  dims:{length:'171.9"',width:'70.9"',height:'61.5"',wheelbase:'103.1"'},
+  trims:[
+    {name:'S',price:21830,features:['2.0L 4-cyl (141 hp)','7" touchscreen','Safety Shield 360','FWD or AWD','28/35 MPG']},
+    {name:'SV',price:23680,features:['17" alloy wheels','12.3" NissanConnect','Heated front seats','LED headlights']},
+    {name:'SR',price:26180,features:['ProPilot Assist','Bose 10-speaker audio','Traffic Sign Recognition','Wireless CarPlay / Android Auto']},
+  ]},
+ {id:'n-rogue',brand:'Nissan',model:'Rogue',year:2025,body:'SUV',segment:'Compact',msrp:29990,
+  ext:['/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_1_500.jpg','/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_2_500.jpg'],
+  int:['/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_i_oem_1_500.jpg','/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_d_oem_1_500.jpg'],
+  dims:{length:'182.5"',width:'72.4"',height:'67.4"',wheelbase:'106.5"'},
+  trims:[
+    {name:'S',price:29990,features:['1.5L VC-Turbo (201 hp)','FWD standard','Safety Shield 360','8" touchscreen','30 MPG combined']},
+    {name:'SV',price:32900,features:['AWD available','Panoramic moonroof','Heated seats','12.3" NissanConnect']},
+    {name:'SL',price:38200,features:['Leather seating','Bose audio','Heated rear seats','ProPilot Assist','Around View Monitor']},
+    {name:'Platinum',price:41100,features:['10.8" Head-Up Display','Quilted leather','Digital rearview mirror']},
+  ]},
+ {id:'n-pathfinder',brand:'Nissan',model:'Pathfinder',year:2025,body:'SUV',segment:'Mid-Size',msrp:38690,
+  ext:['/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_1_500.jpg','/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_2_500.jpg'],
+  int:['/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_i_oem_1_500.jpg','/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_d_oem_1_500.jpg'],
+  dims:{length:'196.8"',width:'78.0"',height:'70.6"',wheelbase:'114.2"'},
+  trims:[
+    {name:'S',price:38690,features:['3.5L V6 (284 hp)','9-speed auto','8-passenger','8" touchscreen','Safety Shield 360']},
+    {name:'SV',price:41390,features:['Leather seats','Heated wheel','Power driver seat','ProPilot Assist','Tri-zone climate']},
+    {name:'SL',price:46900,features:['6,000-lb tow (w/pkg)','Panoramic moonroof','Bose 13-speaker audio','Hands-free liftgate']},
+    {name:'Rock Creek',price:45800,features:['Off-road suspension','All-terrain tires','Rock Creek cladding','Hill Descent Control']},
+    {name:'Platinum',price:50640,features:['Semi-aniline leather','12.3" gauge cluster','Head-up display','Heated 2nd-row captain chairs']},
+  ]},
+ // ─── KIA ───────────────────────────────────────────────────────────────────
+ {id:'k-k4',brand:'Kia',model:'K4',year:2025,body:'Sedan',segment:'Compact',msrp:21990,
+  ext:['/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_fq_oem_1_500.jpg','/kia/k4/2025/oem/2025_kia_k4_sedan_ex_fq_oem_1_500.jpg'],
+  int:['/kia/k4/2025/oem/2025_kia_k4_sedan_ex_detail_oem_1_500.jpg','/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_detail_oem_1_500.jpg'],
+  dims:{length:'183.1"',width:'71.6"',height:'55.9"',wheelbase:'107.9"'},
+  trims:[
+    {name:'LX',price:21990,features:['2.0L 4-cyl (147 hp)','12.3" dual display','Lane Keeping Assist','Forward Collision Avoidance','10-yr/100k warranty']},
+    {name:'LXS',price:22990,features:['Blind Spot Collision Warning','Rear USB-C ports','Enhanced safety package']},
+    {name:'EX',price:23990,features:['Digital instrument cluster','Dual-zone auto climate','Wireless charging pad','Leather-trimmed steering wheel']},
+    {name:'GT-Line',price:25190,features:['Sport-tuned suspension','Red interior accents','Sport exhaust','LED headlights & taillights']},
+    {name:'GT-Line Turbo',price:28090,features:['1.6L Turbo (190 hp)','8-speed DCT','Bose audio','Ventilated seats','HUD','Sport Plus mode']},
+  ]},
+ {id:'k-k5',brand:'Kia',model:'K5',year:2025,body:'Sedan',segment:'Mid-Size',msrp:25590,
+  ext:['/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_1_500.jpg','/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_2_500.jpg'],
+  int:['/kia/k5/2025/oem/2025_kia_k5_sedan_gt_i_oem_1_500.jpg','/kia/k5/2025/oem/2025_kia_k5_sedan_gt_d_oem_1_500.jpg'],
+  dims:{length:'191.1"',width:'73.2"',height:'56.9"',wheelbase:'111.8"'},
+  trims:[
+    {name:'LX',price:25590,features:['2.5L 4-cyl (191 hp)','8-speed auto','12.3" touchscreen','Wireless CarPlay / Android Auto','Smart parking assist']},
+    {name:'EX',price:27490,features:['Heated front seats','Power sunroof','Wireless charging','Blind-Spot Avoidance']},
+    {name:'GT-Line AWD',price:30390,features:['Torque-vectoring AWD','Sport-tuned suspension','18" wheels','Paddle shifters']},
+    {name:'GT',price:35590,features:['2.5L Turbo (290 hp)','0-60 beats BMW 530i','Launch Control','19" staggered wheels','Bose audio']},
+  ]},
+ {id:'k-seltos',brand:'Kia',model:'Seltos',year:2025,body:'Crossover',segment:'Subcompact',msrp:26185,
+  ext:['/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_1_500.jpg','/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_2_500.jpg'],
+  int:['/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_i_oem_1_500.jpg','/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_d_oem_1_500.jpg'],
+  dims:{length:'172.0"',width:'71.0"',height:'64.2"',wheelbase:'102.4"'},
+  trims:[
+    {name:'LX',price:26185,features:['2.0L 4-cyl (146 hp)','10.25" dual screen','Rear cross-traffic alert','Lane Keeping Assist']},
+    {name:'EX',price:28185,features:['AWD available','Sunroof','Wireless CarPlay / Android Auto','Heated front seats','Highway Drive Assist']},
+    {name:'SX',price:32280,features:['1.6L Turbo (195 hp)','DCT','Bose 7-speaker','Ventilated seats','Roof rails','HUD']},
+  ]},
+ {id:'k-sportage',brand:'Kia',model:'Sportage',year:2025,body:'SUV',segment:'Compact',msrp:27590,
+  ext:['/kia/sportage/2024/oem/2024_kia_sportage_4dr-suv_x-pro_fq_oem_1_500.jpg','/kia/sportage/2025/izmo/2025_kia_sportage_4dr-suv_ex_pr_izmo_1_500.jpg'],
+  int:['/kia/sportage/2025/oem/2025_kia_sportage_4dr-suv_ex_i_oem_1_500.jpg','/kia/sportage/2025/oem/2025_kia_sportage_4dr-suv_ex_d_oem_1_500.jpg'],
+  dims:{length:'182.3"',width:'73.6"',height:'65.0"',wheelbase:'108.9"'},
+  trims:[
+    {name:'LX',price:27590,features:['2.5L 4-cyl (187 hp)','12.3" panoramic display','IIHS Top Safety Pick+','Class-leading cargo room']},
+    {name:'EX',price:29590,features:['AWD available','Heated steering wheel','Surround View Monitor','Highway Drive Assist II','Wireless charging']},
+    {name:'X-Pro',price:33990,features:['Off-road suspension','Hill Descent Control','Multi-terrain modes','All-terrain tires','Skid plates']},
+    {name:'SX Prestige',price:39785,features:['Panoramic moonroof','Bose 8-speaker','Ventilated seats','Nappa leather','HUD','LED ambient lighting']},
+  ]},
+ {id:'k-telluride',brand:'Kia',model:'Telluride',year:2025,body:'SUV',segment:'Mid-Size',msrp:36390,
+  ext:['/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_1_500.jpg','/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_2_500.jpg'],
+  int:['/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_i_oem_1_500.jpg','/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_d_oem_1_500.jpg'],
+  dims:{length:'196.9"',width:'78.3"',height:'68.9"',wheelbase:'114.2"'},
+  trims:[
+    {name:'LX',price:36390,features:['3.8L V6 (291 hp)','8-speed auto','3-row / 8-passenger','10.25" touchscreen','Kia DriveWise safety suite']},
+    {name:'EX',price:40390,features:['Heated front & 2nd-row seats','Panoramic sunroof','Wireless CarPlay / Android Auto','Hands-free liftgate']},
+    {name:'X-Pro',price:44990,features:['AWD w/ torque vectoring','Locking differential','Off-road terrain modes','19" all-terrain tires','Skid plates']},
+    {name:'SX Prestige',price:52885,features:['Nappa leather','Harman Kardon 10-speaker','Heated & ventilated seats','Rear entertainment','HUD']},
+  ]},
+ // ─── HONDA ─────────────────────────────────────────────────────────────────
+ {id:'h-civic',brand:'Honda',model:'Civic',year:2025,body:'Sedan',segment:'Compact',msrp:24250,
+  ext:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_2_500.jpg'],
+  int:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_i_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_d_oem_1_500.jpg'],
+  dims:{length:'184.0"',width:'70.9"',height:'55.7"',wheelbase:'107.7"'},
+  trims:[
+    {name:'LX',price:24250,features:['2.0L 4-cyl (150 hp)','CVT','7" touchscreen','Apple CarPlay / Android Auto','Honda Sensing std','32/41 MPG']},
+    {name:'Sport',price:26250,features:['18" gloss-black alloy wheels','Paddle shifters','Blind Spot Info System','Heated side mirrors','Sport mode']},
+    {name:'Sport Hybrid',price:28750,features:['2.0L Hybrid (200 hp)','One-touch moonroof','Heated front seats','Dual-zone climate','50/47 MPG']},
+    {name:'Sport Touring Hybrid',price:31750,features:['9" touchscreen w/ Google built-in','Leather-trimmed seats','Bose 12-speaker','Wireless CarPlay','Wireless charging']},
+    {name:'Si',price:29900,features:['1.5L Turbo (200 hp)','6-speed manual only','Sport seats w/ bolsters','Rev-match downshift','Adaptive dampers']},
+  ]},
+ {id:'h-accord',brand:'Honda',model:'Accord',year:2025,body:'Sedan',segment:'Mid-Size',msrp:28745,
+  ext:['/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_fq_oem_1_500.jpg','/honda/accord/2025/oem/2025_honda_accord_sedan_touring-hybrid_fq_oem_1_500.jpg'],
+  int:['/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_i_oem_1_500.jpg','/honda/accord/2025/oem/2025_honda_accord_sedan_touring-hybrid_i_oem_1_500.jpg'],
+  dims:{length:'195.7"',width:'73.3"',height:'57.1"',wheelbase:'111.4"'},
+  trims:[
+    {name:'LX',price:28745,features:['1.5L Turbo (192 hp)','10.2" touchscreen','Honda Sensing std','Wireless CarPlay / Android Auto','Heated front seats']},
+    {name:'Sport',price:30895,features:['18" wheels','12.3" display','Remote start','Traffic Jam Assist']},
+    {name:'EX-L',price:34045,features:['Leather-trimmed seats','Heated rear seats','Bose 12-speaker audio']},
+    {name:'Sport Hybrid',price:32545,features:['2.0L Hybrid (204 hp)','46 MPG combined','Lane centering assist']},
+    {name:'Touring Hybrid',price:37945,features:['Nappa leather','Panoramic moonroof','HUD','Wireless charging','Bose 14-speaker']},
+  ]},
+ {id:'h-crv',brand:'Honda',model:'CR-V',year:2025,body:'SUV',segment:'Compact',msrp:30920,
+  ext:['/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_1_500.jpg','/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_2_500.jpg'],
+  int:['/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_i_oem_1_500.jpg','/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_d_oem_1_500.jpg'],
+  dims:{length:'184.8"',width:'73.0"',height:'66.3"',wheelbase:'107.3"'},
+  trims:[
+    {name:'LX',price:30920,features:['1.5L Turbo (190 hp)','9" touchscreen','Wireless CarPlay / Android Auto','Honda Sensing safety suite']},
+    {name:'EX',price:33150,features:['Panoramic moonroof','18" wheels','Heated front seats','Remote start','Power tailgate','Blind spot monitoring']},
+    {name:'EX-L',price:35400,features:['Leather-trimmed seats','8-speaker premium audio','Power rear liftgate','Parking sensors','Wireless charging']},
+    {name:'Sport Hybrid',price:36045,features:['2.0L Hybrid (204 hp)','40 MPG combined FWD','Honda Sensing 360','Traffic Jam Assist','EV mode']},
+    {name:'TrailSport Hybrid',price:39000,features:['Off-road suspension','All-terrain tires','AWD standard','Trail mode','Rugged exterior cladding']},
+  ]},
+ {id:'h-passport',brand:'Honda',model:'Passport',year:2025,body:'SUV',segment:'Mid-Size',msrp:42400,
+  ext:['/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_fq_oem_1_500.jpg','/honda/passport/2025/oem/2025_honda_passport_4dr-suv_black-edition_fq_oem_1_500.jpg'],
+  int:['/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_i_oem_1_500.jpg','/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_d_oem_1_500.jpg'],
+  dims:{length:'189.1"',width:'78.6"',height:'72.2"',wheelbase:'110.9"'},
+  trims:[
+    {name:'EX-L',price:42400,features:['3.5L V6 (280 hp)','9-speed auto','AWD standard','Leather seats','Power moonroof','10.2" touchscreen','5,000-lb towing']},
+    {name:'TrailSport',price:45000,features:['Off-road suspension','All-terrain tires','Skid plates','Orange stitching accents','LED fog lights','Navigation']},
+    {name:'Black Edition',price:48470,features:['20" gloss-black wheels','Black leather interior','Crystal Black Pearl exclusive','Wireless charging','Hands-free liftgate']},
+  ]},
+ {id:'h-pilot',brand:'Honda',model:'Pilot',year:2025,body:'SUV',segment:'Mid-Size',msrp:40275,
+  ext:['/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_fq_oem_1_500.jpg','/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_black-edition_fq_oem_1_500.jpg'],
+  int:['/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_i_oem_1_500.jpg','/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_d_oem_1_500.jpg'],
+  dims:{length:'196.5"',width:'78.6"',height:'70.6"',wheelbase:'113.8"'},
+  trims:[
+    {name:'Sport',price:40275,features:['3.5L V6 (285 hp)','10-speed auto','AWD standard','9" touchscreen','3-row / 8-pass','Honda Sensing 360']},
+    {name:'EX-L',price:44475,features:['Leather seats','Hands-free power liftgate','2nd-row captain chairs','Heated front seats','12" display']},
+    {name:'TrailSport',price:48275,features:['Off-road suspension','ATF tires','10-mode i-VTM4 AWD','Roof rails','G-forces display']},
+    {name:'Black Edition',price:50475,features:['All-black interior & exterior accents','Heated & ventilated seats','12-speaker Bose audio','HUD']},
+    {name:'Elite',price:52275,features:['Nappa leather','Rear entertainment system','Built-in 4G LTE Wi-Fi','15.2" rear screens']},
+  ]},
+ {id:'h-ridgeline',brand:'Honda',model:'Ridgeline',year:2025,body:'Truck',segment:'Mid-Size',msrp:40150,
+  ext:['/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_fq_oem_1_500.jpg','/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_rq_oem_1_500.jpg'],
+  int:['/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_rtl_i_oem_1_500.jpg','/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_rtl_d_oem_1_500.jpg'],
+  dims:{length:'210.2"',width:'78.6"',height:'70.8"',wheelbase:'125.2"'},
+  trims:[
+    {name:'Sport',price:40150,features:['3.5L V6 (280 hp)','9-speed auto','AWD standard','9" touchscreen','In-Bed Trunk®','Dual-action tailgate','5,000-lb towing','Honda Sensing']},
+    {name:'Sport+',price:42050,features:['Wireless CarPlay / Android Auto','Wireless phone charger','2nd-row USB-C ports','Remote start']},
+    {name:'RTL',price:42980,features:['Leather-trimmed seats','Heated front seats','Driver seat memory','One-touch power moonroof','8-speaker audio']},
+    {name:'TrailSport',price:45380,features:['Off-road suspension','All-terrain tires','Orange TrailSport accents','Truck-bed audio system']},
+    {name:'Black Edition',price:46750,features:['All-black exterior trim','Black leather interior','12-speaker audio','In-Bed 400W power outlet']},
+  ]},
+ {id:'h-prelude',brand:'Honda',model:'Prelude Hybrid',year:2026,body:'Sports Car',segment:'Compact',msrp:35000,
+  ext:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_3_500.jpg'],
+  int:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_i_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_d_oem_1_500.jpg'],
+  dims:{length:'179.9"',width:'71.3"',height:'53.9"',wheelbase:'107.5"'},
+  trims:[
+    {name:'Prelude Hybrid',price:35000,features:['2.0L Hybrid (200 hp) + dual electric motors','Type R suspension hardware','Brembo front brakes','Adaptive dampers','S+ simulated shift system','Bose stereo','Google built-in infotainment','~mid-40s MPG est.']},
+  ]},
+ // ─── TOYOTA ────────────────────────────────────────────────────────────────
+ {id:'t-corolla',brand:'Toyota',model:'Corolla',year:2025,body:'Sedan',segment:'Compact',msrp:22325,
+  ext:['/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_1_500.jpg','/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_2_500.jpg'],
+  int:['/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_i_oem_1_500.jpg','/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_d_oem_1_500.jpg'],
+  dims:{length:'182.5"',width:'70.1"',height:'56.5"',wheelbase:'105.1"'},
+  trims:[
+    {name:'LE',price:22325,features:['2.0L 4-cyl (169 hp)','CVT','8" Toyota Audio Multimedia','Toyota Safety Sense 3.0','LED headlights','32/41 MPG']},
+    {name:'SE',price:24345,features:['Sport exterior','Paddle shifters','Sport mesh grille','18" wheels','Heated front seats']},
+    {name:'XLE',price:25545,features:['Leather-trimmed seats','SofTex dash trim','Power driver seat','Wireless charging','Dual-zone climate']},
+    {name:'XSE',price:26375,features:['Sport-tuned suspension','19" wheels','Black-chrome exterior trim','Two-tone paint available']},
+    {name:'Hybrid LE',price:25050,features:['1.8L Hybrid (134 hp combined)','53/46 MPG','AWD available','Pre-collision w/ pedestrian detection']},
+    {name:'Hybrid XLE',price:28075,features:['Leather-trimmed seats','Wireless charging','Power driver seat','50 MPG combined']},
+  ]},
+ {id:'t-corollacross',brand:'Toyota',model:'Corolla Cross',year:2025,body:'Crossover',segment:'Subcompact',msrp:24470,
+  ext:['/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_2_500.jpg'],
+  int:['/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_i_oem_1_500.jpg','/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_d_oem_1_500.jpg'],
+  dims:{length:'173.8"',width:'71.5"',height:'64.6"',wheelbase:'103.9"'},
+  trims:[
+    {name:'LE',price:24470,features:['2.0L 4-cyl (169 hp)','CVT','FWD or AWD','8" touchscreen','Toyota Safety Sense 3.0']},
+    {name:'XLE',price:27615,features:['8" multimedia display','Heated front seats','SofTex leatherette','Roof rails','Power rear door']},
+    {name:'Hybrid S',price:27650,features:['2.0L Hybrid (196 hp)','AWD standard','42 MPG combined','Sport mode']},
+    {name:'Hybrid XLE',price:30650,features:['Leather trim','Wireless charging','Heated seats','Panoramic moonroof available']},
+  ]},
+ {id:'t-chr',brand:'Toyota',model:'C-HR',year:2025,body:'Crossover',segment:'Subcompact',msrp:29825,
+  ext:['/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_fq_oem_2_500.jpg'],
+  int:['/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_i_oem_1_500.jpg','/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_d_oem_1_500.jpg'],
+  dims:{length:'175.6"',width:'72.0"',height:'60.9"',wheelbase:'104.7"'},
+  trims:[
+    {name:'LE',price:29825,features:['2.0L Hybrid (196 hp combined)','Hybrid-only powertrain','AWD standard','8" touchscreen','Toyota Safety Sense 3.0','LED headlights & DRL']},
+    {name:'XLE',price:32020,features:['12.3" touchscreen','Wireless CarPlay / Android Auto','Heated front seats','Wireless charging','SofTex leatherette']},
+    {name:'Limited',price:37270,features:['Panoramic moonroof','JBL 8-speaker audio','Ventilated seats','Head-up display','Adaptive LED headlights']},
+  ]},
+ {id:'t-camry',brand:'Toyota',model:'Camry',year:2025,body:'Sedan',segment:'Mid-Size',msrp:28950,
+  ext:['/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_1_500.jpg','/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_2_500.jpg'],
+  int:['/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_i_oem_1_500.jpg','/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_d_oem_1_500.jpg'],
+  dims:{length:'194.1"',width:'72.4"',height:'56.9"',wheelbase:'111.4"'},
+  trims:[
+    {name:'LE',price:28950,features:['2.5L Hybrid (225 hp combined)','eCVT','FWD or AWD','8" touchscreen','Toyota Safety Sense 3.0','51 MPG combined FWD']},
+    {name:'SE',price:30250,features:['Sport mesh grille','Sport suspension','18" wheels','Heated front seats','8-speaker audio']},
+    {name:'XLE',price:32500,features:['Leather-trimmed seats','Wireless CarPlay / Android Auto','Panoramic sunroof','Dual-zone climate']},
+    {name:'XSE',price:33700,features:['Sport-tuned suspension','19" black wheels','Black-chrome exterior trim']},
+    {name:'XSE V6',price:34800,features:['3.5L V6 (301 hp)','Paddle shifters','20" wheels','Sport interior trim']},
+  ]},
+ {id:'t-rav4',brand:'Toyota',model:'RAV4 Hybrid',year:2025,body:'SUV',segment:'Compact',msrp:32125,
+  ext:['/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_2_500.jpg'],
+  int:['/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_i_oem_1_500.jpg','/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_d_oem_1_500.jpg'],
+  dims:{length:'180.9"',width:'73.0"',height:'67.1"',wheelbase:'105.9"'},
+  trims:[
+    {name:'LE Hybrid',price:32125,features:['2.5L Hybrid (219 hp combined)','AWD standard','8" touchscreen','Toyota Safety Sense 2.5+','3,500-lb towing capacity']},
+    {name:'XLE Hybrid',price:34450,features:['Heated front seats','Power tailgate','Dual-zone climate','SofTex seats']},
+    {name:'XSE Hybrid',price:36450,features:['Sport suspension','18" black wheels','Sport front fascia','Two-tone paint available']},
+    {name:'Woodland Hybrid',price:38350,features:['Adventure-ready AWD','All-terrain tires','Roof rails','200mm water wading','Black cladding']},
+    {name:'Limited Hybrid',price:40275,features:['Ventilated front seats','Heated rear seats','9" touchscreen','JBL 9-speaker audio','Panoramic roof']},
+  ]},
+ {id:'t-rav4prime',brand:'Toyota',model:'RAV4 Plug-in Hybrid',year:2026,body:'SUV',segment:'Compact',msrp:42950,
+  ext:['https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/beeee6e8-3f75-4259-89c5-7fb158fc7d1a/2026+Toyota+RAV4+3_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/ec983d59-ff64-4947-bc9f-7516be144243/2026+Toyota+RAV4+7_717.jpg'],
+  int:['https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/beeee6e8-3f75-4259-89c5-7fb158fc7d1a/2026+Toyota+RAV4+3_1280.jpg'],
+  dims:{length:'182.4"',width:'73.0"',height:'67.5"',wheelbase:'105.9"'},
+  trims:[
+    {name:'SE',price:42950,features:['2.5L PHEV (324 hp combined)','AWD standard','52 miles EV range','12.3" digital gauge cluster','Toyota Safety Sense 4.0','3,500-lb towing capacity','7-kW Level 2 onboard charger','0-60 mph: 5.4 seconds']},
+    {name:'Woodland',price:46700,features:['All-terrain tires & 18" matte gray wheels','8.5" ground clearance','Rigid Industries LED fog lights','DC fast charging (CCS) — 10–80% in ~30 min','11-kW onboard charger','Roof rack with crossbars','49 miles EV range','Rugged Urban Rock exclusive color']},
+    {name:'XSE',price:48620,features:['Sporty dark chrome exterior accents','12.9" Toyota Audio Multimedia touchscreen','Heated & ventilated front seats','Hands-free power liftgate','Panoramic moonroof','DC fast charging (CCS)','11-kW onboard charger','52 miles EV range']},
+    {name:'GR Sport',price:49950,features:['GR-tuned suspension & steering (GAZOO Racing)','GR-tuned front & rear crossmember braces','Sport bumpers, rear wing & wider stance','Summer performance tires on 20" black wheels','5.4-sec 0-60 mph (quickest RAV4 ever)','Exclusive Supersonic Red w/ Black roof option','48 miles EV range','Paddle shifters']},
+  ]},
+ {id:'t-bz4x',brand:'Toyota',model:'bZ4X',year:2025,body:'SUV',segment:'Mid-Size',msrp:43490,
+  ext:['/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_2_500.jpg'],
+  int:['/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_i_oem_1_500.jpg','/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_d_oem_1_500.jpg'],
+  dims:{length:'184.6"',width:'73.2"',height:'64.6"',wheelbase:'112.2"'},
+  trims:[
+    {name:'XLE FWD',price:43490,features:['201-hp electric motor (FWD)','252-mile EPA range','12.3" touchscreen','Toyota Safety Sense 3.0','DC fast charging std']},
+    {name:'XLE AWD',price:48450,features:['218-hp dual motor AWD','222-mile EPA range','Wireless charging','Heated front seats']},
+    {name:'Limited AWD',price:52700,features:['Heated & ventilated seats','Panoramic roof','JBL audio','Premium interior trim']},
+  ]},
+ {id:'t-highlander',brand:'Toyota',model:'Highlander',year:2025,body:'SUV',segment:'Mid-Size',msrp:40860,
+  ext:['/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_2_500.jpg'],
+  int:['/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_i_oem_1_500.jpg','/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_d_oem_1_500.jpg'],
+  dims:{length:'194.9"',width:'76.0"',height:'68.1"',wheelbase:'112.2"'},
+  trims:[
+    {name:'LE',price:40860,features:['2.4L Turbo 4-cyl (265 hp)','8-speed auto','AWD standard','8" touchscreen','3-row / 8-passenger','Toyota Safety Sense 2.5+']},
+    {name:'XLE',price:44860,features:['Leather-trimmed seats','Hands-free power rear door','Panoramic moonroof','Wireless charging','Captain chairs']},
+    {name:'Limited',price:50760,features:['Ventilated seats','JBL 11-speaker audio','Heated 2nd-row seats','14" touchscreen','4-zone climate']},
+    {name:'Platinum',price:55320,features:['Premium leather','Heated 3rd row','Rear entertainment','HUD','Hands-free liftgate']},
+  ]},
+ {id:'t-grandhighlander',brand:'Toyota',model:'Grand Highlander',year:2025,body:'SUV',segment:'Mid-Size',msrp:42310,
+  ext:['/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_2_500.jpg'],
+  int:['/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_i_oem_1_500.jpg','/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_d_oem_1_500.jpg'],
+  dims:{length:'200.6"',width:'78.1"',height:'70.7"',wheelbase:'116.1"'},
+  trims:[
+    {name:'LE',price:42310,features:['2.4L Turbo 4-cyl (265 hp)','AWD available','12.3" touchscreen','3-row / 8-passenger','Toyota Safety Sense 3.0']},
+    {name:'XLE',price:45360,features:['Leather-trimmed seats','Dual moonroof','Power liftgate','Heated front seats','Wireless charging']},
+    {name:'Hybrid Max XLE',price:52060,features:['2.5L Hybrid Max (362 hp combined)','Multi-stage hybrid','Standard AWD','Advanced towing mode']},
+    {name:'Platinum',price:58460,features:['JBL 11-speaker audio','Ventilated seats','14" touchscreen','Head-up display','Panoramic moonroof']},
+  ]},
+ {id:'t-crownsignia',brand:'Toyota',model:'Crown Signia',year:2025,body:'Crossover',segment:'Mid-Size',msrp:40230,
+  ext:['/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_2_500.jpg'],
+  int:['/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_i_oem_1_500.jpg','/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_d_oem_1_500.jpg'],
+  dims:{length:'192.5"',width:'74.4"',height:'66.3"',wheelbase:'112.2"'},
+  trims:[
+    {name:'XLE',price:40230,features:['2.5L Hybrid (243 hp combined)','AWD standard','12.3" touchscreen','Toyota Safety Sense 3.0','37 MPG combined','Panoramic glass roof']},
+    {name:'Limited',price:46030,features:['JBL 9-speaker audio','Ventilated seats','Head-up display','Heated rear seats','Premium leather','Advanced Park']},
+  ]},
+ {id:'t-4runner',brand:'Toyota',model:'4Runner',year:2025,body:'SUV',segment:'Mid-Size',msrp:41270,
+  ext:['/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_2_500.jpg'],
+  int:['/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_i_oem_1_500.jpg','/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_d_oem_1_500.jpg'],
+  dims:{length:'191.7"',width:'76.0"',height:'72.0"',wheelbase:'109.8"'},
+  trims:[
+    {name:'SR5',price:41270,features:['2.4L Turbo 4-cyl (278 hp)','8-speed auto','RWD or 4WD','8" touchscreen','Toyota Safety Sense 3.0','Multi-terrain Select']},
+    {name:'TRD Sport',price:45900,features:['TRD-tuned suspension','TRD-stamped components','Hood scoop','Performance exhaust note']},
+    {name:'TRD Off-Road',price:46900,features:['Kinetic Dynamic Suspension System','Electronic locking rear diff','Crawl Control','ATRAC terrain traction']},
+    {name:'TRD Pro',price:58700,features:['Fox suspension shocks','Rock rails','Skid plates','TRD Pro Exhaust','Wireless charging']},
+    {name:'Limited',price:52000,features:['Premium leather','14" touchscreen','Adaptive headlights','Heated & ventilated seats','JBL audio']},
+  ]},
+ {id:'t-sequoia',brand:'Toyota',model:'Sequoia',year:2025,body:'SUV',segment:'Full-Size',msrp:62295,
+  ext:['/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_2_500.jpg'],
+  int:['/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_i_oem_1_500.jpg','/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_d_oem_1_500.jpg'],
+  dims:{length:'214.4"',width:'80.0"',height:'74.0"',wheelbase:'122.0"'},
+  trims:[
+    {name:'SR5',price:62295,features:['3.5L Twin-Turbo V6 Hybrid (437 hp)','Hybrid-only','3-row / 8-passenger','14" touchscreen','Toyota Safety Sense 2.5+','9,000-lb towing']},
+    {name:'Limited',price:71795,features:['Semi-aniline leather','Tri-zone climate','JBL 14-speaker audio','Wireless charging','Power running boards']},
+    {name:'Platinum',price:78595,features:['Four-zone climate','HUD','Heated & ventilated 2nd row','Mark Levinson audio','22" wheels']},
+    {name:'TRD Pro',price:80295,features:['Fox internal bypass shocks','Multi-terrain select','KDSS standard','TRD Pro grille','TRD exhaust']},
+    {name:'Capstone',price:89095,features:["Semi-aniline quilted leather","24-speaker Mark Levinson audio","Power running boards","Rear-seat entertainment","Captain's chairs 2nd row"]},
+  ]},
+ {id:'t-landcruiser',brand:'Toyota',model:'Land Cruiser',year:2025,body:'SUV',segment:'Full-Size',msrp:56450,
+  ext:['/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_1_500.jpg','/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_2_500.jpg'],
+  int:['/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_i_oem_1_500.jpg','/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_d_oem_1_500.jpg'],
+  dims:{length:'192.3"',width:'77.6"',height:'75.4"',wheelbase:'112.2"'},
+  trims:[
+    {name:'Land Cruiser',price:56450,features:['2.4L Twin-Turbo Hybrid (326 hp)','4WD standard','Multi-terrain select','KDSS stabilizer','14" touchscreen','Toyota Safety Sense 3.0']},
+    {name:'1958 Edition',price:59550,features:['Heritage-inspired styling','Unique 18" wheels','Retro badging','Off-road skid plates','Electronic locking differential']},
+    {name:'First Edition',price:68000,features:['Premium leather','Heated & ventilated seats','JBL 14-speaker audio','Panoramic roof','Head-up display']},
+  ]},
+];
+
+// ── FALLBACK image (used if OEM CDN returns 404)
+const FALLBACK = 'https://media.ed.edmunds-media.com/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg';
+
+function img(path){ return path.startsWith('http') ? path : CDN + path; }
+
+// ── SIZE ORDER for segment-based sorting
+const SEG_ORDER={'Subcompact':1,'Compact':2,'Mid-Size':3,'Full-Size':4};
+function sizeKey(c){return (SEG_ORDER[c.segment]||5)*1e9 + parseFloat(c.dims.length);}
+
+// ── SORT STATE
+let sortKey='', sortDir='asc';
+
+function setSort(key,dir){
+  if(sortKey===key && sortDir===dir){
+    // toggle off (reset to default)
+    sortKey=''; sortDir='asc';
+  } else {
+    sortKey=key; sortDir=dir;
+  }
+  // update button active states
+  ['price-asc','price-desc','size-asc','size-desc','model-asc','brand-asc'].forEach(id=>{
+    const btn=document.getElementById('sb-'+id);
+    if(btn) btn.classList.toggle('active', id===key+'-'+dir && sortKey===key && sortDir===dir);
+  });
+  doFilter();
+}
+
+function applySortCars(cars){
+  if(!sortKey) return cars;
+  return [...cars].sort((a,b)=>{
+    let va,vb;
+    if(sortKey==='price'){va=a.msrp;vb=b.msrp;}
+    else if(sortKey==='size'){va=sizeKey(a);vb=sizeKey(b);}
+    else if(sortKey==='model'){va=a.model.toLowerCase();vb=b.model.toLowerCase();}
+    else if(sortKey==='brand'){va=(a.brand+a.model).toLowerCase();vb=(b.brand+b.model).toLowerCase();}
+    else return 0;
+    if(va<vb)return sortDir==='asc'?-1:1;
+    if(va>vb)return sortDir==='asc'?1:-1;
+    return 0;
+  });
+}
+
+// ── STATE
+let cmpList=[], activeCar=null, galType='ext';
+const fmt=n=>'$'+n.toLocaleString();
+
+// ── GRID
+function renderGrid(cars){
+  document.getElementById('cnt').textContent=cars.length;
+  document.getElementById('grid').innerHTML=cars.map(c=>{
+    const inC=cmpList.includes(c.id);
+    return `<div class="car-card" onclick="openCar('${c.id}')">
+      <div class="img-wrap">
+        <img class="card-img" src="${img(c.ext[0])}" alt="${c.brand} ${c.model}"
+          onerror="this.onerror=null;this.src='${FALLBACK}'">
+        <span class="brand-bdg">${c.brand}</span>
+        <div class="price-badge">From <span>${fmt(c.msrp)}</span></div>
+        <div class="cmp-chk ${inC?'on':''}" onclick="toggleCmp(event,'${c.id}')" title="Add to compare">${inC?'✓':'+'}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">${c.model}</div>
+        <div class="card-sub">${c.year} Model Year</div>
+        <div class="card-footer">
+          <span class="seg-pill">${c.segment}</span>
+          <span class="body-pill">${c.body}</span>
+          <span class="ctag">${c.trims.length} trim${c.trims.length>1?'s':''}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function doFilter(){
+  const q=document.getElementById('srch').value.toLowerCase();
+  const b=document.getElementById('fBrand').value;
+  const bo=document.getElementById('fBody').value;
+  const s=document.getElementById('fSeg').value;
+  const filtered=CARS.filter(c=>
+    (!q||(c.brand+' '+c.model).toLowerCase().includes(q))&&
+    (!b||c.brand===b)&&(!bo||c.body===bo)&&(!s||c.segment===s)
+  );
+  renderGrid(applySortCars(filtered));
+}
+
+// ── MODAL
+function openCar(id){
+  activeCar=CARS.find(c=>c.id===id);
+  if(!activeCar)return;
+  const c=activeCar;
+  document.getElementById('mBrand').textContent=c.brand;
+  document.getElementById('mTitle').textContent=c.model;
+  document.getElementById('mPrice').textContent='From '+fmt(c.msrp);
+  document.getElementById('mYear').textContent=c.year+' Model Year';
+  document.getElementById('mSeg').textContent=c.segment+' · '+c.body;
+  const mh=document.getElementById('mHero');
+  mh.src=img(c.ext[0]);
+  mh.onerror=()=>{mh.onerror=null;mh.src=FALLBACK;};
+  const inC=cmpList.includes(c.id);
+  const btn=document.getElementById('addBtn');
+  btn.textContent=inC?'✓ In comparison list':'+ Add to Comparison';
+  btn.className='add-cmp-btn'+(inC?' added':'');
+  galType='ext';
+  document.querySelectorAll('.gal-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  renderGal();renderDims();renderTrims();
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function renderGal(){
+  const c=activeCar;
+  const imgs=galType==='ext'?c.ext:c.int;
+  const label=galType==='ext'?'Exterior':'Interior';
+  document.getElementById('mGal').innerHTML=imgs.map((p,i)=>
+    `<img src="${img(p)}" alt="${c.brand} ${c.model} ${label}" title="Click to expand"
+      onclick="openLb(${JSON.stringify(imgs.map(x=>img(x)))},${i},'${c.brand} ${c.model} ${label}')"
+      onerror="this.onerror=null;this.src=intFallback('${p}','${c.id}')">`
+  ).join('');
+}
+
+// Interior image fallback chain: try _i_oem_ → _d_oem_ → _detail_oem_ → exterior fq
+function intFallback(path, carId){
+  const c=CARS.find(x=>x.id===carId);
+  if(!c) return FALLBACK;
+  // Full URLs (http) that fail → fall back to first exterior
+  if(path.startsWith('http')) return img(c.ext[0]);
+  // If the _i_oem_ failed, try _d_oem_ (dashboard), then fall back to first exterior
+  if(path.includes('_i_oem_')){
+    return path.replace('_i_oem_','_d_oem_');
+  }
+  if(path.includes('_d_oem_')){
+    return path.replace('_d_oem_','_detail_oem_');
+  }
+  // Last resort: use the exterior hero
+  return img(c.ext[0]);
+}
+
+function switchGal(type,el){
+  galType=type;
+  document.querySelectorAll('.gal-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderGal();
+}
+
+function renderDims(){
+  const d=activeCar.dims;
+  document.getElementById('mDims').innerHTML=
+    [{k:'Length',v:d.length},{k:'Width',v:d.width},{k:'Height',v:d.height},{k:'Wheelbase',v:d.wheelbase}]
+    .map(x=>`<div class="dim-box"><div class="dim-val">${x.v}</div><div class="dim-key">${x.k}</div></div>`).join('');
+}
+
+function renderTrims(){
+  document.getElementById('mTrims').innerHTML=activeCar.trims.map((t,i)=>`
+    <div class="trim-item" id="ti${i}">
+      <div class="trim-hdr" onclick="togTrim(${i})">
+        <span class="trim-nm">${t.name}</span>
+        <span class="trim-pr">${fmt(t.price)}</span>
+        <span class="trim-arr">▾</span>
+      </div>
+      <div class="trim-bd"><ul class="trim-feats">${t.features.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+    </div>`).join('');
+}
+
+function togTrim(i){document.getElementById('ti'+i).classList.toggle('open');}
+
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('overlay'))return;
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── COMPARE
+function toggleCmp(e,id){
+  e&&e.stopPropagation();
+  if(cmpList.includes(id))cmpList=cmpList.filter(x=>x!==id);
+  else{if(cmpList.length>=4){alert('Max 4 vehicles can be compared at once.');return;}cmpList.push(id);}
+  updPanel();doFilter();
+}
+
+function addToCmp(){
+  if(!activeCar)return;
+  toggleCmp(null,activeCar.id);
+  const inC=cmpList.includes(activeCar.id);
+  const btn=document.getElementById('addBtn');
+  btn.textContent=inC?'✓ In comparison list':'+ Add to Comparison';
+  btn.className='add-cmp-btn'+(inC?' added':'');
+}
+
+function updPanel(){
+  const panel=document.getElementById('cmpPanel');
+  const slots=document.getElementById('cmpSlots');
+  const go=document.getElementById('cmpGo');
+  if(!cmpList.length){panel.classList.remove('vis');return;}
+  panel.classList.add('vis');
+  slots.innerHTML=cmpList.map(id=>{
+    const c=CARS.find(x=>x.id===id);
+    return `<div class="cmp-slot"><span class="slot-nm">${c.brand} ${c.model}</span><span class="slot-rm" onclick="rmCmp('${id}')">✕</span></div>`;
+  }).join('');
+  go.disabled=cmpList.length<2;
+}
+
+function rmCmp(id){cmpList=cmpList.filter(x=>x!==id);updPanel();doFilter();}
+
+function openCmpView(){
+  if(cmpList.length<2)return;
+  document.getElementById('mainView').style.display='none';
+  document.getElementById('cmpView').classList.add('open');
+  renderCmp();
+}
+
+function closeCmpView(){
+  document.getElementById('mainView').style.display='';
+  document.getElementById('cmpView').classList.remove('open');
+}
+
+function renderCmp(){
+  const cars=cmpList.map(id=>CARS.find(c=>c.id===id));
+  const cols=document.getElementById('cmpCols');
+  cols.className='cmp-cols n'+Math.min(cars.length,4);
+  const specs=[
+    ['Segment',c=>c.segment],['Body',c=>c.body],['Starting MSRP',c=>fmt(c.msrp)],
+    ['Year',c=>String(c.year)],['Length',c=>c.dims.length],['Width',c=>c.dims.width],
+    ['Height',c=>c.dims.height],['Wheelbase',c=>c.dims.wheelbase],
+    ['# of Trims',c=>String(c.trims.length)],
+    ['Base Trim',c=>c.trims[0].name+' — '+fmt(c.trims[0].price)],
+    ['Top Trim',c=>c.trims[c.trims.length-1].name+' — '+fmt(c.trims[c.trims.length-1].price)],
+  ];
+  cols.innerHTML=cars.map(c=>{
+    const rows=specs.map(([lbl,fn])=>{
+      const val=fn(c);
+      const allSame=cars.every(x=>fn(x)===val);
+      return `<tr><td>${lbl}</td><td class="${allSame?'same':'diff'}">${val}</td></tr>`;
+    }).join('');
+    return `<div class="cmp-col">
+      <img class="cmp-col-img" src="${img(c.ext[0])}" alt="${c.model}" onerror="this.onerror=null;this.src='${FALLBACK}'">
+      <div class="cmp-col-body">
+        <div class="cmp-col-brand">${c.brand}</div>
+        <div class="cmp-col-nm">${c.model}</div>
+        <div class="cmp-col-price">From ${fmt(c.msrp)}</div>
+        <div class="ts-row"><label>Trim</label>
+          <select id="ts_${c.id}" onchange="rTF('${c.id}')">
+            ${c.trims.map((t,i)=>`<option value="${i}">${t.name} — ${fmt(t.price)}</option>`).join('')}
+          </select>
+        </div>
+        <div id="tf_${c.id}">${tfMini(c,0)}</div>
+        <table class="spec-tbl">${rows}</table>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tfMini(car,idx){
+  return `<ul class="cmp-feats">${car.trims[idx].features.map(f=>`<li>${f}</li>`).join('')}</ul>`;
+}
+function rTF(cid){
+  const sel=document.getElementById('ts_'+cid);
+  const car=CARS.find(c=>c.id===cid);
+  document.getElementById('tf_'+cid).innerHTML=tfMini(car,parseInt(sel.value));
+}
+
+// ── INIT
+renderGrid(CARS);
+
+// ── LIGHTBOX ──────────────────────────────────────────────────────────────
+let lbImages=[], lbIndex=0;
+
+function openLb(images, startIdx, caption){
+  lbImages=images; lbIndex=startIdx;
+  document.getElementById('lbImg').src=images[startIdx];
+  document.getElementById('lbCaption').textContent=caption||'';
+  updateLbCounter();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openLbSingle(src, caption){
+  openLb([src], 0, caption);
+}
+
+function closeLb(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function lbClickOutside(e){
+  if(e.target===document.getElementById('lightbox')) closeLb();
+}
+
+function lbNav(dir){
+  lbIndex=(lbIndex+dir+lbImages.length)%lbImages.length;
+  const lbImg=document.getElementById('lbImg');
+  lbImg.style.opacity='0';
+  setTimeout(()=>{
+    lbImg.src=lbImages[lbIndex];
+    lbImg.style.opacity='1';
+  },120);
+  updateLbCounter();
+}
+
+function updateLbCounter(){
+  const el=document.getElementById('lbCounter');
+  if(lbImages.length>1) el.textContent=`${lbIndex+1} / ${lbImages.length}`;
+  else el.textContent='';
+}
+
+// Keyboard nav for lightbox
+document.addEventListener('keydown',e=>{
+  const lb=document.getElementById('lightbox');
+  if(!lb.classList.contains('open')) return;
+  if(e.key==='Escape') closeLb();
+  else if(e.key==='ArrowLeft') lbNav(-1);
+  else if(e.key==='ArrowRight') lbNav(1);
+});
+
+function goHome(){
+  closeCmpView();
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ADMIN PANEL — password-protected car entry manager
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<!-- Footer trigger button -->
+<div id="adminFooter">
+  <button id="adminTriggerBtn" onclick="adminLogin()">⚙ Manage Cars</button>
+</div>
+
+<!-- Password Gate -->
+<div id="adminLoginModal" class="adm-overlay" onclick="if(event.target===this)closeAdminLogin()">
+  <div class="adm-gate">
+    <div class="adm-gate-logo">AutoMatch <span>Admin</span></div>
+    <p class="adm-gate-sub">Enter your password to access the car management panel.</p>
+    <div class="adm-input-wrap">
+      <input type="password" id="adminPwInput" class="adm-input" placeholder="Password"
+        onkeydown="if(event.key==='Enter')checkAdminPw()">
+      <div id="adminPwError" class="adm-pw-error" style="display:none">Incorrect password. Try again.</div>
+    </div>
+    <div class="adm-gate-actions">
+      <button class="adm-btn-ghost" onclick="closeAdminLogin()">Cancel</button>
+      <button class="adm-btn-primary" onclick="checkAdminPw()">Unlock →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Admin Panel -->
+<div id="adminPanel" class="adm-overlay" onclick="if(event.target===this)closeAdmin()">
+  <div class="adm-panel">
+
+    <!-- Header -->
+    <div class="adm-header">
+      <div>
+        <div class="adm-header-title">AutoMatch <span>Admin</span></div>
+        <div class="adm-header-sub">Add or edit car listings</div>
+      </div>
+      <button class="adm-close" onclick="closeAdmin()">✕</button>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="adm-tabs">
+      <button class="adm-tab active" onclick="switchAdmTab('add',this)">＋ Add New Car</button>
+      <button class="adm-tab" onclick="switchAdmTab('edit',this)">✎ Edit Existing</button>
+    </div>
+
+    <!-- ADD TAB -->
+    <div id="admTabAdd" class="adm-tab-body">
+      <div class="adm-section-title">Step 1 — Provide Sources</div>
+      <div class="adm-field-grid">
+        <div class="adm-field">
+          <label class="adm-label">Manufacturer Page URL <span class="adm-req">*</span></label>
+          <input id="admMfrUrl" class="adm-input" type="url" placeholder="e.g. https://www.toyota.com/rav4pluginhybrid/">
+          <div class="adm-hint">Toyota, Honda, Nissan, Kia — any official product page</div>
+        </div>
+        <div class="adm-field">
+          <label class="adm-label">Photo Source URL <span class="adm-opt">(optional)</span></label>
+          <input id="admPhotoUrl" class="adm-input" type="url" placeholder="e.g. https://www.edmunds.com/toyota/rav4/2026/pictures/">
+          <div class="adm-hint">Edmunds, KBB, or any page with OEM or press photos</div>
+        </div>
+      </div>
+
+      <div class="adm-fetch-row">
+        <button class="adm-fetch-btn" id="admFetchBtn" onclick="admFetchData()">
+          <span id="admFetchBtnTxt">✦ Fetch &amp; Extract Data</span>
+          <span id="admFetchSpinner" style="display:none">⟳ Fetching…</span>
+        </button>
+        <button class="adm-manual-btn" onclick="admFillManual()" title="Skip auto-fetch and fill the form manually">✎ Fill Manually</button>
+      </div>
+      <div id="admFetchError" class="adm-error" style="display:none"></div>
+
+      <!-- Debug Log Panel -->
+      <div id="admDebugPanel" style="display:none">
+        <div class="adl-header">
+          <span class="adl-title">⬡ Debug Log</span>
+          <div class="adl-actions">
+            <button class="adl-copy-btn" onclick="admCopyLog()" title="Copy log to clipboard">⎘ Copy</button>
+            <button class="adl-clear-btn" onclick="clearAdmLog();document.getElementById('admDebugPanel').style.display='none'">✕ Clear</button>
+          </div>
+        </div>
+        <div id="admDebugLog" class="adl-log"></div>
+      </div>
+
+      <!-- Confirmation / Edit form — hidden until fetch succeeds -->
+      <div id="admConfirmForm" style="display:none">
+        <div class="adm-divider"></div>
+        <div class="adm-section-title">Step 2 — Review &amp; Edit</div>
+        <div class="adm-confirm-grid">
+          <div class="adm-field"><label class="adm-label">Brand</label><input id="cf-brand" class="adm-input"></div>
+          <div class="adm-field"><label class="adm-label">Model</label><input id="cf-model" class="adm-input"></div>
+          <div class="adm-field"><label class="adm-label">Year</label><input id="cf-year" class="adm-input" type="number"></div>
+          <div class="adm-field"><label class="adm-label">Body Type</label>
+            <select id="cf-body" class="adm-input">
+              <option>SUV</option><option>Sedan</option><option>Hatchback</option>
+              <option>Truck</option><option>Coupe</option><option>Minivan</option><option>Wagon</option>
+            </select>
+          </div>
+          <div class="adm-field"><label class="adm-label">Segment</label>
+            <select id="cf-segment" class="adm-input">
+              <option>Subcompact</option><option>Compact</option><option>Mid-Size</option><option>Full-Size</option>
+            </select>
+          </div>
+          <div class="adm-field"><label class="adm-label">Base MSRP ($)</label><input id="cf-msrp" class="adm-input" type="number"></div>
+          <div class="adm-field"><label class="adm-label">Length</label><input id="cf-length" class="adm-input" placeholder='e.g. 182.4"'></div>
+          <div class="adm-field"><label class="adm-label">Width</label><input id="cf-width" class="adm-input" placeholder='e.g. 73.0"'></div>
+          <div class="adm-field"><label class="adm-label">Height</label><input id="cf-height" class="adm-input" placeholder='e.g. 67.5"'></div>
+          <div class="adm-field"><label class="adm-label">Wheelbase</label><input id="cf-wheelbase" class="adm-input" placeholder='e.g. 105.9"'></div>
+        </div>
+
+        <div class="adm-field" style="margin-top:1rem">
+          <label class="adm-label">Exterior Image URLs <span class="adm-hint-inline">(one per line)</span></label>
+          <textarea id="cf-ext" class="adm-textarea" rows="3" placeholder="https://..."></textarea>
+        </div>
+        <div class="adm-field">
+          <label class="adm-label">Interior Image URLs <span class="adm-hint-inline">(one per line)</span></label>
+          <textarea id="cf-int" class="adm-textarea" rows="3" placeholder="https://..."></textarea>
+        </div>
+
+        <!-- Image preview row -->
+        <div id="admImgPreview" class="adm-img-preview"></div>
+
+        <div class="adm-field">
+          <label class="adm-label">Trims <span class="adm-hint-inline">(JSON array — edit as needed)</span></label>
+          <textarea id="cf-trims" class="adm-textarea adm-mono" rows="8"></textarea>
+          <div class="adm-hint">Format: <code>[{"name":"SE","price":42950,"features":["324 hp","AWD"]}]</code></div>
+        </div>
+
+        <div class="adm-confirm-actions">
+          <button class="adm-btn-ghost" onclick="admResetAdd()">↺ Start Over</button>
+          <button class="adm-btn-primary" onclick="admPublishCar()">✓ Publish to Site</button>
+        </div>
+        <div id="admPublishMsg" class="adm-publish-msg" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- EDIT TAB -->
+    <div id="admTabEdit" class="adm-tab-body" style="display:none">
+      <div class="adm-section-title">Select a car to edit</div>
+      <div class="adm-search-wrap">
+        <input id="admEditSearch" class="adm-input" placeholder="Search by name…" oninput="renderAdmEditList()">
+      </div>
+      <div id="admEditList" class="adm-edit-list"></div>
+
+      <!-- Edit form (same fields, shown when a car is selected) -->
+      <div id="admEditForm" style="display:none">
+        <div class="adm-divider"></div>
+        <div class="adm-section-title" id="admEditFormTitle">Editing: <span id="admEditCarName"></span></div>
+        <div class="adm-confirm-grid">
+          <div class="adm-field"><label class="adm-label">Brand</label><input id="ef-brand" class="adm-input"></div>
+          <div class="adm-field"><label class="adm-label">Model</label><input id="ef-model" class="adm-input"></div>
+          <div class="adm-field"><label class="adm-label">Year</label><input id="ef-year" class="adm-input" type="number"></div>
+          <div class="adm-field"><label class="adm-label">Body Type</label>
+            <select id="ef-body" class="adm-input">
+              <option>SUV</option><option>Sedan</option><option>Hatchback</option>
+              <option>Truck</option><option>Coupe</option><option>Minivan</option><option>Wagon</option>
+            </select>
+          </div>
+          <div class="adm-field"><label class="adm-label">Segment</label>
+            <select id="ef-segment" class="adm-input">
+              <option>Subcompact</option><option>Compact</option><option>Mid-Size</option><option>Full-Size</option>
+            </select>
+          </div>
+          <div class="adm-field"><label class="adm-label">Base MSRP ($)</label><input id="ef-msrp" class="adm-input" type="number"></div>
+          <div class="adm-field"><label class="adm-label">Length</label><input id="ef-length" class="adm-input"></div>
+          <div class="adm-field"><label class="adm-label">Width</label><input id="ef-width" class="adm-input"></div>
+          <div class="adm-field"><label class="adm-label">Height</label><input id="ef-height" class="adm-input"></div>
+          <div class="adm-field"><label class="adm-label">Wheelbase</label><input id="ef-wheelbase" class="adm-input"></div>
+        </div>
+        <div class="adm-field" style="margin-top:1rem">
+          <label class="adm-label">Exterior Image URLs <span class="adm-hint-inline">(one per line)</span></label>
+          <textarea id="ef-ext" class="adm-textarea" rows="3"></textarea>
+        </div>
+        <div class="adm-field">
+          <label class="adm-label">Interior Image URLs <span class="adm-hint-inline">(one per line)</span></label>
+          <textarea id="ef-int" class="adm-textarea" rows="3"></textarea>
+        </div>
+        <div id="admEditImgPreview" class="adm-img-preview"></div>
+        <div class="adm-field">
+          <label class="adm-label">Trims <span class="adm-hint-inline">(JSON array)</span></label>
+          <textarea id="ef-trims" class="adm-textarea adm-mono" rows="8"></textarea>
+        </div>
+        <div class="adm-confirm-actions">
+          <button class="adm-btn-danger" onclick="admDeleteCar()">🗑 Delete Car</button>
+          <button class="adm-btn-ghost" onclick="admCancelEdit()">Cancel</button>
+          <button class="adm-btn-primary" onclick="admSaveEdit()">✓ Save Changes</button>
+        </div>
+        <div id="admEditMsg" class="adm-publish-msg" style="display:none"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ── ADMIN FOOTER ── */
+#adminFooter{
+  position:fixed;bottom:1.2rem;right:1.4rem;z-index:200;
+}
+#adminTriggerBtn{
+  font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.08em;
+  color:rgba(255,255,255,0.35);background:rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.1);border-radius:999px;
+  padding:0.4rem 0.9rem;cursor:pointer;backdrop-filter:blur(8px);
+  transition:color 0.2s,background 0.2s,border-color 0.2s;
+}
+#adminTriggerBtn:hover{color:#fff;background:rgba(0,0,0,0.7);border-color:rgba(255,255,255,0.25)}
+
+/* ── OVERLAYS ── */
+.adm-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;padding:1rem;
+}
+.adm-overlay.open{display:flex}
+
+/* ── PASSWORD GATE ── */
+.adm-gate{
+  background:#fff;border-radius:20px;padding:2.5rem 2rem;
+  width:100%;max-width:380px;text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,0.3);
+}
+.adm-gate-logo{
+  font-family:'DM Serif Display',serif;font-size:1.5rem;
+  color:#111118;margin-bottom:0.5rem;
+}
+.adm-gate-logo span{color:#e84545;font-style:italic}
+.adm-gate-sub{font-size:0.82rem;color:#9898aa;margin-bottom:1.5rem;line-height:1.5}
+.adm-input-wrap{margin-bottom:1.25rem;text-align:left}
+.adm-pw-error{color:#e84545;font-size:0.78rem;margin-top:0.4rem;padding:0 0.2rem}
+.adm-gate-actions{display:flex;gap:0.75rem;justify-content:center}
+
+/* ── MAIN PANEL ── */
+.adm-panel{
+  background:#fff;border-radius:20px;
+  width:100%;max-width:780px;max-height:90vh;
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,0.3);
+}
+.adm-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.5rem 1.75rem 1.25rem;
+  border-bottom:1px solid rgba(0,0,0,0.08);flex-shrink:0;
+}
+.adm-header-title{
+  font-family:'DM Serif Display',serif;font-size:1.4rem;color:#111118;
+}
+.adm-header-title span{color:#e84545;font-style:italic}
+.adm-header-sub{font-size:0.78rem;color:#9898aa;margin-top:2px}
+.adm-close{
+  width:32px;height:32px;border-radius:50%;border:1px solid rgba(0,0,0,0.1);
+  background:transparent;cursor:pointer;font-size:0.85rem;color:#9898aa;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.15s,color 0.15s;flex-shrink:0;
+}
+.adm-close:hover{background:#f5f5f8;color:#111118}
+
+/* ── TABS ── */
+.adm-tabs{display:flex;gap:0.25rem;padding:0.75rem 1.75rem 0;flex-shrink:0}
+.adm-tab{
+  font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;
+  padding:0.45rem 1.1rem;border-radius:999px;border:1px solid transparent;
+  background:transparent;color:#9898aa;cursor:pointer;transition:all 0.15s;
+}
+.adm-tab:hover{background:#f5f5f8;color:#111118}
+.adm-tab.active{background:#111118;color:#fff}
+
+/* ── TAB BODY ── */
+.adm-tab-body{
+  padding:1.5rem 1.75rem;overflow-y:auto;flex:1;
+}
+.adm-section-title{
+  font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:#9898aa;margin-bottom:1rem;
+}
+.adm-divider{height:1px;background:rgba(0,0,0,0.07);margin:1.5rem 0}
+
+/* ── FIELDS ── */
+.adm-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;margin-bottom:1rem}
+.adm-confirm-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:0.75rem;margin-bottom:0.5rem}
+@media(max-width:600px){
+  .adm-field-grid{grid-template-columns:1fr}
+  .adm-confirm-grid{grid-template-columns:1fr 1fr}
+}
+.adm-field{display:flex;flex-direction:column;gap:0.3rem}
+.adm-label{font-size:0.74rem;font-weight:500;color:#44444f}
+.adm-req{color:#e84545}
+.adm-opt{color:#9898aa;font-weight:400}
+.adm-hint{font-size:0.7rem;color:#9898aa}
+.adm-hint-inline{font-size:0.72rem;color:#9898aa;font-weight:400}
+.adm-input{
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#111118;
+  border:1px solid rgba(0,0,0,0.12);border-radius:8px;padding:0.55rem 0.75rem;
+  background:#fff;transition:border-color 0.15s,box-shadow 0.15s;outline:none;width:100%;
+}
+.adm-input:focus{border-color:#e84545;box-shadow:0 0 0 3px rgba(232,69,69,0.1)}
+.adm-textarea{
+  font-family:'DM Sans',sans-serif;font-size:0.8rem;color:#111118;
+  border:1px solid rgba(0,0,0,0.12);border-radius:8px;padding:0.6rem 0.75rem;
+  background:#fff;resize:vertical;outline:none;width:100%;
+  transition:border-color 0.15s,box-shadow 0.15s;line-height:1.5;
+}
+.adm-textarea:focus{border-color:#e84545;box-shadow:0 0 0 3px rgba(232,69,69,0.1)}
+.adm-mono{font-family:'Courier New',monospace;font-size:0.75rem}
+
+/* ── BUTTONS ── */
+.adm-fetch-row{display:flex;gap:0.6rem;align-items:stretch;margin-bottom:0.5rem}
+.adm-fetch-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;
+  background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;
+  border:none;border-radius:10px;padding:0.75rem 1.5rem;cursor:pointer;
+  transition:opacity 0.15s,transform 0.1s;flex:1;
+}
+.adm-fetch-btn:hover{opacity:0.88}
+.adm-fetch-btn:active{transform:scale(0.99)}
+.adm-fetch-btn:disabled{opacity:0.5;cursor:not-allowed}
+.adm-manual-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;
+  background:#f5f5f8;color:#44444f;border:1px solid rgba(0,0,0,0.12);
+  border-radius:10px;padding:0.75rem 1rem;cursor:pointer;white-space:nowrap;
+  transition:background 0.15s,border-color 0.15s;flex-shrink:0;
+}
+.adm-manual-btn:hover{background:#ebebf0;border-color:rgba(0,0,0,0.2)}
+
+.adm-btn-primary{
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;
+  background:#e84545;color:#fff;border:none;border-radius:8px;
+  padding:0.6rem 1.4rem;cursor:pointer;transition:opacity 0.15s;
+}
+.adm-btn-primary:hover{opacity:0.88}
+.adm-btn-ghost{
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;
+  background:transparent;color:#44444f;border:1px solid rgba(0,0,0,0.15);
+  border-radius:8px;padding:0.6rem 1.2rem;cursor:pointer;transition:background 0.15s;
+}
+.adm-btn-ghost:hover{background:#f5f5f8}
+.adm-btn-danger{
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;
+  background:transparent;color:#e84545;border:1px solid rgba(232,69,69,0.3);
+  border-radius:8px;padding:0.6rem 1.2rem;cursor:pointer;transition:background 0.15s;
+}
+.adm-btn-danger:hover{background:rgba(232,69,69,0.06)}
+
+.adm-confirm-actions{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.25rem;flex-wrap:wrap}
+.adm-error{background:#fff0f0;border:1px solid rgba(232,69,69,0.25);border-radius:8px;
+  padding:0.65rem 0.9rem;font-size:0.8rem;color:#c0392b;margin-top:0.5rem}
+.adm-publish-msg{border-radius:8px;padding:0.65rem 0.9rem;font-size:0.8rem;margin-top:0.75rem}
+.adm-publish-msg.success{background:#f0fff4;border:1px solid rgba(34,197,94,0.25);color:#166534}
+.adm-publish-msg.error{background:#fff0f0;border:1px solid rgba(232,69,69,0.25);color:#c0392b}
+
+/* ── IMAGE PREVIEW ── */
+.adm-img-preview{display:flex;gap:0.5rem;flex-wrap:wrap;margin:0.5rem 0 1rem;min-height:0}
+.adm-img-preview img{
+  height:90px;width:140px;object-fit:cover;border-radius:8px;
+  border:1px solid rgba(0,0,0,0.1);background:#f5f5f8;
+}
+.adm-img-preview img.broken{opacity:0.3;filter:grayscale(1)}
+
+/* ── DEBUG LOG ── */
+#admDebugPanel{
+  margin-top:0.75rem;border-radius:10px;overflow:hidden;
+  border:1px solid rgba(0,0,0,0.1);
+}
+.adl-header{
+  display:flex;align-items:center;justify-content:space-between;
+  background:#1a1a2e;padding:0.5rem 0.75rem;
+}
+.adl-title{font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.7);letter-spacing:0.06em}
+.adl-actions{display:flex;gap:0.4rem}
+.adl-copy-btn,.adl-clear-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.68rem;
+  background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);
+  border:1px solid rgba(255,255,255,0.15);border-radius:4px;
+  padding:0.2rem 0.5rem;cursor:pointer;transition:background 0.12s;
+}
+.adl-copy-btn:hover,.adl-clear-btn:hover{background:rgba(255,255,255,0.2);color:#fff}
+.adl-log{
+  background:#0d1117;max-height:260px;overflow-y:auto;
+  font-family:'Courier New',monospace;font-size:0.72rem;
+  padding:0.5rem;display:flex;flex-direction:column;gap:2px;
+}
+.adl-row{display:flex;flex-direction:column;gap:1px;padding:3px 4px;border-radius:4px}
+.adl-row:hover{background:rgba(255,255,255,0.03)}
+.adl-info{color:#8b949e}
+.adl-ok{color:#3fb950}
+.adl-warn{color:#d29922}
+.adl-error{color:#f85149;background:rgba(248,81,73,0.07)}
+.adl-row .adl-ts{color:rgba(255,255,255,0.25);margin-right:0.4rem;flex-shrink:0}
+.adl-badge{
+  display:inline-block;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;
+  padding:1px 4px;border-radius:3px;margin-right:0.4rem;vertical-align:middle;flex-shrink:0;
+}
+.adl-badge-info{background:rgba(88,166,255,0.15);color:#58a6ff}
+.adl-badge-ok{background:rgba(63,185,80,0.15);color:#3fb950}
+.adl-badge-warn{background:rgba(210,153,34,0.15);color:#d29922}
+.adl-badge-error{background:rgba(248,81,73,0.2);color:#f85149}
+.adl-msg{color:inherit;line-height:1.4}
+.adl-detail{
+  margin:3px 0 2px 2.5rem;padding:4px 6px;
+  background:rgba(255,255,255,0.04);border-left:2px solid rgba(255,255,255,0.1);
+  border-radius:0 4px 4px 0;font-size:0.68rem;color:#8b949e;
+  white-space:pre-wrap;word-break:break-all;max-height:120px;overflow-y:auto;
+}
+
+/* ── EDIT LIST ── */
+.adm-search-wrap{margin-bottom:0.75rem}
+.adm-edit-list{display:flex;flex-direction:column;gap:0.35rem;max-height:280px;overflow-y:auto}
+.adm-edit-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.65rem 0.85rem;border-radius:10px;border:1px solid rgba(0,0,0,0.08);
+  cursor:pointer;transition:background 0.12s;
+}
+.adm-edit-row:hover{background:#f5f5f8}
+.adm-edit-row-left{display:flex;align-items:center;gap:0.75rem}
+.adm-edit-thumb{width:52px;height:36px;object-fit:cover;border-radius:5px;background:#eee}
+.adm-edit-name{font-size:0.82rem;font-weight:500;color:#111118}
+.adm-edit-meta{font-size:0.72rem;color:#9898aa}
+.adm-edit-arrow{color:#9898aa;font-size:0.75rem}
+</style>
+
+<script>
+// ── ADMIN PASSWORD HASH (SHA-256 of the real password — plaintext never stored) ──
+// To change password: replace this hash with: sha256sum of your new password
+// Current password: (see your deployment notes — not stored here)
+const ADMIN_PW_HASH = '53767c1edafbad9cddae821efd42e85c219f470a8f14c4144bb81c16d8c2df93';
+
+// ── STATE ──
+let admEditingId = null;
+
+// ── LOGIN ──
+function adminLogin(){
+  document.getElementById('adminLoginModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('adminPwInput').focus(),100);
+}
+
+function closeAdminLogin(){
+  document.getElementById('adminLoginModal').classList.remove('open');
+  document.getElementById('adminPwInput').value='';
+  document.getElementById('adminPwError').style.display='none';
+  document.body.style.overflow='';
+}
+
+async function checkAdminPw(){
+  const v = document.getElementById('adminPwInput').value;
+  // Hash the input using the browser's native Web Crypto API
+  const encoder = new TextEncoder();
+  const data = encoder.encode(v);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+
+  if(hashHex === ADMIN_PW_HASH){
+    closeAdminLogin();
+    openAdmin();
+  } else {
+    document.getElementById('adminPwError').style.display='block';
+    document.getElementById('adminPwInput').value='';
+    document.getElementById('adminPwInput').focus();
+  }
+}
+
+// ── OPEN/CLOSE PANEL ──
+function openAdmin(){
+  renderAdmEditList();
+  document.getElementById('adminPanel').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeAdmin(){
+  document.getElementById('adminPanel').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── TAB SWITCHING ──
+function switchAdmTab(tab, el){
+  document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('admTabAdd').style.display = tab==='add' ? 'block' : 'none';
+  document.getElementById('admTabEdit').style.display = tab==='edit' ? 'block' : 'none';
+  if(tab==='edit') renderAdmEditList();
+}
+
+// ── FETCH & EXTRACT ──
+// ── DEBUG LOG ──────────────────────────────────────────────────────────────
+const admLog = [];
+function admLogLine(type, msg, detail=''){
+  const ts = new Date().toISOString().substring(11,23);
+  admLog.push({ts, type, msg, detail});
+  renderAdmLog();
+}
+function renderAdmLog(){
+  const el = document.getElementById('admDebugLog');
+  if(!el) return;
+  el.innerHTML = admLog.map(l=>`
+    <div class="adl-row adl-${l.type}">
+      <span class="adl-ts">${l.ts}</span>
+      <span class="adl-badge adl-badge-${l.type}">${l.type.toUpperCase()}</span>
+      <span class="adl-msg">${escHtml(l.msg)}</span>
+      ${l.detail ? `<pre class="adl-detail">${escHtml(l.detail)}</pre>` : ''}
+    </div>
+  `).join('');
+  el.scrollTop = el.scrollHeight;
+}
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function clearAdmLog(){ admLog.length=0; renderAdmLog(); }
+
+// ── FETCH & EXTRACT ──────────────────────────────────────────────────────────
+async function admFetchData(){
+  const mfrUrl = document.getElementById('admMfrUrl').value.trim();
+  const photoUrl = document.getElementById('admPhotoUrl').value.trim();
+
+  if(!mfrUrl){ showAdmError('Please enter a manufacturer URL.'); return; }
+
+  const btn = document.getElementById('admFetchBtn');
+  document.getElementById('admFetchBtnTxt').style.display='none';
+  document.getElementById('admFetchSpinner').style.display='inline';
+  btn.disabled=true;
+  document.getElementById('admFetchError').style.display='none';
+  document.getElementById('admConfirmForm').style.display='none';
+
+  // Show and clear the debug panel
+  clearAdmLog();
+  document.getElementById('admDebugPanel').style.display='block';
+  admLogLine('info', 'Starting fetch & extract');
+  admLogLine('info', 'Manufacturer URL: ' + mfrUrl);
+  if(photoUrl) admLogLine('info', 'Photo URL: ' + photoUrl);
+
+  try {
+    admLogLine('info', 'Building API request (model: claude-sonnet-4-20250514, web_search enabled)');
+
+    const systemPrompt = `You are a car data extraction assistant. You will receive one or two URLs for a car. Your task:
+1. Use web_search to search for the car's specs, pricing, trims, and images. Search for the car model name plus "specs", "price", "trims", and "pictures".
+2. Also try to directly fetch the provided manufacturer URL using web_search.
+3. Extract all data and return ONLY a raw JSON object — no markdown fences, no prose, nothing else.
+
+Required JSON schema:
+{
+  "brand": "Mazda",
+  "model": "MX-5 Miata RF",
+  "year": 2025,
+  "body": "Coupe",
+  "segment": "Compact",
+  "msrp": 37850,
+  "dims": { "length": "154.1\"", "width": "68.1\"", "height": "48.8\"", "wheelbase": "90.9\"" },
+  "ext": ["https://...full-url..."],
+  "int": ["https://...full-url..."],
+  "trims": [
+    { "name": "Grand Touring", "price": 37850, "features": ["2.0L Skyactiv-G (181 hp)", "6-speed manual", "Bose 9-speaker audio"] }
+  ]
+}
+
+Field rules:
+- body: one of SUV, Sedan, Hatchback, Truck, Coupe, Minivan, Wagon
+- segment: one of Subcompact, Compact, Mid-Size, Full-Size
+- msrp: plain integer, no $ or commas
+- dims: include inch symbol in each value string
+- ext/int: full https:// image URLs only. Prefer clean studio/OEM photos from media.ed.edmunds-media.com or similar CDNs. Empty array [] if none found.
+- trims: array of {name, price (int), features (string array, max 8 items)}
+- CRITICAL: Output ONLY the raw JSON object. No backticks, no markdown, no explanation whatsoever.`;
+
+    const userMsg = `Manufacturer URL: ${mfrUrl}${photoUrl ? '\nPhoto/review URL: ' + photoUrl : ''}
+
+Search for specs, pricing, dimensions, trim levels, and images for this car. Return only the JSON object.`;
+
+    const requestBody = {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2000,
+      tools: [{type:'web_search_20250305', name:'web_search'}],
+      system: systemPrompt,
+      messages: [{role:'user', content:userMsg}]
+    };
+
+    admLogLine('info', 'Sending request to Anthropic API…');
+    let response, data;
+
+    // Detect environment: claude.ai artifact vs local file
+    const isClaudeAI = location.hostname.includes('claude.ai') || location.hostname.includes('anthropic.com');
+    const apiUrl = 'https://api.anthropic.com/v1/messages';
+    admLogLine('info', `Environment: ${isClaudeAI ? 'claude.ai (proxied)' : 'local file'} — ${location.hostname || 'filesystem'}`);
+
+    if(!isClaudeAI){
+      admLogLine('error', 'CORS restriction: direct API calls only work when this file is open inside claude.ai');
+      admLogLine('info', 'To use this feature, open the file in claude.ai, or use the manual entry form below');
+      throw new Error('This feature requires the page to be open inside claude.ai. The browser blocks direct Anthropic API calls from local files due to CORS. Use the manual entry fields below to add the car data yourself.');
+    }
+
+    try {
+      response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        credentials: 'include',
+        body: JSON.stringify(requestBody)
+      });
+      admLogLine('info', `HTTP response status: ${response.status} ${response.statusText}`);
+    } catch(networkErr){
+      admLogLine('error', 'Network request failed — cannot reach Anthropic API', networkErr.message);
+      const isCors = networkErr.message.includes('fetch') || networkErr.message === 'Failed to fetch';
+      if(isCors){
+        throw new Error('CORS error: The browser blocked the API call. This page must be opened inside claude.ai for auto-fetch to work. Use the manual entry form instead.');
+      }
+      throw new Error('Network error: ' + networkErr.message);
+    }
+
+    try {
+      data = await response.json();
+    } catch(jsonErr){
+      admLogLine('error', 'Failed to parse API response as JSON', jsonErr.message);
+      throw new Error('API returned non-JSON response (status ' + response.status + ')');
+    }
+
+    admLogLine('info', 'API response received', JSON.stringify({
+      id: data.id,
+      model: data.model,
+      stop_reason: data.stop_reason,
+      usage: data.usage,
+      content_blocks: data.content?.length,
+      error: data.error
+    }, null, 2));
+
+    // Check for API-level error
+    if(data.error){
+      admLogLine('error', 'API returned error: ' + data.error.type, data.error.message);
+      throw new Error(`API error (${data.error.type}): ${data.error.message}`);
+    }
+
+    // Check HTTP status
+    if(!response.ok){
+      admLogLine('error', `HTTP ${response.status} error`, JSON.stringify(data, null, 2));
+      throw new Error(`HTTP ${response.status}: ${JSON.stringify(data)}`);
+    }
+
+    // Log each content block
+    if(!data.content || data.content.length === 0){
+      admLogLine('error', 'API response has no content blocks');
+      throw new Error('Empty response from API — no content returned.');
+    }
+
+    admLogLine('info', `Response has ${data.content.length} content block(s):`);
+    let rawText = '';
+    for(const [i, block] of data.content.entries()){
+      if(block.type === 'text'){
+        admLogLine('ok', `Block ${i}: text (${block.text.length} chars)`, block.text.substring(0, 500) + (block.text.length > 500 ? '…' : ''));
+        rawText += block.text;
+      } else if(block.type === 'tool_use'){
+        admLogLine('info', `Block ${i}: tool_use — ${block.name}`, JSON.stringify(block.input).substring(0, 200));
+      } else if(block.type === 'tool_result'){
+        admLogLine('info', `Block ${i}: tool_result`, JSON.stringify(block).substring(0, 200));
+      } else {
+        admLogLine('info', `Block ${i}: ${block.type}`, JSON.stringify(block).substring(0, 200));
+      }
+    }
+
+    if(!rawText.trim()){
+      admLogLine('error', 'No text blocks found in response — AI may have only called tools without returning final text');
+      admLogLine('info', 'Full response dump', JSON.stringify(data.content, null, 2).substring(0, 1000));
+      throw new Error('AI returned no text output. It may have only performed web searches without summarising results. Try again or add a photo URL to help.');
+    }
+
+    admLogLine('info', 'Raw text from AI (' + rawText.length + ' chars):', rawText.substring(0, 600));
+
+    // Strip markdown fences
+    const cleaned = rawText.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+    if(cleaned !== rawText.trim()){
+      admLogLine('info', 'Stripped markdown fences from response');
+    }
+
+    // Find first { ... } JSON object in case there's surrounding text
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if(!jsonMatch){
+      admLogLine('error', 'No JSON object found in AI response', cleaned.substring(0, 400));
+      throw new Error('AI response did not contain a JSON object. See debug log for the raw output.');
+    }
+    const jsonStr = jsonMatch[0];
+    if(jsonStr.length < cleaned.length){
+      admLogLine('info', 'Extracted JSON object from surrounding text (' + (cleaned.length - jsonStr.length) + ' chars trimmed)');
+    }
+
+    let car;
+    try {
+      car = JSON.parse(jsonStr);
+      admLogLine('ok', 'JSON parsed successfully', JSON.stringify(car, null, 2).substring(0, 800));
+    } catch(parseErr){
+      admLogLine('error', 'JSON.parse failed: ' + parseErr.message, jsonStr.substring(0, 500));
+      throw new Error('JSON parse error: ' + parseErr.message + '. See debug log for the raw string.');
+    }
+
+    // Validate required fields
+    const missing = ['brand','model','year','msrp'].filter(k=>!car[k]);
+    if(missing.length){
+      admLogLine('warn', 'Missing required fields: ' + missing.join(', ') + ' — filling with defaults');
+    }
+
+    // Normalise body/segment to valid values
+    const validBodies = ['SUV','Sedan','Hatchback','Truck','Coupe','Minivan','Wagon'];
+    const validSegs = ['Subcompact','Compact','Mid-Size','Full-Size'];
+    if(!validBodies.includes(car.body)){
+      admLogLine('warn', `body="${car.body}" is not a valid option — defaulting to "Coupe"`);
+      car.body = 'Coupe';
+    }
+    if(!validSegs.includes(car.segment)){
+      admLogLine('warn', `segment="${car.segment}" is not a valid option — defaulting to "Compact"`);
+      car.segment = 'Compact';
+    }
+
+    admLogLine('ok', '✓ Extraction complete — populating form');
+    populateAddForm(car);
+
+  } catch(err){
+    admLogLine('error', 'FATAL: ' + err.message);
+    showAdmError(err.message + ' — see the Debug Log below for details.');
+  } finally {
+    document.getElementById('admFetchBtnTxt').style.display='inline';
+    document.getElementById('admFetchSpinner').style.display='none';
+    btn.disabled=false;
+  }
+}
+
+function showAdmError(msg){
+  const el = document.getElementById('admFetchError');
+  el.innerHTML = msg;
+  el.style.display='block';
+}
+
+// ── POPULATE CONFIRM FORM ──
+function populateAddForm(car){
+  document.getElementById('cf-brand').value = car.brand||'';
+  document.getElementById('cf-model').value = car.model||'';
+  document.getElementById('cf-year').value = car.year||'';
+  setSelect('cf-body', car.body||'SUV');
+  setSelect('cf-segment', car.segment||'Compact');
+  document.getElementById('cf-msrp').value = car.msrp||'';
+  document.getElementById('cf-length').value = car.dims?.length||'';
+  document.getElementById('cf-width').value = car.dims?.width||'';
+  document.getElementById('cf-height').value = car.dims?.height||'';
+  document.getElementById('cf-wheelbase').value = car.dims?.wheelbase||'';
+  document.getElementById('cf-ext').value = (car.ext||[]).join('\n');
+  document.getElementById('cf-int').value = (car.int||[]).join('\n');
+  document.getElementById('cf-trims').value = JSON.stringify(car.trims||[], null, 2);
+
+  renderImgPreview('cf-ext','cf-int','admImgPreview');
+  document.getElementById('cf-ext').addEventListener('input',()=>renderImgPreview('cf-ext','cf-int','admImgPreview'));
+  document.getElementById('cf-int').addEventListener('input',()=>renderImgPreview('cf-ext','cf-int','admImgPreview'));
+
+  document.getElementById('admConfirmForm').style.display='block';
+  document.getElementById('admPublishMsg').style.display='none';
+  document.getElementById('admConfirmForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function setSelect(id, val){
+  const sel = document.getElementById(id);
+  for(const opt of sel.options){ if(opt.value===val){ sel.value=val; return; } }
+}
+
+// ── IMAGE PREVIEW ──
+function renderImgPreview(extId, intId, previewId){
+  const extLines = document.getElementById(extId).value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const intLines = document.getElementById(intId).value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const allUrls = [...extLines, ...intLines];
+  const wrap = document.getElementById(previewId);
+  wrap.innerHTML = allUrls.map(u=>`<img src="${u}" onerror="this.classList.add('broken')" title="${u}">`).join('');
+}
+
+// ── PUBLISH NEW CAR ──
+function admPublishCar(){
+  try {
+    const brand = document.getElementById('cf-brand').value.trim();
+    const model = document.getElementById('cf-model').value.trim();
+    const year = parseInt(document.getElementById('cf-year').value);
+    const body = document.getElementById('cf-body').value;
+    const segment = document.getElementById('cf-segment').value;
+    const msrp = parseInt(document.getElementById('cf-msrp').value);
+    const dims = {
+      length: document.getElementById('cf-length').value.trim(),
+      width: document.getElementById('cf-width').value.trim(),
+      height: document.getElementById('cf-height').value.trim(),
+      wheelbase: document.getElementById('cf-wheelbase').value.trim()
+    };
+    const ext = document.getElementById('cf-ext').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    const int_ = document.getElementById('cf-int').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    const trims = JSON.parse(document.getElementById('cf-trims').value);
+
+    if(!brand||!model||!year||!msrp) throw new Error('Brand, Model, Year, and MSRP are required.');
+
+    // Generate a unique id
+    const prefix = brand.substring(0,2).toLowerCase();
+    const slug = model.toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-');
+    let id = `${prefix}-${slug}`;
+    let i=2; const baseId=id;
+    while(CARS.find(c=>c.id===id)){ id=`${baseId}-${i}`; i++; }
+
+    const newCar = {id, brand, model, year, body, segment, msrp, ext, int:int_, dims, trims};
+    CARS.push(newCar);
+    doFilter();
+
+    const msg = document.getElementById('admPublishMsg');
+    msg.className='adm-publish-msg success';
+    msg.textContent=`✓ "${brand} ${model}" added successfully! It now appears in the grid.`;
+    msg.style.display='block';
+
+    setTimeout(()=>{ admResetAdd(); renderAdmEditList(); }, 2500);
+
+  } catch(e){
+    const msg = document.getElementById('admPublishMsg');
+    msg.className='adm-publish-msg error';
+    msg.textContent='Error: ' + e.message;
+    msg.style.display='block';
+  }
+}
+
+function admResetAdd(){
+  document.getElementById('admMfrUrl').value='';
+  document.getElementById('admPhotoUrl').value='';
+  document.getElementById('admConfirmForm').style.display='none';
+  document.getElementById('admFetchError').style.display='none';
+  document.getElementById('admPublishMsg').style.display='none';
+  document.getElementById('admDebugPanel').style.display='none';
+}
+
+function admFillManual(){
+  // Pre-fill with a blank skeleton so user can type directly
+  populateAddForm({
+    brand:'', model:'', year: new Date().getFullYear(),
+    body:'SUV', segment:'Compact', msrp:0,
+    dims:{length:'',width:'',height:'',wheelbase:''},
+    ext:[], int:[],
+    trims:[{name:'Base',price:0,features:[]}]
+  });
+  document.getElementById('admFetchError').style.display='none';
+  document.getElementById('admDebugPanel').style.display='none';
+}
+
+// ── EDIT LIST ──
+function renderAdmEditList(){
+  const q = (document.getElementById('admEditSearch')?.value||'').toLowerCase();
+  const filtered = CARS.filter(c=>`${c.brand} ${c.model} ${c.year}`.toLowerCase().includes(q));
+  const list = document.getElementById('admEditList');
+  list.innerHTML = filtered.map(c=>`
+    <div class="adm-edit-row" onclick="admOpenEdit('${c.id}')">
+      <div class="adm-edit-row-left">
+        <img class="adm-edit-thumb" src="${img(c.ext[0])}" alt="" onerror="this.src='${FALLBACK}'">
+        <div>
+          <div class="adm-edit-name">${c.brand} ${c.model}</div>
+          <div class="adm-edit-meta">${c.year} · ${c.body} · ${c.segment} · ${fmt(c.msrp)}</div>
+        </div>
+      </div>
+      <span class="adm-edit-arrow">›</span>
+    </div>
+  `).join('');
+}
+
+// ── OPEN EDIT ──
+function admOpenEdit(id){
+  const c = CARS.find(x=>x.id===id);
+  if(!c) return;
+  admEditingId = id;
+
+  document.getElementById('admEditCarName').textContent = `${c.brand} ${c.model}`;
+  document.getElementById('ef-brand').value = c.brand;
+  document.getElementById('ef-model').value = c.model;
+  document.getElementById('ef-year').value = c.year;
+  setSelect('ef-body', c.body);
+  setSelect('ef-segment', c.segment);
+  document.getElementById('ef-msrp').value = c.msrp;
+  document.getElementById('ef-length').value = c.dims?.length||'';
+  document.getElementById('ef-width').value = c.dims?.width||'';
+  document.getElementById('ef-height').value = c.dims?.height||'';
+  document.getElementById('ef-wheelbase').value = c.dims?.wheelbase||'';
+  document.getElementById('ef-ext').value = (c.ext||[]).join('\n');
+  document.getElementById('ef-int').value = (c.int||[]).join('\n');
+  document.getElementById('ef-trims').value = JSON.stringify(c.trims||[], null, 2);
+
+  renderImgPreview('ef-ext','ef-int','admEditImgPreview');
+  document.getElementById('ef-ext').addEventListener('input',()=>renderImgPreview('ef-ext','ef-int','admEditImgPreview'));
+  document.getElementById('ef-int').addEventListener('input',()=>renderImgPreview('ef-ext','ef-int','admEditImgPreview'));
+
+  document.getElementById('admEditForm').style.display='block';
+  document.getElementById('admEditMsg').style.display='none';
+  document.getElementById('admEditForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── SAVE EDIT ──
+function admSaveEdit(){
+  try {
+    const idx = CARS.findIndex(c=>c.id===admEditingId);
+    if(idx<0) throw new Error('Car not found.');
+
+    const trims = JSON.parse(document.getElementById('ef-trims').value);
+    CARS[idx] = {
+      id: admEditingId,
+      brand: document.getElementById('ef-brand').value.trim(),
+      model: document.getElementById('ef-model').value.trim(),
+      year: parseInt(document.getElementById('ef-year').value),
+      body: document.getElementById('ef-body').value,
+      segment: document.getElementById('ef-segment').value,
+      msrp: parseInt(document.getElementById('ef-msrp').value),
+      dims:{
+        length: document.getElementById('ef-length').value.trim(),
+        width: document.getElementById('ef-width').value.trim(),
+        height: document.getElementById('ef-height').value.trim(),
+        wheelbase: document.getElementById('ef-wheelbase').value.trim()
+      },
+      ext: document.getElementById('ef-ext').value.split('\n').map(s=>s.trim()).filter(Boolean),
+      int: document.getElementById('ef-int').value.split('\n').map(s=>s.trim()).filter(Boolean),
+      trims
+    };
+    doFilter();
+    renderAdmEditList();
+
+    const msg = document.getElementById('admEditMsg');
+    msg.className='adm-publish-msg success';
+    msg.textContent='✓ Changes saved successfully.';
+    msg.style.display='block';
+    setTimeout(()=>{ msg.style.display='none'; admCancelEdit(); }, 2000);
+
+  } catch(e){
+    const msg = document.getElementById('admEditMsg');
+    msg.className='adm-publish-msg error';
+    msg.textContent='Error: '+e.message;
+    msg.style.display='block';
+  }
+}
+
+// ── DELETE ──
+function admDeleteCar(){
+  const c = CARS.find(x=>x.id===admEditingId);
+  if(!c) return;
+  if(!confirm(`Delete "${c.brand} ${c.model}"? This cannot be undone.`)) return;
+  const idx = CARS.findIndex(x=>x.id===admEditingId);
+  CARS.splice(idx,1);
+  doFilter();
+  renderAdmEditList();
+  admCancelEdit();
+}
+
+function admCancelEdit(){
+  admEditingId=null;
+  document.getElementById('admEditForm').style.display='none';
+}
+
+function admCopyLog(){
+  const lines = admLog.map(l=>`[${l.ts}] [${l.type.toUpperCase()}] ${l.msg}${l.detail ? '\n' + l.detail : ''}`).join('\n');
+  navigator.clipboard.writeText(lines).then(()=>{
+    const btn = document.querySelector('.adl-copy-btn');
+    btn.textContent='✓ Copied';
+    setTimeout(()=>btn.textContent='⎘ Copy', 1500);
+  }).catch(()=>{ alert('Copy failed — try selecting the log text manually.'); });
+}
+</script>
+</body>
+</html>
