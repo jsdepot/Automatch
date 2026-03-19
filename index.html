@@ -41,7 +41,6 @@ header{
   padding:1.5rem 2.5rem 1.25rem;
   display:flex;align-items:center;gap:2rem;
   position:sticky;top:0;z-index:100;
-  border-bottom:1px solid rgba(255,255,255,0.06);
 }
 .logo{font-family:'Outfit',sans-serif;font-size:1.55rem;font-weight:800;letter-spacing:-0.04em;color:#d1aea6;flex-shrink:0;line-height:1}
 .logo-a{color:#d1aea6;}
@@ -60,46 +59,101 @@ header{
 
 /* ── CONTROL BAR — white surface ─────────────────────────────────────────── */
 .search-bar{
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
+  background:#292528;
   padding:0.9rem 2.5rem;
-  display:flex;align-items:center;gap:1rem;
+  display:flex;align-items:center;justify-content:center;gap:1rem;
   flex-wrap:wrap;position:sticky;top:75px;z-index:90;
-  box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  box-shadow:0 2px 12px rgba(0,0,0,0.18);
 }
 .srch-wrap{position:relative;min-width:200px;max-width:280px;flex:1}
 .srch-wrap input{
   width:100%;padding:0.6rem 1rem 0.6rem 2.4rem;
-  border:1.5px solid var(--border);border-radius:var(--pill-radius);
+  border:1.5px solid rgba(255,255,255,0.15);border-radius:var(--pill-radius);
   font-size:0.84rem;font-family:'DM Sans',sans-serif;
-  background:var(--surface2);color:var(--ink);outline:none;transition:var(--trans);
+  background:rgba(255,255,255,0.1);color:#fff;outline:none;transition:var(--trans);
 }
-.srch-wrap input::placeholder{color:var(--ink3)}
-.srch-wrap input:focus{border-color:#aaa;background:var(--surface)}
-.srch-icon{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:14px;pointer-events:none}
+.srch-wrap input::placeholder{color:rgba(255,255,255,0.4)}
+.srch-wrap input:focus{border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.15)}
+.srch-icon{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.45);font-size:14px;pointer-events:none}
 
 /* pill filter groups */
 .control-group{display:flex;align-items:center;gap:0.45rem;flex-wrap:wrap}
-.ctrl-lbl{font-size:0.65rem;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em;flex-shrink:0}
+.ctrl-lbl{font-size:0.65rem;font-weight:600;color:rgba(209,174,166,0.7);text-transform:uppercase;letter-spacing:0.1em;flex-shrink:0}
 select{
   padding:0.5rem 1.75rem 0.5rem 0.9rem;
-  border:1.5px solid var(--border);
+  border:1.5px solid rgba(255,255,255,0.15);
   border-radius:var(--pill-radius);
-  font-size:0.8rem;font-family:'DM Sans',sans-serif;
-  background:var(--surface2);color:var(--ink);
+  font-size:0.9rem;font-family:Arial,Helvetica,sans-serif;
+  background:rgba(255,255,255,0.1);color:#fff;
   cursor:pointer;outline:none;transition:var(--trans);
   appearance:none;-webkit-appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(0,0,0,0.35)'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 0.65rem center;
 }
-select:hover{border-color:#aaa}
-select option{background:var(--surface);color:var(--ink)}
+select:hover{border-color:rgba(255,255,255,0.35)}
+select option{background:#292528;color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:0.9rem}
 
-.divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.divider{width:1px;height:24px;background:rgba(255,255,255,0.15);flex-shrink:0}
 
-/* ── PRICE RANGE SLIDER ── */
-.price-slider-wrap{display:flex;flex-direction:column;gap:4px;min-width:160px}
-.price-slider-labels{display:flex;justify-content:space-between;font-size:0.68rem;font-weight:600;color:var(--ink2)}
+/* ── PRICE DROPDOWN + SLIDER ── */
+.price-dd-group{position:relative}
+.price-dd{position:relative}
+.price-dd-trigger{
+  display:flex;align-items:center;gap:0.5rem;
+  padding:0.5rem 0.9rem;
+  border:1.5px solid rgba(255,255,255,0.15);border-radius:var(--pill-radius);
+  background:rgba(255,255,255,0.1);color:#fff;
+  font-size:0.9rem;font-family:Arial,Helvetica,sans-serif;
+  cursor:pointer;outline:none;transition:var(--trans);white-space:nowrap;
+}
+.price-dd-trigger:hover{border-color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.15)}
+.price-dd-trigger.active{border-color:#ad3a3c;background:rgba(173,58,60,0.25);color:#fff}
+.price-dd-panel{
+  display:none;position:absolute;top:calc(100% + 6px);left:0;
+  background:#fff;border:1.5px solid var(--border);border-radius:16px;
+  padding:1rem 1.1rem 0.8rem;min-width:220px;
+  box-shadow:0 8px 28px rgba(0,0,0,0.12);z-index:95;
+}
+.price-dd-panel.open{display:block}
+.price-dd-labels{display:flex;justify-content:space-between;font-size:0.78rem;font-weight:600;color:var(--ink2);margin-bottom:0.6rem;font-family:Arial,Helvetica,sans-serif}
+.filter-dd{position:relative}
+.filter-dd-panel{min-width:160px;padding:0.4rem 0.4rem 0.5rem}
+.filter-dd-opt{
+  display:block;width:100%;text-align:left;
+  font-family:Arial,Helvetica,sans-serif;font-size:0.88rem;
+  color:var(--ink2);background:transparent;border:none;
+  padding:0.48rem 0.75rem;border-radius:8px;cursor:pointer;
+  transition:background 0.1s,color 0.1s;
+}
+.filter-dd-opt:hover{background:var(--surface2);color:var(--ink)}
+.filter-dd-opt.active{background:#292528;color:#d1aea6;font-weight:600}
+.sort-dd{position:relative}
+.sort-dd-panel{min-width:190px;padding:0.5rem 0.5rem 0.6rem}
+.sort-dd-opt{
+  display:block;width:100%;text-align:left;
+  font-family:Arial,Helvetica,sans-serif;font-size:0.88rem;
+  color:var(--ink2);background:transparent;border:none;
+  padding:0.52rem 0.75rem;border-radius:8px;cursor:pointer;
+  transition:background 0.1s,color 0.1s;
+}
+.sort-dd-opt:hover{background:var(--surface2);color:var(--ink)}
+.sort-dd-opt.active{background:#292528;color:#d1aea6;font-weight:600}
+.sort-dd-clear{
+  display:block;width:100%;text-align:left;
+  font-family:Arial,Helvetica,sans-serif;font-size:0.78rem;
+  color:var(--ink3);background:transparent;
+  border:none;border-top:1px solid var(--border);
+  padding:0.5rem 0.75rem 0.1rem;cursor:pointer;margin-top:0.3rem;
+  transition:color 0.12s;
+}
+.sort-dd-clear:hover{color:#ad3a3c}
+.price-dd-clear{
+  display:block;width:100%;margin-top:0.75rem;
+  font-family:Arial,Helvetica,sans-serif;font-size:0.78rem;
+  background:transparent;color:var(--ink3);border:1px solid var(--border);
+  border-radius:6px;padding:0.3rem;cursor:pointer;transition:color 0.12s,border-color 0.12s;
+}
+.price-dd-clear:hover{color:#ad3a3c;border-color:#ad3a3c}
 .price-slider-track{position:relative;height:20px;display:flex;align-items:center}
 .price-slider-fill{
   position:absolute;height:4px;background:#ad3a3c;border-radius:2px;
@@ -141,7 +195,7 @@ select option{background:var(--surface);color:var(--ink)}
 .sort-btn:hover{background:var(--surface3);border-color:#bbb;color:var(--ink)}
 .sort-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-.res-cnt{margin-left:auto;font-size:0.75rem;color:var(--ink3);white-space:nowrap}
+.res-cnt{font-size:0.75rem;color:rgba(255,255,255,0.45);white-space:nowrap}
 .res-cnt b{color:var(--accent)}
 
 /* ── MAIN GRID ───────────────────────────────────────────────────────────── */
@@ -412,49 +466,97 @@ select option{background:var(--surface);color:var(--ink)}
   </div>
   <div class="control-group">
     <span class="ctrl-lbl">Brand</span>
-    <select id="fBrand" onchange="doFilter()">
-      <option value="">All</option>
-      <option>Nissan</option><option>Kia</option><option>Honda</option><option>Toyota</option>
-    </select>
+    <div class="filter-dd" id="brandDd">
+      <button class="price-dd-trigger" id="brandDdTrigger" onclick="toggleFilterDd(event,'brandDd')">
+        <span id="brandDdLabel">All</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M0 0l5 6 5-6z" fill="rgba(255,255,255,0.5)"/></svg>
+      </button>
+      <div class="price-dd-panel filter-dd-panel" id="brandDdPanel">
+        <button class="filter-dd-opt active" onclick="setFilterDd('brand','','All','brandDd')">All</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('brand','Nissan','Nissan','brandDd')">Nissan</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('brand','Kia','Kia','brandDd')">Kia</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('brand','Honda','Honda','brandDd')">Honda</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('brand','Toyota','Toyota','brandDd')">Toyota</button>
+      </div>
+    </div>
   </div>
   <div class="control-group">
-    <span class="ctrl-lbl">Body</span>
-    <select id="fBody" onchange="doFilter()">
-      <option value="">All</option>
-      <option>Sedan</option><option>SUV</option><option>Crossover</option><option>Truck</option><option>Sports Car</option>
-    </select>
+    <span class="ctrl-lbl">Body Style</span>
+    <div class="filter-dd" id="bodyDd">
+      <button class="price-dd-trigger" id="bodyDdTrigger" onclick="toggleFilterDd(event,'bodyDd')">
+        <span id="bodyDdLabel">All</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M0 0l5 6 5-6z" fill="rgba(255,255,255,0.5)"/></svg>
+      </button>
+      <div class="price-dd-panel filter-dd-panel" id="bodyDdPanel">
+        <button class="filter-dd-opt active" onclick="setFilterDd('body','','All','bodyDd')">All</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('body','Sedan','Sedan','bodyDd')">Sedan</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('body','SUV','SUV','bodyDd')">SUV</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('body','Crossover','Crossover','bodyDd')">Crossover</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('body','Truck','Truck','bodyDd')">Truck</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('body','Sports Car','Sports Car','bodyDd')">Sports Car</button>
+      </div>
+    </div>
   </div>
   <div class="control-group">
     <span class="ctrl-lbl">Size</span>
-    <select id="fSeg" onchange="doFilter()">
-      <option value="">All</option>
-      <option>Subcompact</option><option>Compact</option><option>Mid-Size</option><option>Full-Size</option>
-    </select>
-  </div>
-  <div class="divider"></div>
-  <div class="control-group">
-    <span class="ctrl-lbl">Price</span>
-    <div class="price-slider-wrap">
-      <div class="price-slider-labels">
-        <span id="priceMin">$0</span>
-        <span id="priceMax">$100k+</span>
+    <div class="filter-dd" id="segDd">
+      <button class="price-dd-trigger" id="segDdTrigger" onclick="toggleFilterDd(event,'segDd')">
+        <span id="segDdLabel">All</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M0 0l5 6 5-6z" fill="rgba(255,255,255,0.5)"/></svg>
+      </button>
+      <div class="price-dd-panel filter-dd-panel" id="segDdPanel">
+        <button class="filter-dd-opt active" onclick="setFilterDd('seg','','All','segDd')">All</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('seg','Subcompact','Subcompact','segDd')">Subcompact</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('seg','Compact','Compact','segDd')">Compact</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('seg','Mid-Size','Mid-Size','segDd')">Mid-Size</button>
+        <button class="filter-dd-opt" onclick="setFilterDd('seg','Full-Size','Full-Size','segDd')">Full-Size</button>
       </div>
-      <div class="price-slider-track">
-        <div class="price-slider-fill" id="sliderFill"></div>
-        <input type="range" id="sliderLo" class="price-slider" min="0" max="100000" step="500" value="0"    oninput="onSlider()">
-        <input type="range" id="sliderHi" class="price-slider" min="0" max="100000" step="500" value="100000" oninput="onSlider()">
+    </div>
+  </div>
+  <!-- Hidden inputs keep doFilter() working unchanged -->
+  <input type="hidden" id="fBrand" value="">
+  <input type="hidden" id="fBody" value="">
+  <input type="hidden" id="fSeg" value="">
+  <div class="divider"></div>
+  <div class="control-group price-dd-group">
+    <span class="ctrl-lbl">Price</span>
+    <div class="price-dd" id="priceDd">
+      <button class="price-dd-trigger" id="priceDdTrigger" onclick="togglePriceDd(event)">
+        <span id="priceDdLabel">Any price</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M0 0l5 6 5-6z" fill="rgba(0,0,0,0.4)"/></svg>
+      </button>
+      <div class="price-dd-panel" id="priceDdPanel">
+        <div class="price-dd-labels">
+          <span id="priceMin">$0</span>
+          <span id="priceMax">$100k+</span>
+        </div>
+        <div class="price-slider-track">
+          <div class="price-slider-fill" id="sliderFill"></div>
+          <input type="range" id="sliderLo" class="price-slider" min="0" max="100000" step="500" value="0"      oninput="onSlider()">
+          <input type="range" id="sliderHi" class="price-slider" min="0" max="100000" step="500" value="100000" oninput="onSlider()">
+        </div>
+        <button class="price-dd-clear" onclick="resetPriceFilter()">Clear</button>
       </div>
     </div>
   </div>
   <div class="divider"></div>
-  <div class="sort-wrap">
+  <div class="control-group">
     <span class="ctrl-lbl">Sort</span>
-    <button class="sort-btn" id="sb-price-asc"  onclick="setSort('price','asc')">Price ↑</button>
-    <button class="sort-btn" id="sb-price-desc" onclick="setSort('price','desc')">Price ↓</button>
-    <button class="sort-btn" id="sb-size-asc"   onclick="setSort('size','asc')">Size ↑</button>
-    <button class="sort-btn" id="sb-size-desc"  onclick="setSort('size','desc')">Size ↓</button>
-    <button class="sort-btn" id="sb-model-asc"  onclick="setSort('model','asc')">A–Z Model</button>
-    <button class="sort-btn" id="sb-brand-asc"  onclick="setSort('brand','asc')">A–Z Make</button>
+    <div class="sort-dd" id="sortDd">
+      <button class="price-dd-trigger" id="sortDdTrigger" onclick="toggleSortDd(event)">
+        <span id="sortDdLabel">Default</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M0 0l5 6 5-6z" fill="rgba(0,0,0,0.4)"/></svg>
+      </button>
+      <div class="price-dd-panel sort-dd-panel" id="sortDdPanel">
+        <button class="sort-dd-opt" id="sb-price-asc"  onclick="setSortDd('price','asc','Price: Low to High')">Price: Low to High</button>
+        <button class="sort-dd-opt" id="sb-price-desc" onclick="setSortDd('price','desc','Price: High to Low')">Price: High to Low</button>
+        <button class="sort-dd-opt" id="sb-size-asc"   onclick="setSortDd('size','asc','Size: Small to Large')">Size: Small to Large</button>
+        <button class="sort-dd-opt" id="sb-size-desc"  onclick="setSortDd('size','desc','Size: Large to Small')">Size: Large to Small</button>
+        <button class="sort-dd-opt" id="sb-model-asc"  onclick="setSortDd('model','asc','A–Z by Model')">A–Z by Model</button>
+        <button class="sort-dd-opt" id="sb-brand-asc"  onclick="setSortDd('brand','asc','A–Z by Brand')">A–Z by Brand</button>
+        <button class="sort-dd-clear" onclick="clearSort()">Clear sort</button>
+      </div>
+    </div>
   </div>
   <button class="reset-filters-btn" id="resetFiltersBtn" onclick="resetFilters()" title="Clear all filters and sort">✕ Reset</button>
   <div class="res-cnt"><b id="cnt">0</b> vehicles</div>
@@ -893,16 +995,16 @@ let sortKey='', sortDir='asc';
 
 function setSort(key,dir){
   if(sortKey===key && sortDir===dir){
-    // toggle off (reset to default)
     sortKey=''; sortDir='asc';
   } else {
     sortKey=key; sortDir=dir;
   }
-  // update button active states
-  ['price-asc','price-desc','size-asc','size-desc','model-asc','brand-asc'].forEach(id=>{
-    const btn=document.getElementById('sb-'+id);
-    if(btn) btn.classList.toggle('active', id===key+'-'+dir && sortKey===key && sortDir===dir);
-  });
+  // keep sort dropdown in sync
+  document.querySelectorAll('.sort-dd-opt').forEach(btn=>btn.classList.remove('active'));
+  if(sortKey){
+    const active=document.getElementById('sb-'+sortKey+'-'+sortDir);
+    if(active) active.classList.add('active');
+  }
   doFilter();
 }
 
@@ -970,6 +1072,119 @@ function doFilter(){
   renderGrid(applySortCars(filtered));
 }
 
+// Generic filter dropdown (Brand / Body Style / Size)
+const _filterState = {brand:'', body:'', seg:''};
+
+function toggleFilterDd(e, ddId){
+  e.stopPropagation();
+  const panel   = document.getElementById(ddId+'Panel');
+  const trigger = document.getElementById(ddId+'Trigger');
+  const isOpen  = panel.classList.contains('open');
+  // close all open dropdowns
+  document.querySelectorAll('.price-dd-panel.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.price-dd-trigger.active').forEach(t=>t.classList.remove('active'));
+  if(!isOpen){
+    panel.classList.add('open');
+    trigger.classList.add('active');
+  }
+}
+
+function setFilterDd(type, value, label, ddId){
+  _filterState[type] = value;
+  // update hidden input so doFilter() still works
+  const inputId = type==='brand' ? 'fBrand' : type==='body' ? 'fBody' : 'fSeg';
+  const input = document.getElementById(inputId);
+  if(input) input.value = value;
+  // update trigger label
+  document.getElementById(ddId+'Label').textContent = label || 'All';
+  // highlight active option
+  document.querySelectorAll('#'+ddId+'Panel .filter-dd-opt').forEach(btn=>{
+    btn.classList.toggle('active', btn.textContent.trim() === (label||'All'));
+  });
+  // toggle trigger active state when non-default selected
+  const trigger = document.getElementById(ddId+'Trigger');
+  trigger.classList.toggle('active', !!value);
+  // close panel
+  document.getElementById(ddId+'Panel').classList.remove('open');
+  doFilter();
+}
+
+function toggleSortDd(e){
+  e.stopPropagation();
+  const panel   = document.getElementById('sortDdPanel');
+  const trigger = document.getElementById('sortDdTrigger');
+  const isOpen  = panel.classList.contains('open');
+  // close all dropdowns first
+  document.querySelectorAll('.price-dd-panel.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.price-dd-trigger.active').forEach(t=>t.classList.remove('active'));
+  if(!isOpen){
+    panel.classList.add('open');
+    trigger.classList.add('active');
+  }
+}
+
+function setSortDd(key, dir, label){
+  // If clicking the already-active option, clear it
+  if(sortKey===key && sortDir===dir){
+    clearSort();
+    return;
+  }
+  sortKey=key; sortDir=dir;
+  document.getElementById('sortDdLabel').textContent = label;
+  document.getElementById('sortDdTrigger').classList.add('active');
+  // highlight active option
+  document.querySelectorAll('.sort-dd-opt').forEach(btn=>btn.classList.remove('active'));
+  const id = 'sb-'+key+'-'+dir;
+  const btn = document.getElementById(id);
+  if(btn) btn.classList.add('active');
+  // close panel
+  document.getElementById('sortDdPanel').classList.remove('open');
+  doFilter();
+}
+
+function clearSort(){
+  sortKey=''; sortDir='asc';
+  document.getElementById('sortDdLabel').textContent = 'Default';
+  document.getElementById('sortDdTrigger').classList.remove('active');
+  document.querySelectorAll('.sort-dd-opt').forEach(btn=>btn.classList.remove('active'));
+  document.getElementById('sortDdPanel').classList.remove('open');
+  doFilter();
+}
+
+function togglePriceDd(e){
+  e.stopPropagation();
+  const panel = document.getElementById('priceDdPanel');
+  const trigger = document.getElementById('priceDdTrigger');
+  const isOpen = panel.classList.contains('open');
+  // close any open dropdowns first
+  document.querySelectorAll('.price-dd-panel.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.price-dd-trigger.active').forEach(t=>t.classList.remove('active'));
+  if(!isOpen){
+    panel.classList.add('open');
+    trigger.classList.add('active');
+  }
+}
+
+function resetPriceFilter(){
+  document.getElementById('sliderLo').value = 0;
+  document.getElementById('sliderHi').value = 100000;
+  document.getElementById('priceMin').textContent = '$0';
+  document.getElementById('priceMax').textContent = '$100k+';
+  document.getElementById('sliderFill').style.left  = '0%';
+  document.getElementById('sliderFill').style.width = '100%';
+  document.getElementById('priceDdLabel').textContent = 'Any price';
+  document.getElementById('priceDdTrigger').classList.remove('active');
+  doFilter();
+}
+
+// Close all filter dropdowns when clicking outside
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.filter-dd') && !e.target.closest('#priceDd') && !e.target.closest('#sortDd')){
+    document.querySelectorAll('.price-dd-panel.open').forEach(p=>p.classList.remove('open'));
+    document.querySelectorAll('.price-dd-trigger.active').forEach(t=>t.classList.remove('active'));
+  }
+});
+
 function onSlider(){
   let lo = parseInt(document.getElementById('sliderLo').value);
   let hi = parseInt(document.getElementById('sliderHi').value);
@@ -977,8 +1192,13 @@ function onSlider(){
   if(lo > hi - GAP){ lo = hi - GAP; document.getElementById('sliderLo').value = lo; }
   if(hi < lo + GAP){ hi = lo + GAP; document.getElementById('sliderHi').value = hi; }
   // update labels
-  document.getElementById('priceMin').textContent = lo === 0 ? '$0' : '$'+lo.toLocaleString();
-  document.getElementById('priceMax').textContent = hi >= 100000 ? '$100k+' : '$'+hi.toLocaleString();
+  const minTxt = lo === 0 ? '$0' : '$'+lo.toLocaleString();
+  const maxTxt = hi >= 100000 ? '$100k+' : '$'+hi.toLocaleString();
+  document.getElementById('priceMin').textContent = minTxt;
+  document.getElementById('priceMax').textContent = maxTxt;
+  // Update dropdown trigger label
+  const lbl = document.getElementById('priceDdLabel');
+  if(lbl) lbl.textContent = (lo===0 && hi>=100000) ? 'Any price' : minTxt+' – '+maxTxt;
   // update fill bar
   const pct = (v,mn,mx) => ((v-mn)/(mx-mn)*100).toFixed(2)+'%';
   const fill = document.getElementById('sliderFill');
@@ -1241,18 +1461,32 @@ function resetFilters(){
   document.getElementById('fBrand').value='';
   document.getElementById('fBody').value='';
   document.getElementById('fSeg').value='';
+  // reset custom filter dropdowns
+  ['brand','body','seg'].forEach(type=>{
+    _filterState[type]='';
+    const ddId = type==='brand'?'brandDd':type==='body'?'bodyDd':'segDd';
+    const lbl = document.getElementById(ddId+'Label');
+    if(lbl) lbl.textContent='All';
+    const trigger = document.getElementById(ddId+'Trigger');
+    if(trigger) trigger.classList.remove('active');
+    document.querySelectorAll('#'+ddId+'Panel .filter-dd-opt').forEach((btn,i)=>{
+      btn.classList.toggle('active', i===0);
+    });
+  });
   document.getElementById('sliderLo').value=0;
   document.getElementById('sliderHi').value=100000;
   document.getElementById('priceMin').textContent='$0';
   document.getElementById('priceMax').textContent='$100k+';
   document.getElementById('sliderFill').style.left='0%';
   document.getElementById('sliderFill').style.width='100%';
+  const lbl=document.getElementById('priceDdLabel');
+  if(lbl) lbl.textContent='Any price';
+  const panel=document.getElementById('priceDdPanel');
+  if(panel) panel.classList.remove('open');
+  const trigger=document.getElementById('priceDdTrigger');
+  if(trigger) trigger.classList.remove('active');
   // reset sort
-  sortKey=''; sortDir='asc';
-  ['price-asc','price-desc','size-asc','size-desc','model-asc','brand-asc'].forEach(id=>{
-    const btn=document.getElementById('sb-'+id);
-    if(btn) btn.classList.remove('active');
-  });
+  clearSort();
   doFilter();
 }
 
@@ -1513,14 +1747,14 @@ function shareComparison(){
 /* ── RESET FILTERS BUTTON ── */
 .reset-filters-btn{
   font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:500;
-  color:var(--ink3);background:transparent;
-  border:1px solid var(--border);border-radius:var(--pill-radius);
+  color:rgba(255,255,255,0.5);background:transparent;
+  border:1px solid rgba(255,255,255,0.15);border-radius:var(--pill-radius);
   padding:0.35rem 0.85rem;cursor:pointer;white-space:nowrap;
   transition:color var(--trans),border-color var(--trans),background var(--trans);
   display:none;
 }
 .reset-filters-btn.visible{display:inline-flex;align-items:center;gap:0.3rem}
-.reset-filters-btn:hover{color:var(--accent);border-color:var(--accent);background:rgba(232,69,69,0.05)}
+.reset-filters-btn:hover{color:#fff;border-color:rgba(173,58,60,0.7);background:rgba(173,58,60,0.2)}
 
 /* ── CLEAR COMPARE BUTTON ── */
 .cmp-clear{
