@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AutoMatch — Car Comparison</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 /* ── TOKENS ──────────────────────────────────────────────────────────────── */
 :root{
-  --bg:#f5f5f8;
+  --bg:#e6e1de;
   --bg2:#ffffff;
-  --bg3:#eeeef3;
+  --bg3:#e8e3e0;
   --surface:#ffffff;
-  --surface2:#f5f5f8;
-  --surface3:#ebebf0;
+  --surface2:#f7f4f2;
+  --surface3:#ede8e5;
   --ink:#111118;
   --ink2:#44444f;
   --ink3:#9898aa;
@@ -37,15 +37,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 
 /* ── HEADER — stays dark for contrast ───────────────────────────────────── */
 header{
-  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f0f13 100%);
+  background:#292528;
   padding:1.5rem 2.5rem 1.25rem;
   display:flex;align-items:center;gap:2rem;
   position:sticky;top:0;z-index:100;
   border-bottom:1px solid rgba(255,255,255,0.06);
 }
-.logo{font-family:'DM Serif Display',serif;font-size:1.7rem;letter-spacing:-0.04em;color:#fff;flex-shrink:0;line-height:1}
-.logo span{color:var(--accent);font-style:italic}
-.logo-sub{font-size:0.65rem;color:rgba(255,255,255,0.4);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px}
+.logo{font-family:'Outfit',sans-serif;font-size:1.55rem;font-weight:800;letter-spacing:-0.04em;color:#d1aea6;flex-shrink:0;line-height:1}
+.logo-a{color:#d1aea6;}
+.logo-b{color:#ad3a3c;}
+.logo-sub{font-size:0.65rem;color:rgba(209,174,166,0.6);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px}
 .tagline{font-size:0.72rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;margin-left:auto;white-space:nowrap}
 .hdr-btn{
   background:var(--accent);color:#fff;border:none;
@@ -128,10 +129,16 @@ select option{background:var(--surface);color:var(--ink)}
 .img-wrap{overflow:hidden;position:relative;background:var(--surface3)}
 .card-img{width:100%;height:200px;object-fit:cover;display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1)}
 .car-card:hover .card-img{transform:scale(1.07)}
+/* white fade from bottom of image into card body */
+.img-wrap::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:56px;
+  background:linear-gradient(to bottom,rgba(255,255,255,0) 0%,rgba(255,255,255,0.97) 100%);
+  pointer-events:none;z-index:1;
+}
 
 /* floating price badge on image */
 .price-badge{
-  position:absolute;bottom:12px;left:12px;
+  position:absolute;bottom:12px;left:12px;z-index:2;
   background:rgba(15,15,19,0.82);
   color:#fff;font-size:0.78rem;font-weight:600;
   padding:5px 11px;border-radius:var(--pill-radius);
@@ -159,7 +166,7 @@ select option{background:var(--surface);color:var(--ink)}
 .cmp-chk.on{background:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(232,69,69,0.4)}
 
 .card-body{padding:1rem 1.1rem 1.15rem;flex:1;display:flex;flex-direction:column;gap:0.18rem;background:var(--surface)}
-.card-model{font-family:'DM Serif Display',serif;font-size:1.2rem;line-height:1.2;letter-spacing:-0.02em;color:var(--ink)}
+.card-model{font-family:'Outfit',sans-serif;font-weight:700;font-size:1.2rem;line-height:1.2;letter-spacing:-0.02em;color:var(--ink)}
 .card-sub{font-size:0.75rem;color:var(--ink3);margin-top:1px}
 .card-footer{display:flex;align-items:center;gap:0.5rem;margin-top:0.75rem;flex-wrap:wrap}
 .seg-pill{
@@ -193,7 +200,7 @@ select option{background:var(--surface);color:var(--ink)}
 .m-body{padding:1.75rem 2rem 2.25rem}
 
 .m-brand-lbl{font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.2rem}
-.m-title{font-family:'DM Serif Display',serif;font-size:2rem;letter-spacing:-0.03em;line-height:1.1;margin-bottom:0.5rem;color:var(--ink)}
+.m-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:2rem;letter-spacing:-0.03em;line-height:1.1;margin-bottom:0.5rem;color:var(--ink)}
 
 .m-badges{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
 .m-price-badge{background:var(--accent);color:#fff;font-size:0.95rem;font-weight:700;padding:6px 16px;border-radius:var(--pill-radius);letter-spacing:0.01em}
@@ -263,7 +270,7 @@ select option{background:var(--surface);color:var(--ink)}
   background:rgba(15,15,19,0.95);color:#fff;
   padding:0.9rem 2.5rem;z-index:150;
   align-items:center;gap:0.8rem;flex-wrap:wrap;
-  backdrop-filter:blur(12px);border-top:1px solid var(--border);
+  backdrop-filter:blur(12px);border-top:1px solid rgba(41,37,40,0.1);
 }
 .cmp-panel.vis{display:flex}
 .cmp-plbl{font-size:0.65rem;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;flex-shrink:0}
@@ -298,7 +305,7 @@ select option{background:var(--surface);color:var(--ink)}
   color:var(--ink2);margin-bottom:1.5rem;transition:var(--trans);
 }
 .back-btn:hover{border-color:#aaa;color:var(--ink)}
-.cmp-hd{font-family:'DM Serif Display',serif;font-size:1.75rem;letter-spacing:-0.02em;margin-bottom:0.3rem;color:var(--ink)}
+.cmp-hd{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.75rem;letter-spacing:-0.02em;margin-bottom:0.3rem;color:var(--ink)}
 .cmp-sub{font-size:0.8rem;color:var(--ink3);margin-bottom:1.4rem}
 
 .cmp-cols{display:grid;gap:1.25rem}
@@ -310,7 +317,7 @@ select option{background:var(--surface);color:var(--ink)}
 .cmp-col-img{width:100%;height:160px;object-fit:cover;background:var(--surface3);display:block}
 .cmp-col-body{padding:1rem 1.1rem 1.15rem}
 .cmp-col-brand{font-size:0.63rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink3)}
-.cmp-col-nm{font-family:'DM Serif Display',serif;font-size:1.1rem;margin:0.2rem 0;color:var(--ink)}
+.cmp-col-nm{font-family:'Outfit',sans-serif;font-weight:700;font-size:1.1rem;margin:0.2rem 0;color:var(--ink)}
 .cmp-col-price{font-size:0.88rem;font-weight:700;color:var(--accent);margin-bottom:0.75rem}
 .ts-row{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem}
 .ts-row label{font-size:0.65rem;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;flex-shrink:0}
@@ -349,7 +356,7 @@ select option{background:var(--surface);color:var(--ink)}
 <body>
 <header>
   <div>
-    <div class="logo" onclick="goHome()" style="cursor:pointer" title="Back to home">Auto<span>Match</span></div>
+    <div class="logo" onclick="goHome()" style="cursor:pointer" title="Back to home"><span class="logo-a">AUTO</span><span class="logo-b">MATCH</span></div>
     <div class="logo-sub">2025–2026 New Car Explorer</div>
   </div>
   <div class="tagline" style="display:none">placeholder</div>
@@ -391,6 +398,7 @@ select option{background:var(--surface);color:var(--ink)}
     <button class="sort-btn" id="sb-model-asc"  onclick="setSort('model','asc')">A–Z Model</button>
     <button class="sort-btn" id="sb-brand-asc"  onclick="setSort('brand','asc')">A–Z Make</button>
   </div>
+  <button class="reset-filters-btn" id="resetFiltersBtn" onclick="resetFilters()" title="Clear all filters and sort">✕ Reset</button>
   <div class="res-cnt"><b id="cnt">0</b> vehicles</div>
 </div>
 <div id="mainView"><div class="main"><div class="car-grid" id="grid"></div></div></div>
@@ -430,6 +438,7 @@ select option{background:var(--surface);color:var(--ink)}
 <div class="cmp-panel" id="cmpPanel">
   <span class="cmp-plbl">Compare</span>
   <div class="cmp-slots" id="cmpSlots"></div>
+  <button class="cmp-clear" onclick="clearCompare()" title="Clear all selected vehicles">✕ Clear</button>
   <button class="cmp-go" id="cmpGo" onclick="openCmpView()" disabled>Compare Now →</button>
 </div>
 
@@ -882,6 +891,9 @@ function doFilter(){
   const b=document.getElementById('fBrand').value;
   const bo=document.getElementById('fBody').value;
   const s=document.getElementById('fSeg').value;
+  // show reset button only when any filter or sort is active
+  const resetBtn=document.getElementById('resetFiltersBtn');
+  if(resetBtn) resetBtn.classList.toggle('visible',!!(q||b||bo||s||sortKey));
   const filtered=CARS.filter(c=>
     (!q||(c.brand+' '+c.model).toLowerCase().includes(q))&&
     (!b||c.brand===b)&&(!bo||c.body===bo)&&(!s||c.segment===s)
@@ -1138,6 +1150,26 @@ function goHome(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+function resetFilters(){
+  document.getElementById('srch').value='';
+  document.getElementById('fBrand').value='';
+  document.getElementById('fBody').value='';
+  document.getElementById('fSeg').value='';
+  // reset sort
+  sortKey=''; sortDir='asc';
+  ['price-asc','price-desc','size-asc','size-desc','model-asc','brand-asc'].forEach(id=>{
+    const btn=document.getElementById('sb-'+id);
+    if(btn) btn.classList.remove('active');
+  });
+  doFilter();
+}
+
+function clearCompare(){
+  cmpList=[];
+  updPanel();
+  doFilter();
+}
+
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════════════════
@@ -1145,9 +1177,13 @@ function goHome(){
      ═══════════════════════════════════════════════════════════════════════ -->
 
 <!-- Footer trigger button -->
-<div id="adminFooter">
-  <button id="adminTriggerBtn" onclick="adminLogin()">⚙ Manage Cars</button>
-</div>
+
+
+<!-- Page footer with hidden admin entry -->
+<footer class="site-footer">
+  <span class="footer-copy">© 2025 AutoMatch</span>
+  <button class="footer-admin-btn" onclick="adminLogin()">⚙</button>
+</footer>
 
 <!-- Password Gate -->
 <div id="adminLoginModal" class="adm-overlay" onclick="if(event.target===this)closeAdminLogin()">
@@ -1336,18 +1372,42 @@ function goHome(){
 </div>
 
 <style>
-/* ── ADMIN FOOTER ── */
-#adminFooter{
-  position:fixed;bottom:1.2rem;right:1.4rem;z-index:200;
+/* ── SITE FOOTER ── */
+.site-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 2.5rem;
+  border-top:1px solid var(--border);
+  margin-top:2rem;
 }
-#adminTriggerBtn{
-  font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.08em;
-  color:rgba(255,255,255,0.35);background:rgba(0,0,0,0.45);
-  border:1px solid rgba(255,255,255,0.1);border-radius:999px;
-  padding:0.4rem 0.9rem;cursor:pointer;backdrop-filter:blur(8px);
-  transition:color 0.2s,background 0.2s,border-color 0.2s;
+.footer-copy{font-size:0.75rem;color:var(--ink3)}
+.footer-admin-btn{
+  font-size:0.8rem;color:var(--ink3);background:transparent;
+  border:none;cursor:pointer;padding:0.25rem 0.4rem;border-radius:6px;
+  opacity:0.35;transition:opacity 0.2s;
 }
-#adminTriggerBtn:hover{color:#fff;background:rgba(0,0,0,0.7);border-color:rgba(255,255,255,0.25)}
+.footer-admin-btn:hover{opacity:1}
+
+/* ── RESET FILTERS BUTTON ── */
+.reset-filters-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:500;
+  color:var(--ink3);background:transparent;
+  border:1px solid var(--border);border-radius:var(--pill-radius);
+  padding:0.35rem 0.85rem;cursor:pointer;white-space:nowrap;
+  transition:color var(--trans),border-color var(--trans),background var(--trans);
+  display:none;
+}
+.reset-filters-btn.visible{display:inline-flex;align-items:center;gap:0.3rem}
+.reset-filters-btn:hover{color:var(--accent);border-color:var(--accent);background:rgba(232,69,69,0.05)}
+
+/* ── CLEAR COMPARE BUTTON ── */
+.cmp-clear{
+  font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:500;
+  color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.12);border-radius:var(--pill-radius);
+  padding:0.35rem 0.85rem;cursor:pointer;
+  transition:color 0.15s,background 0.15s;white-space:nowrap;
+}
+.cmp-clear:hover{color:#fff;background:rgba(255,255,255,0.13)}
 
 /* ── OVERLAYS ── */
 .adm-overlay{
@@ -1364,7 +1424,7 @@ function goHome(){
   box-shadow:0 30px 80px rgba(0,0,0,0.3);
 }
 .adm-gate-logo{
-  font-family:'DM Serif Display',serif;font-size:1.5rem;
+  font-family:'Outfit',sans-serif;font-weight:800;font-size:1.5rem;
   color:#111118;margin-bottom:0.5rem;
 }
 .adm-gate-logo span{color:#e84545;font-style:italic}
@@ -1386,7 +1446,7 @@ function goHome(){
   border-bottom:1px solid rgba(0,0,0,0.08);flex-shrink:0;
 }
 .adm-header-title{
-  font-family:'DM Serif Display',serif;font-size:1.4rem;color:#111118;
+  font-family:'Outfit',sans-serif;font-weight:800;font-size:1.4rem;color:#111118;
 }
 .adm-header-title span{color:#e84545;font-style:italic}
 .adm-header-sub{font-size:0.78rem;color:#9898aa;margin-top:2px}
