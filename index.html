@@ -97,6 +97,38 @@ select option{background:var(--surface);color:var(--ink)}
 
 .divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
 
+/* ── PRICE RANGE SLIDER ── */
+.price-slider-wrap{display:flex;flex-direction:column;gap:4px;min-width:160px}
+.price-slider-labels{display:flex;justify-content:space-between;font-size:0.68rem;font-weight:600;color:var(--ink2)}
+.price-slider-track{position:relative;height:20px;display:flex;align-items:center}
+.price-slider-fill{
+  position:absolute;height:4px;background:#ad3a3c;border-radius:2px;
+  left:0%;width:100%;pointer-events:none;z-index:1;
+}
+.price-slider-track::before{
+  content:'';position:absolute;width:100%;height:4px;
+  background:var(--border);border-radius:2px;
+}
+.price-slider{
+  position:absolute;width:100%;height:4px;
+  background:transparent;outline:none;border:none;
+  -webkit-appearance:none;appearance:none;pointer-events:none;z-index:2;
+}
+.price-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:16px;height:16px;border-radius:50%;
+  background:#ad3a3c;border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);
+  cursor:pointer;pointer-events:all;transition:transform 0.1s;
+}
+.price-slider::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.price-slider::-moz-range-thumb{
+  width:16px;height:16px;border-radius:50%;
+  background:#ad3a3c;border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);
+  cursor:pointer;pointer-events:all;
+}
+
 /* pill sort buttons */
 .sort-wrap{display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap}
 .sort-btn{
@@ -305,6 +337,17 @@ select option{background:var(--surface);color:var(--ink)}
   color:var(--ink2);margin-bottom:1.5rem;transition:var(--trans);
 }
 .back-btn:hover{border-color:#aaa;color:var(--ink)}
+.cmp-topbar{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.cmp-topbar>div{flex:1}
+.share-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;
+  background:#292528;color:#d1aea6;
+  border:none;border-radius:var(--pill-radius);
+  padding:0.55rem 1.2rem;cursor:pointer;white-space:nowrap;
+  transition:opacity 0.15s,transform 0.1s;flex-shrink:0;
+}
+.share-btn:hover{opacity:0.85}
+.share-btn:active{transform:scale(0.97)}
 .cmp-hd{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.75rem;letter-spacing:-0.02em;margin-bottom:0.3rem;color:var(--ink)}
 .cmp-sub{font-size:0.8rem;color:var(--ink3);margin-bottom:1.4rem}
 
@@ -389,6 +432,21 @@ select option{background:var(--surface);color:var(--ink)}
     </select>
   </div>
   <div class="divider"></div>
+  <div class="control-group">
+    <span class="ctrl-lbl">Price</span>
+    <div class="price-slider-wrap">
+      <div class="price-slider-labels">
+        <span id="priceMin">$0</span>
+        <span id="priceMax">$100k+</span>
+      </div>
+      <div class="price-slider-track">
+        <div class="price-slider-fill" id="sliderFill"></div>
+        <input type="range" id="sliderLo" class="price-slider" min="0" max="100000" step="500" value="0"    oninput="onSlider()">
+        <input type="range" id="sliderHi" class="price-slider" min="0" max="100000" step="500" value="100000" oninput="onSlider()">
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
   <div class="sort-wrap">
     <span class="ctrl-lbl">Sort</span>
     <button class="sort-btn" id="sb-price-asc"  onclick="setSort('price','asc')">Price ↑</button>
@@ -403,9 +461,16 @@ select option{background:var(--surface);color:var(--ink)}
 </div>
 <div id="mainView"><div class="main"><div class="car-grid" id="grid"></div></div></div>
 <div class="cmp-view" id="cmpView">
-  <button class="back-btn" onclick="closeCmpView()">← All vehicles</button>
-  <div class="cmp-hd">Side-by-side comparison</div>
-  <div class="cmp-sub">Select a trim per vehicle · <span style="color:#22c55e">green = shared</span> · <span style="color:#ff6b6b">orange = different</span></div>
+  <div class="cmp-topbar">
+    <button class="back-btn" onclick="closeCmpView()">← All vehicles</button>
+    <div>
+      <div class="cmp-hd">Side-by-side comparison</div>
+      <div class="cmp-sub">Select a trim per vehicle · <span style="color:#22c55e">green = shared</span> · <span style="color:#ff6b6b">orange = different</span></div>
+    </div>
+    <button class="share-btn" onclick="shareComparison()" title="Copy shareable link to clipboard">
+      <span id="shareBtnTxt">⎘ Share</span>
+    </button>
+  </div>
   <div class="cmp-cols" id="cmpCols"></div>
 </div>
 <div class="overlay" id="overlay" onclick="closeModal(event)">
@@ -887,18 +952,39 @@ function renderGrid(cars){
 }
 
 function doFilter(){
-  const q=document.getElementById('srch').value.toLowerCase();
-  const b=document.getElementById('fBrand').value;
-  const bo=document.getElementById('fBody').value;
-  const s=document.getElementById('fSeg').value;
-  // show reset button only when any filter or sort is active
-  const resetBtn=document.getElementById('resetFiltersBtn');
-  if(resetBtn) resetBtn.classList.toggle('visible',!!(q||b||bo||s||sortKey));
-  const filtered=CARS.filter(c=>
+  const q  = document.getElementById('srch').value.toLowerCase();
+  const b  = document.getElementById('fBrand').value;
+  const bo = document.getElementById('fBody').value;
+  const s  = document.getElementById('fSeg').value;
+  const lo = parseInt(document.getElementById('sliderLo')?.value||0);
+  const hi = parseInt(document.getElementById('sliderHi')?.value||100000);
+  const priceActive = lo > 0 || hi < 100000;
+  // show reset button when any filter or sort is active
+  const resetBtn = document.getElementById('resetFiltersBtn');
+  if(resetBtn) resetBtn.classList.toggle('visible',!!(q||b||bo||s||sortKey||priceActive));
+  const filtered = CARS.filter(c=>
     (!q||(c.brand+' '+c.model).toLowerCase().includes(q))&&
-    (!b||c.brand===b)&&(!bo||c.body===bo)&&(!s||c.segment===s)
+    (!b||c.brand===b)&&(!bo||c.body===bo)&&(!s||c.segment===s)&&
+    (c.msrp>=lo && c.msrp<=hi)
   );
   renderGrid(applySortCars(filtered));
+}
+
+function onSlider(){
+  let lo = parseInt(document.getElementById('sliderLo').value);
+  let hi = parseInt(document.getElementById('sliderHi').value);
+  const GAP = 2000;
+  if(lo > hi - GAP){ lo = hi - GAP; document.getElementById('sliderLo').value = lo; }
+  if(hi < lo + GAP){ hi = lo + GAP; document.getElementById('sliderHi').value = hi; }
+  // update labels
+  document.getElementById('priceMin').textContent = lo === 0 ? '$0' : '$'+lo.toLocaleString();
+  document.getElementById('priceMax').textContent = hi >= 100000 ? '$100k+' : '$'+hi.toLocaleString();
+  // update fill bar
+  const pct = (v,mn,mx) => ((v-mn)/(mx-mn)*100).toFixed(2)+'%';
+  const fill = document.getElementById('sliderFill');
+  fill.style.left  = pct(lo,0,100000);
+  fill.style.width = (pct(hi,0,100000).replace('%','') - pct(lo,0,100000).replace('%','')).toFixed(2)+'%';
+  doFilter();
 }
 
 // ── MODAL
@@ -1155,6 +1241,12 @@ function resetFilters(){
   document.getElementById('fBrand').value='';
   document.getElementById('fBody').value='';
   document.getElementById('fSeg').value='';
+  document.getElementById('sliderLo').value=0;
+  document.getElementById('sliderHi').value=100000;
+  document.getElementById('priceMin').textContent='$0';
+  document.getElementById('priceMax').textContent='$100k+';
+  document.getElementById('sliderFill').style.left='0%';
+  document.getElementById('sliderFill').style.width='100%';
   // reset sort
   sortKey=''; sortDir='asc';
   ['price-asc','price-desc','size-asc','size-desc','model-asc','brand-asc'].forEach(id=>{
@@ -1169,6 +1261,32 @@ function clearCompare(){
   updPanel();
   doFilter();
 }
+
+function shareComparison(){
+  const ids = cmpList.join(',');
+  const url = location.origin + location.pathname + '?cmp=' + ids;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn = document.getElementById('shareBtnTxt');
+    btn.textContent = '✓ Copied!';
+    setTimeout(()=>{ btn.textContent = '⎘ Share'; }, 2200);
+  }).catch(()=>{
+    prompt('Copy this link:', url);
+  });
+}
+
+// On load: restore comparison from URL ?cmp= param
+(function bootFromUrl(){
+  const params = new URLSearchParams(location.search);
+  const cmp = params.get('cmp');
+  if(!cmp) return;
+  const ids = cmp.split(',').map(s=>s.trim()).filter(Boolean);
+  ids.forEach(id=>{ if(CARS.find(c=>c.id===id) && cmpList.length<4) cmpList.push(id); });
+  if(cmpList.length >= 2){
+    updPanel();
+    // Small delay so DOM is ready
+    setTimeout(()=>openCmpView(), 100);
+  }
+})();
 
 </script>
 
@@ -1300,9 +1418,11 @@ function clearCompare(){
         <div id="admImgPreview" class="adm-img-preview"></div>
 
         <div class="adm-field">
-          <label class="adm-label">Trims <span class="adm-hint-inline">(JSON array — edit as needed)</span></label>
-          <textarea id="cf-trims" class="adm-textarea adm-mono" rows="8"></textarea>
-          <div class="adm-hint">Format: <code>[{"name":"SE","price":42950,"features":["324 hp","AWD"]}]</code></div>
+          <div class="adm-trims-header">
+            <label class="adm-label">Trim Levels</label>
+            <button class="adm-add-trim-btn" onclick="admAddTrim('cf')">＋ Add Trim</button>
+          </div>
+          <div id="cf-trims-list" class="adm-trims-list"></div>
         </div>
 
         <div class="adm-confirm-actions">
@@ -1356,8 +1476,11 @@ function clearCompare(){
         </div>
         <div id="admEditImgPreview" class="adm-img-preview"></div>
         <div class="adm-field">
-          <label class="adm-label">Trims <span class="adm-hint-inline">(JSON array)</span></label>
-          <textarea id="ef-trims" class="adm-textarea adm-mono" rows="8"></textarea>
+          <div class="adm-trims-header">
+            <label class="adm-label">Trim Levels</label>
+            <button class="adm-add-trim-btn" onclick="admAddTrim('ef')">＋ Add Trim</button>
+          </div>
+          <div id="ef-trims-list" class="adm-trims-list"></div>
         </div>
         <div class="adm-confirm-actions">
           <button class="adm-btn-danger" onclick="admDeleteCar()">🗑 Delete Car</button>
@@ -1585,6 +1708,37 @@ function clearCompare(){
 }
 .adm-img-preview img.broken{opacity:0.3;filter:grayscale(1)}
 
+/* ── TRIM FORM BUILDER ── */
+.adm-trims-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem}
+.adm-trims-list{display:flex;flex-direction:column;gap:0.75rem}
+.adm-add-trim-btn{
+  font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;
+  background:#111118;color:#fff;border:none;border-radius:6px;
+  padding:0.3rem 0.75rem;cursor:pointer;transition:opacity 0.15s;
+}
+.adm-add-trim-btn:hover{opacity:0.8}
+.adm-trim-row{
+  background:#f9f9fc;border:1px solid rgba(0,0,0,0.08);
+  border-radius:10px;padding:0.85rem 0.9rem;
+}
+.adm-trim-row-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:0.6rem;
+}
+.adm-trim-row-num{
+  font-size:0.68rem;font-weight:700;letter-spacing:0.08em;
+  text-transform:uppercase;color:#9898aa;
+}
+.adm-trim-remove{
+  font-family:'DM Sans',sans-serif;font-size:0.7rem;
+  background:transparent;color:#9898aa;border:1px solid rgba(0,0,0,0.1);
+  border-radius:4px;padding:1px 6px;cursor:pointer;
+  transition:color 0.12s,border-color 0.12s;
+}
+.adm-trim-remove:hover{color:#e84545;border-color:rgba(232,69,69,0.3)}
+.adm-trim-fields{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+@media(max-width:480px){.adm-trim-fields{grid-template-columns:1fr}}
+
 /* ── EDIT LIST ── */
 .adm-search-wrap{margin-bottom:0.75rem}
 .adm-edit-list{display:flex;flex-direction:column;gap:0.35rem;max-height:280px;overflow-y:auto}
@@ -1693,7 +1847,7 @@ function populateAddForm(car){
   document.getElementById('cf-wheelbase').value = car.dims?.wheelbase||'';
   document.getElementById('cf-ext').value = (car.ext||[]).filter(Boolean).join('\n');
   document.getElementById('cf-int').value = (car.int||[]).filter(Boolean).join('\n');
-  document.getElementById('cf-trims').value = JSON.stringify(car.trims||[], null, 2);
+  renderTrimList('cf', car.trims||[]);
 
   renderImgPreview('cf-ext','cf-int','admImgPreview');
   document.getElementById('cf-ext').addEventListener('input',()=>renderImgPreview('cf-ext','cf-int','admImgPreview'));
@@ -1735,7 +1889,7 @@ function admPublishCar(){
     };
     const ext = document.getElementById('cf-ext').value.split('\n').map(s=>s.trim()).filter(Boolean);
     const int_ = document.getElementById('cf-int').value.split('\n').map(s=>s.trim()).filter(Boolean);
-    const trims = JSON.parse(document.getElementById('cf-trims').value);
+    const trims = readTrimList('cf');
 
     if(!brand||!model||!year||!msrp) throw new Error('Brand, Model, Year, and MSRP are required.');
 
@@ -1781,7 +1935,7 @@ function admFillManual(){
     body:'SUV', segment:'Compact', msrp:0,
     dims:{length:'',width:'',height:'',wheelbase:''},
     ext:[], int:[],
-    trims:[{name:'Base',price:0,features:[]}]
+    trims:[{name:'',price:0,features:[]}]
   });
   document.getElementById('admFetchError').style.display='none';
 }
@@ -1824,7 +1978,7 @@ function admOpenEdit(id){
   document.getElementById('ef-wheelbase').value = c.dims?.wheelbase||'';
   document.getElementById('ef-ext').value = (c.ext||[]).filter(Boolean).join('\n');
   document.getElementById('ef-int').value = (c.int||[]).filter(Boolean).join('\n');
-  document.getElementById('ef-trims').value = JSON.stringify(c.trims||[], null, 2);
+  renderTrimList('ef', c.trims||[]);
 
   renderImgPreview('ef-ext','ef-int','admEditImgPreview');
   document.getElementById('ef-ext').addEventListener('input',()=>renderImgPreview('ef-ext','ef-int','admEditImgPreview'));
@@ -1841,7 +1995,7 @@ function admSaveEdit(){
     const idx = CARS.findIndex(c=>c.id===admEditingId);
     if(idx<0) throw new Error('Car not found.');
 
-    const trims = JSON.parse(document.getElementById('ef-trims').value);
+    const trims = readTrimList('ef');
     CARS[idx] = {
       id: admEditingId,
       brand: document.getElementById('ef-brand').value.trim(),
@@ -1890,6 +2044,85 @@ function admDeleteCar(){
   renderAdmEditList();
   admCancelEdit();
 }
+
+// ── TRIM FORM BUILDER ────────────────────────────────────────────────────────
+
+function renderTrimList(prefix, trims){
+  const list = document.getElementById(prefix+'-trims-list');
+  list.innerHTML = '';
+  if(!trims || trims.length === 0){
+    admAddTrim(prefix); // always start with at least one row
+    return;
+  }
+  trims.forEach((t,i) => addTrimRow(prefix, t, i));
+}
+
+function addTrimRow(prefix, data, idx){
+  const list = document.getElementById(prefix+'-trims-list');
+  const id = prefix+'-trim-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
+  const msrp = data ? data.price : 0;
+  const features = data ? (data.features||[]).join(', ') : '';
+  const div = document.createElement('div');
+  div.className = 'adm-trim-row';
+  div.dataset.trimId = id;
+  div.innerHTML = `
+    <div class="adm-trim-row-header">
+      <span class="adm-trim-row-num">Trim ${list.children.length + 1}</span>
+      <button class="adm-trim-remove" onclick="removeTrimRow(this)" title="Remove this trim">✕</button>
+    </div>
+    <div class="adm-trim-fields">
+      <div class="adm-field">
+        <label class="adm-label">Trim Name</label>
+        <input class="adm-input trim-name" type="text" placeholder="e.g. SE, Grand Touring" value="${data ? esc(data.name) : ''}">
+      </div>
+      <div class="adm-field">
+        <label class="adm-label">MSRP ($)</label>
+        <input class="adm-input trim-price" type="number" placeholder="e.g. 42950" value="${msrp || ''}">
+      </div>
+    </div>
+    <div class="adm-field" style="margin-top:0.5rem">
+      <label class="adm-label">Features <span class="adm-hint-inline">— separate with commas</span></label>
+      <textarea class="adm-textarea trim-features" rows="2" placeholder="e.g. 2.0L 4-cyl (181 hp), 6-speed manual, Bose audio">${features}</textarea>
+    </div>
+  `;
+  list.appendChild(div);
+  renumberTrimRows(prefix);
+}
+
+function admAddTrim(prefix){
+  addTrimRow(prefix, null, -1);
+}
+
+function removeTrimRow(btn){
+  const row = btn.closest('.adm-trim-row');
+  const list = row.parentElement;
+  const prefix = list.id.replace('-trims-list','');
+  row.remove();
+  renumberTrimRows(prefix);
+}
+
+function renumberTrimRows(prefix){
+  const rows = document.querySelectorAll('#'+prefix+'-trims-list .adm-trim-row');
+  rows.forEach((row, i) => {
+    const num = row.querySelector('.adm-trim-row-num');
+    if(num) num.textContent = 'Trim '+(i+1);
+  });
+}
+
+function readTrimList(prefix){
+  const rows = document.querySelectorAll('#'+prefix+'-trims-list .adm-trim-row');
+  const trims = [];
+  rows.forEach(row => {
+    const name  = row.querySelector('.trim-name').value.trim();
+    const price = parseInt(row.querySelector('.trim-price').value) || 0;
+    const featStr = row.querySelector('.trim-features').value;
+    const features = featStr.split(',').map(f=>f.trim()).filter(Boolean);
+    if(name || price) trims.push({name, price, features});
+  });
+  return trims;
+}
+
+function esc(s){ return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
 function admCancelEdit(){
   admEditingId=null;
