@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AutoMatch — Car Comparison</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -45,7 +46,6 @@ header{
 .logo{font-family:'Outfit',sans-serif;font-size:1.55rem;font-weight:800;letter-spacing:-0.04em;color:#d1aea6;flex-shrink:0;line-height:1}
 .logo-a{color:#d1aea6;}
 .logo-b{color:#ad3a3c;}
-.logo-sub{font-size:0.65rem;color:rgba(209,174,166,0.6);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px}
 .tagline{font-size:0.72rem;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;margin-left:auto;white-space:nowrap}
 .hdr-btn{
   background:var(--accent);color:#fff;border:none;
@@ -319,7 +319,7 @@ select option{background:#292528;color:#fff;font-family:Arial,Helvetica,sans-ser
 .lb-caption{position:fixed;bottom:44px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.75);font-size:0.82rem;font-weight:500;white-space:nowrap;letter-spacing:0.02em}
 
 /* dims */
-.dims-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.65rem}
+.dims-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.65rem;row-gap:0.9rem}
 .dim-box{background:var(--surface2);border-radius:14px;padding:0.85rem;text-align:center;border:1px solid var(--border-light)}
 .dim-val{font-size:1rem;font-weight:600;color:var(--ink)}
 .dim-key{font-size:0.63rem;color:var(--ink3);margin-top:3px;text-transform:uppercase;letter-spacing:0.06em}
@@ -337,6 +337,12 @@ select option{background:#292528;color:#fff;font-family:Arial,Helvetica,sans-ser
 .trim-bd{display:none;padding:0.75rem 1rem 0.9rem;background:var(--surface2);border-top:1px solid var(--border-light)}
 .trim-item.open .trim-bd{display:block}
 .trim-feats{list-style:none;display:flex;flex-direction:column;gap:0.32rem}
+.trim-pwt-badge{font-size:0.65rem;margin-left:0.35rem;opacity:0.6;vertical-align:middle}
+.trim-pwt-row{display:flex;flex-wrap:wrap;align-items:center;gap:0.3rem;
+  font-size:0.75rem;font-weight:600;color:var(--ink2);
+  background:var(--surface2);border-radius:8px;padding:0.4rem 0.75rem;margin-bottom:0.6rem}
+.trim-pwt-sep{color:var(--ink3);font-weight:400}
+.cmp-pwt-row{margin-bottom:0.5rem;font-size:0.72rem}
 .trim-feats li{font-size:0.79rem;color:var(--ink2);display:flex;gap:0.5rem;align-items:flex-start;line-height:1.45}
 .trim-feats li::before{content:"✓";color:var(--green);font-weight:700;flex-shrink:0;font-size:0.72rem;margin-top:2px}
 
@@ -453,8 +459,7 @@ select option{background:#292528;color:#fff;font-family:Arial,Helvetica,sans-ser
 <body>
 <header>
   <div>
-    <div class="logo" onclick="goHome()" style="cursor:pointer" title="Back to home"><span class="logo-a">AUTO</span><span class="logo-b">MATCH</span></div>
-    <div class="logo-sub">2025–2026 New Car Explorer</div>
+        <div class="logo" onclick="goHome()" style="cursor:pointer" title="Back to home"><span class="logo-a">AUTO</span><span class="logo-b">MATCH</span></div>
   </div>
   <div class="tagline" style="display:none">placeholder</div>
   <button class="hdr-btn" onclick="openCmpView()">⊕ Compare</button>
@@ -471,13 +476,7 @@ select option{background:#292528;color:#fff;font-family:Arial,Helvetica,sans-ser
         <span id="brandDdLabel">All</span>
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M0 0l5 6 5-6z" fill="rgba(255,255,255,0.5)"/></svg>
       </button>
-      <div class="price-dd-panel filter-dd-panel" id="brandDdPanel">
-        <button class="filter-dd-opt active" onclick="setFilterDd('brand','','All','brandDd')">All</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('brand','Nissan','Nissan','brandDd')">Nissan</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('brand','Kia','Kia','brandDd')">Kia</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('brand','Honda','Honda','brandDd')">Honda</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('brand','Toyota','Toyota','brandDd')">Toyota</button>
-      </div>
+      <div class="price-dd-panel filter-dd-panel" id="brandDdPanel"></div>
     </div>
   </div>
   <div class="control-group">
@@ -487,14 +486,7 @@ select option{background:#292528;color:#fff;font-family:Arial,Helvetica,sans-ser
         <span id="bodyDdLabel">All</span>
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M0 0l5 6 5-6z" fill="rgba(255,255,255,0.5)"/></svg>
       </button>
-      <div class="price-dd-panel filter-dd-panel" id="bodyDdPanel">
-        <button class="filter-dd-opt active" onclick="setFilterDd('body','','All','bodyDd')">All</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('body','Sedan','Sedan','bodyDd')">Sedan</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('body','SUV','SUV','bodyDd')">SUV</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('body','Crossover','Crossover','bodyDd')">Crossover</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('body','Truck','Truck','bodyDd')">Truck</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('body','Sports Car','Sports Car','bodyDd')">Sports Car</button>
-      </div>
+      <div class="price-dd-panel filter-dd-panel" id="bodyDdPanel"></div>
     </div>
   </div>
   <div class="control-group">
@@ -504,13 +496,7 @@ select option{background:#292528;color:#fff;font-family:Arial,Helvetica,sans-ser
         <span id="segDdLabel">All</span>
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M0 0l5 6 5-6z" fill="rgba(255,255,255,0.5)"/></svg>
       </button>
-      <div class="price-dd-panel filter-dd-panel" id="segDdPanel">
-        <button class="filter-dd-opt active" onclick="setFilterDd('seg','','All','segDd')">All</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('seg','Subcompact','Subcompact','segDd')">Subcompact</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('seg','Compact','Compact','segDd')">Compact</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('seg','Mid-Size','Mid-Size','segDd')">Mid-Size</button>
-        <button class="filter-dd-opt" onclick="setFilterDd('seg','Full-Size','Full-Size','segDd')">Full-Size</button>
-      </div>
+      <div class="price-dd-panel filter-dd-panel" id="segDdPanel"></div>
     </div>
   </div>
   <!-- Hidden inputs keep doFilter() working unchanged -->
@@ -594,7 +580,7 @@ select option{background:#292528;color:#fff;font-family:Arial,Helvetica,sans-ser
         <button class="gal-tab" onclick="switchGal('int',this)">Interior</button>
       </div>
       <div class="gallery" id="mGal"></div>
-      <div class="sec-lbl">Dimensions</div>
+      <div class="sec-lbl" style="display:flex;align-items:center;gap:0.5rem">Specs <span id="mSpecsTrimCtx" style="font-size:0.65rem;font-weight:500;color:var(--ink3);background:var(--surface3);padding:0.15rem 0.55rem;border-radius:999px;letter-spacing:0.04em;display:none"></span></div>
       <div class="dims-grid" id="mDims"></div>
       <div class="sec-lbl">Trim Levels</div>
       <div class="trim-list" id="mTrims"></div>
@@ -633,6 +619,8 @@ const DEFAULT_CARS = [
   ext:['/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_1_500.jpg','/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_fq_oem_2_500.jpg'],
   int:['/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_i_oem_1_500.jpg','/nissan/versa/2025/oem/2025_nissan_versa_sedan_sr_d_oem_1_500.jpg'],
   dims:{length:'175.0"',width:'67.3"',height:'57.7"',wheelbase:'103.1"'},
+  hp:'122 hp',drivetrain:'FWD',transmission:'CVT',
+  engine:'1.6L 4-cyl',
   trims:[
     {name:'S',price:17390,features:['1.6L 4-cyl (122 hp)','5-speed manual','15" steel wheels','7" touchscreen','Bluetooth','Forward Collision Warning','35 MPG combined']},
     {name:'S CVT',price:19190,features:['CVT automatic','Automatic Emergency Braking','Rear Cross Traffic Alert','Apple CarPlay / Android Auto']},
@@ -643,6 +631,8 @@ const DEFAULT_CARS = [
   ext:['/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_1_500.jpg','/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_fq_oem_2_500.jpg'],
   int:['/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_i_oem_1_500.jpg','/nissan/sentra/2025/oem/2025_nissan_sentra_sedan_sr_d_oem_1_500.jpg'],
   dims:{length:'182.7"',width:'70.8"',height:'57.3"',wheelbase:'105.1"'},
+  hp:'149 hp',drivetrain:'FWD',transmission:'CVT',
+  engine:'2.0L 4-cyl',
   trims:[
     {name:'S',price:22730,features:['2.0L 4-cyl (149 hp)','CVT','8" touchscreen','Safety Shield 360','Apple CarPlay / Android Auto']},
     {name:'SV',price:23480,features:['17" aluminum wheels','Heated front seats','Leather-wrapped wheel','ProPilot Assist']},
@@ -652,6 +642,8 @@ const DEFAULT_CARS = [
   ext:['/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_fq_oem_1_500.jpg','/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sv_fq_oem_1_500.jpg'],
   int:['/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_i_oem_1_500.jpg','/nissan/altima/2025/oem/2025_nissan_altima_sedan_25-sr_d_oem_1_500.jpg'],
   dims:{length:'192.5"',width:'73.0"',height:'57.9"',wheelbase:'111.2"'},
+  hp:'182 hp',drivetrain:'FWD / AWD',transmission:'CVT',
+  engine:'2.5L 4-cyl',
   trims:[
     {name:'S',price:27000,features:['2.5L 4-cyl (188 hp)','CVT w/ Sport mode','8" touchscreen','Safety Shield 360','39 MPG highway']},
     {name:'SV',price:29330,features:['Wireless CarPlay / Android Auto','12.3" display available','ProPilot Assist','Heated seats']},
@@ -663,6 +655,8 @@ const DEFAULT_CARS = [
   ext:['/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_fq_oem_1_500.jpg','/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_fq_oem_2_500.jpg'],
   int:['/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_i_oem_1_500.jpg','/nissan/kicks/2025/oem/2025_nissan_kicks_4dr-suv_sr_d_oem_1_500.jpg'],
   dims:{length:'171.9"',width:'70.9"',height:'61.5"',wheelbase:'103.1"'},
+  hp:'141 hp',drivetrain:'FWD',transmission:'CVT',
+  engine:'1.6L 4-cyl',
   trims:[
     {name:'S',price:21830,features:['2.0L 4-cyl (141 hp)','7" touchscreen','Safety Shield 360','FWD or AWD','28/35 MPG']},
     {name:'SV',price:23680,features:['17" alloy wheels','12.3" NissanConnect','Heated front seats','LED headlights']},
@@ -672,6 +666,8 @@ const DEFAULT_CARS = [
   ext:['/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_1_500.jpg','/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_fq_oem_2_500.jpg'],
   int:['/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_i_oem_1_500.jpg','/nissan/rogue/2025/oem/2025_nissan_rogue_4dr-suv_platinum_d_oem_1_500.jpg'],
   dims:{length:'182.5"',width:'72.4"',height:'67.4"',wheelbase:'106.5"'},
+  hp:'201 hp',drivetrain:'FWD / AWD',transmission:'CVT',
+  engine:'1.5L 3-cyl Turbo',
   trims:[
     {name:'S',price:29990,features:['1.5L VC-Turbo (201 hp)','FWD standard','Safety Shield 360','8" touchscreen','30 MPG combined']},
     {name:'SV',price:32900,features:['AWD available','Panoramic moonroof','Heated seats','12.3" NissanConnect']},
@@ -682,6 +678,8 @@ const DEFAULT_CARS = [
   ext:['/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_1_500.jpg','/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_fq_oem_2_500.jpg'],
   int:['/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_i_oem_1_500.jpg','/nissan/pathfinder/2025/oem/2025_nissan_pathfinder_4dr-suv_platinum_d_oem_1_500.jpg'],
   dims:{length:'196.8"',width:'78.0"',height:'70.6"',wheelbase:'114.2"'},
+  hp:'284 hp',drivetrain:'FWD / 4WD',transmission:'9-speed auto',
+  engine:'3.5L V6',
   trims:[
     {name:'S',price:38690,features:['3.5L V6 (284 hp)','9-speed auto','8-passenger','8" touchscreen','Safety Shield 360']},
     {name:'SV',price:41390,features:['Leather seats','Heated wheel','Power driver seat','ProPilot Assist','Tri-zone climate']},
@@ -694,6 +692,8 @@ const DEFAULT_CARS = [
   ext:['/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_fq_oem_1_500.jpg','/kia/k4/2025/oem/2025_kia_k4_sedan_ex_fq_oem_1_500.jpg'],
   int:['/kia/k4/2025/oem/2025_kia_k4_sedan_ex_detail_oem_1_500.jpg','/kia/k4/2025/oem/2025_kia_k4_sedan_gt-line-turbo_detail_oem_1_500.jpg'],
   dims:{length:'183.1"',width:'71.6"',height:'55.9"',wheelbase:'107.9"'},
+  hp:'147 hp',drivetrain:'FWD',transmission:'CVT',
+  engine:'2.0L 4-cyl',
   trims:[
     {name:'LX',price:21990,features:['2.0L 4-cyl (147 hp)','12.3" dual display','Lane Keeping Assist','Forward Collision Avoidance','10-yr/100k warranty']},
     {name:'LXS',price:22990,features:['Blind Spot Collision Warning','Rear USB-C ports','Enhanced safety package']},
@@ -705,6 +705,8 @@ const DEFAULT_CARS = [
   ext:['/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_1_500.jpg','/kia/k5/2025/oem/2025_kia_k5_sedan_gt_fq_oem_2_500.jpg'],
   int:['/kia/k5/2025/oem/2025_kia_k5_sedan_gt_i_oem_1_500.jpg','/kia/k5/2025/oem/2025_kia_k5_sedan_gt_d_oem_1_500.jpg'],
   dims:{length:'191.1"',width:'73.2"',height:'56.9"',wheelbase:'111.8"'},
+  hp:'180 hp',drivetrain:'FWD',transmission:'8-speed auto',
+  engine:'1.6L 4-cyl Turbo',
   trims:[
     {name:'LX',price:25590,features:['2.5L 4-cyl (191 hp)','8-speed auto','12.3" touchscreen','Wireless CarPlay / Android Auto','Smart parking assist']},
     {name:'EX',price:27490,features:['Heated front seats','Power sunroof','Wireless charging','Blind-Spot Avoidance']},
@@ -715,6 +717,8 @@ const DEFAULT_CARS = [
   ext:['/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_1_500.jpg','/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_fq_oem_2_500.jpg'],
   int:['/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_i_oem_1_500.jpg','/kia/seltos/2025/oem/2025_kia_seltos_4dr-suv_sx_d_oem_1_500.jpg'],
   dims:{length:'172.0"',width:'71.0"',height:'64.2"',wheelbase:'102.4"'},
+  hp:'146 hp',drivetrain:'FWD / AWD',transmission:'CVT / DCT',
+  engine:'2.0L 4-cyl',
   trims:[
     {name:'LX',price:26185,features:['2.0L 4-cyl (146 hp)','10.25" dual screen','Rear cross-traffic alert','Lane Keeping Assist']},
     {name:'EX',price:28185,features:['AWD available','Sunroof','Wireless CarPlay / Android Auto','Heated front seats','Highway Drive Assist']},
@@ -724,6 +728,8 @@ const DEFAULT_CARS = [
   ext:['/kia/sportage/2024/oem/2024_kia_sportage_4dr-suv_x-pro_fq_oem_1_500.jpg','/kia/sportage/2025/izmo/2025_kia_sportage_4dr-suv_ex_pr_izmo_1_500.jpg'],
   int:['/kia/sportage/2025/oem/2025_kia_sportage_4dr-suv_ex_i_oem_1_500.jpg','/kia/sportage/2025/oem/2025_kia_sportage_4dr-suv_ex_d_oem_1_500.jpg'],
   dims:{length:'182.3"',width:'73.6"',height:'65.0"',wheelbase:'108.9"'},
+  hp:'187 hp',drivetrain:'FWD / AWD',transmission:'8-speed auto',
+  engine:'2.5L 4-cyl',
   trims:[
     {name:'LX',price:27590,features:['2.5L 4-cyl (187 hp)','12.3" panoramic display','IIHS Top Safety Pick+','Class-leading cargo room']},
     {name:'EX',price:29590,features:['AWD available','Heated steering wheel','Surround View Monitor','Highway Drive Assist II','Wireless charging']},
@@ -734,6 +740,8 @@ const DEFAULT_CARS = [
   ext:['/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_1_500.jpg','/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_fq_oem_2_500.jpg'],
   int:['/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_i_oem_1_500.jpg','/kia/telluride/2025/oem/2025_kia_telluride_4dr-suv_sx-prestige-x-pro_d_oem_1_500.jpg'],
   dims:{length:'196.9"',width:'78.3"',height:'68.9"',wheelbase:'114.2"'},
+  hp:'291 hp',drivetrain:'FWD / AWD',transmission:'8-speed auto',
+  engine:'3.8L V6',
   trims:[
     {name:'LX',price:36390,features:['3.8L V6 (291 hp)','8-speed auto','3-row / 8-passenger','10.25" touchscreen','Kia DriveWise safety suite']},
     {name:'EX',price:40390,features:['Heated front & 2nd-row seats','Panoramic sunroof','Wireless CarPlay / Android Auto','Hands-free liftgate']},
@@ -745,6 +753,8 @@ const DEFAULT_CARS = [
   ext:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_2_500.jpg'],
   int:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_i_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_d_oem_1_500.jpg'],
   dims:{length:'184.0"',width:'70.9"',height:'55.7"',wheelbase:'107.7"'},
+  hp:'158 hp',drivetrain:'FWD',transmission:'CVT',
+  engine:'2.0L 4-cyl',
   trims:[
     {name:'LX',price:24250,features:['2.0L 4-cyl (150 hp)','CVT','7" touchscreen','Apple CarPlay / Android Auto','Honda Sensing std','32/41 MPG']},
     {name:'Sport',price:26250,features:['18" gloss-black alloy wheels','Paddle shifters','Blind Spot Info System','Heated side mirrors','Sport mode']},
@@ -756,6 +766,8 @@ const DEFAULT_CARS = [
   ext:['/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_fq_oem_1_500.jpg','/honda/accord/2025/oem/2025_honda_accord_sedan_touring-hybrid_fq_oem_1_500.jpg'],
   int:['/honda/accord/2025/oem/2025_honda_accord_sedan_sport-l-hybrid_i_oem_1_500.jpg','/honda/accord/2025/oem/2025_honda_accord_sedan_touring-hybrid_i_oem_1_500.jpg'],
   dims:{length:'195.7"',width:'73.3"',height:'57.1"',wheelbase:'111.4"'},
+  hp:'192 hp',drivetrain:'FWD',transmission:'CVT',
+  engine:'1.5L 4-cyl Turbo',
   trims:[
     {name:'LX',price:28745,features:['1.5L Turbo (192 hp)','10.2" touchscreen','Honda Sensing std','Wireless CarPlay / Android Auto','Heated front seats']},
     {name:'Sport',price:30895,features:['18" wheels','12.3" display','Remote start','Traffic Jam Assist']},
@@ -767,6 +779,8 @@ const DEFAULT_CARS = [
   ext:['/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_1_500.jpg','/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_fq_oem_2_500.jpg'],
   int:['/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_i_oem_1_500.jpg','/honda/cr-v/2025/oem/2025_honda_cr-v_4dr-suv_ex-l_d_oem_1_500.jpg'],
   dims:{length:'184.8"',width:'73.0"',height:'66.3"',wheelbase:'107.3"'},
+  hp:'190 hp',drivetrain:'FWD / AWD',transmission:'CVT',
+  engine:'1.5L 4-cyl Turbo',
   trims:[
     {name:'LX',price:30920,features:['1.5L Turbo (190 hp)','9" touchscreen','Wireless CarPlay / Android Auto','Honda Sensing safety suite']},
     {name:'EX',price:33150,features:['Panoramic moonroof','18" wheels','Heated front seats','Remote start','Power tailgate','Blind spot monitoring']},
@@ -778,6 +792,8 @@ const DEFAULT_CARS = [
   ext:['/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_fq_oem_1_500.jpg','/honda/passport/2025/oem/2025_honda_passport_4dr-suv_black-edition_fq_oem_1_500.jpg'],
   int:['/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_i_oem_1_500.jpg','/honda/passport/2025/oem/2025_honda_passport_4dr-suv_trailsport_d_oem_1_500.jpg'],
   dims:{length:'189.1"',width:'78.6"',height:'72.2"',wheelbase:'110.9"'},
+  hp:'280 hp',drivetrain:'AWD',transmission:'9-speed auto',
+  engine:'3.5L V6',
   trims:[
     {name:'EX-L',price:42400,features:['3.5L V6 (280 hp)','9-speed auto','AWD standard','Leather seats','Power moonroof','10.2" touchscreen','5,000-lb towing']},
     {name:'TrailSport',price:45000,features:['Off-road suspension','All-terrain tires','Skid plates','Orange stitching accents','LED fog lights','Navigation']},
@@ -787,6 +803,8 @@ const DEFAULT_CARS = [
   ext:['/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_fq_oem_1_500.jpg','/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_black-edition_fq_oem_1_500.jpg'],
   int:['/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_i_oem_1_500.jpg','/honda/pilot/2025/oem/2025_honda_pilot_4dr-suv_elite_d_oem_1_500.jpg'],
   dims:{length:'196.5"',width:'78.6"',height:'70.6"',wheelbase:'113.8"'},
+  hp:'285 hp',drivetrain:'FWD / AWD',transmission:'10-speed auto',
+  engine:'3.5L V6',
   trims:[
     {name:'Sport',price:40275,features:['3.5L V6 (285 hp)','10-speed auto','AWD standard','9" touchscreen','3-row / 8-pass','Honda Sensing 360']},
     {name:'EX-L',price:44475,features:['Leather seats','Hands-free power liftgate','2nd-row captain chairs','Heated front seats','12" display']},
@@ -798,6 +816,8 @@ const DEFAULT_CARS = [
   ext:['/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_fq_oem_1_500.jpg','/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_trailsport_rq_oem_1_500.jpg'],
   int:['/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_rtl_i_oem_1_500.jpg','/honda/ridgeline/2025/oem/2025_honda_ridgeline_crew-cab-pickup_rtl_d_oem_1_500.jpg'],
   dims:{length:'210.2"',width:'78.6"',height:'70.8"',wheelbase:'125.2"'},
+  hp:'280 hp',drivetrain:'AWD',transmission:'9-speed auto',
+  engine:'3.5L V6',
   trims:[
     {name:'Sport',price:40150,features:['3.5L V6 (280 hp)','9-speed auto','AWD standard','9" touchscreen','In-Bed Trunk®','Dual-action tailgate','5,000-lb towing','Honda Sensing']},
     {name:'Sport+',price:42050,features:['Wireless CarPlay / Android Auto','Wireless phone charger','2nd-row USB-C ports','Remote start']},
@@ -809,6 +829,8 @@ const DEFAULT_CARS = [
   ext:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_fq_oem_3_500.jpg'],
   int:['/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_i_oem_1_500.jpg','/honda/civic/2025/oem/2025_honda_civic_4dr-hatchback_sport-touring-hybrid_d_oem_1_500.jpg'],
   dims:{length:'179.9"',width:'71.3"',height:'53.9"',wheelbase:'107.5"'},
+  hp:'181 hp',drivetrain:'FWD',transmission:'e-CVT',
+  engine:'2.0L 4-cyl Hybrid',
   trims:[
     {name:'Prelude Hybrid',price:35000,features:['2.0L Hybrid (200 hp) + dual electric motors','Type R suspension hardware','Brembo front brakes','Adaptive dampers','S+ simulated shift system','Bose stereo','Google built-in infotainment','~mid-40s MPG est.']},
   ]},
@@ -817,6 +839,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_1_500.jpg','/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_fq_oem_2_500.jpg'],
   int:['/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_i_oem_1_500.jpg','/toyota/corolla/2025/oem/2025_toyota_corolla_sedan_fx_d_oem_1_500.jpg'],
   dims:{length:'182.5"',width:'70.1"',height:'56.5"',wheelbase:'105.1"'},
+  hp:'169 hp',drivetrain:'FWD',transmission:'CVT',
+  engine:'2.0L 4-cyl',
   trims:[
     {name:'LE',price:22325,features:['2.0L 4-cyl (169 hp)','CVT','8" Toyota Audio Multimedia','Toyota Safety Sense 3.0','LED headlights','32/41 MPG']},
     {name:'SE',price:24345,features:['Sport exterior','Paddle shifters','Sport mesh grille','18" wheels','Heated front seats']},
@@ -829,6 +853,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_fq_oem_2_500.jpg'],
   int:['/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_i_oem_1_500.jpg','/toyota/corolla-cross/2025/oem/2025_toyota_corolla-cross_4dr-suv_xle_d_oem_1_500.jpg'],
   dims:{length:'173.8"',width:'71.5"',height:'64.6"',wheelbase:'103.9"'},
+  hp:'169 hp',drivetrain:'FWD / AWD',transmission:'CVT',
+  engine:'2.0L 4-cyl',
   trims:[
     {name:'LE',price:24470,features:['2.0L 4-cyl (169 hp)','CVT','FWD or AWD','8" touchscreen','Toyota Safety Sense 3.0']},
     {name:'XLE',price:27615,features:['8" multimedia display','Heated front seats','SofTex leatherette','Roof rails','Power rear door']},
@@ -839,6 +865,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_fq_oem_2_500.jpg'],
   int:['/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_i_oem_1_500.jpg','/toyota/c-hr/2025/oem/2025_toyota_c-hr_4dr-suv_limited_d_oem_1_500.jpg'],
   dims:{length:'175.6"',width:'72.0"',height:'60.9"',wheelbase:'104.7"'},
+  hp:'194 hp',drivetrain:'FWD',transmission:'CVT',
+  engine:'2.0L 4-cyl Hybrid',
   trims:[
     {name:'LE',price:29825,features:['2.0L Hybrid (196 hp combined)','Hybrid-only powertrain','AWD standard','8" touchscreen','Toyota Safety Sense 3.0','LED headlights & DRL']},
     {name:'XLE',price:32020,features:['12.3" touchscreen','Wireless CarPlay / Android Auto','Heated front seats','Wireless charging','SofTex leatherette']},
@@ -848,6 +876,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_1_500.jpg','/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_fq_oem_2_500.jpg'],
   int:['/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_i_oem_1_500.jpg','/toyota/camry/2025/oem/2025_toyota_camry_sedan_se_d_oem_1_500.jpg'],
   dims:{length:'194.1"',width:'72.4"',height:'56.9"',wheelbase:'111.4"'},
+  hp:'225 hp',drivetrain:'FWD / AWD',transmission:'8-speed auto',
+  engine:'2.5L 4-cyl Hybrid',
   trims:[
     {name:'LE',price:28950,features:['2.5L Hybrid (225 hp combined)','eCVT','FWD or AWD','8" touchscreen','Toyota Safety Sense 3.0','51 MPG combined FWD']},
     {name:'SE',price:30250,features:['Sport mesh grille','Sport suspension','18" wheels','Heated front seats','8-speaker audio']},
@@ -859,6 +889,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_fq_oem_2_500.jpg'],
   int:['/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_i_oem_1_500.jpg','/toyota/rav4/2025/oem/2025_toyota_rav4_4dr-suv_limited_d_oem_1_500.jpg'],
   dims:{length:'180.9"',width:'73.0"',height:'67.1"',wheelbase:'105.9"'},
+  hp:'219 hp',drivetrain:'AWD',transmission:'e-CVT',
+  engine:'2.5L 4-cyl Hybrid',
   trims:[
     {name:'LE Hybrid',price:32125,features:['2.5L Hybrid (219 hp combined)','AWD standard','8" touchscreen','Toyota Safety Sense 2.5+','3,500-lb towing capacity']},
     {name:'XLE Hybrid',price:34450,features:['Heated front seats','Power tailgate','Dual-zone climate','SofTex seats']},
@@ -870,6 +902,8 @@ const DEFAULT_CARS = [
   ext:['https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/beeee6e8-3f75-4259-89c5-7fb158fc7d1a/2026+Toyota+RAV4+3_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/ec983d59-ff64-4947-bc9f-7516be144243/2026+Toyota+RAV4+7_717.jpg'],
   int:['https://www.edmunds.com/assets/m/cs/cms/9cf6e702-ab7c-42d6-92c8-8b11128450d4/2026+Toyota+RAV4+GR+01+f34+02092026+Edmunds_1280.jpg','https://www.edmunds.com/assets/m/cs/cms/beeee6e8-3f75-4259-89c5-7fb158fc7d1a/2026+Toyota+RAV4+3_1280.jpg'],
   dims:{length:'182.4"',width:'73.0"',height:'67.5"',wheelbase:'105.9"'},
+  hp:'302 hp',drivetrain:'AWD',transmission:'e-CVT',
+  engine:'2.5L 4-cyl Plug-in Hybrid',
   trims:[
     {name:'SE',price:42950,features:['2.5L PHEV (324 hp combined)','AWD standard','52 miles EV range','12.3" digital gauge cluster','Toyota Safety Sense 4.0','3,500-lb towing capacity','7-kW Level 2 onboard charger','0-60 mph: 5.4 seconds']},
     {name:'Woodland',price:46700,features:['All-terrain tires & 18" matte gray wheels','8.5" ground clearance','Rigid Industries LED fog lights','DC fast charging (CCS) — 10–80% in ~30 min','11-kW onboard charger','Roof rack with crossbars','49 miles EV range','Rugged Urban Rock exclusive color']},
@@ -880,6 +914,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_fq_oem_2_500.jpg'],
   int:['/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_i_oem_1_500.jpg','/toyota/bz4x/2025/oem/2025_toyota_bz4x_4dr-suv_limited_d_oem_1_500.jpg'],
   dims:{length:'184.6"',width:'73.2"',height:'64.6"',wheelbase:'112.2"'},
+  hp:'214 hp',drivetrain:'FWD / AWD',transmission:'single-speed',
+  engine:'Dual Electric Motors',
   trims:[
     {name:'XLE FWD',price:43490,features:['201-hp electric motor (FWD)','252-mile EPA range','12.3" touchscreen','Toyota Safety Sense 3.0','DC fast charging std']},
     {name:'XLE AWD',price:48450,features:['218-hp dual motor AWD','222-mile EPA range','Wireless charging','Heated front seats']},
@@ -889,6 +925,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_fq_oem_2_500.jpg'],
   int:['/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_i_oem_1_500.jpg','/toyota/highlander/2025/oem/2025_toyota_highlander_4dr-suv_limited_d_oem_1_500.jpg'],
   dims:{length:'194.9"',width:'76.0"',height:'68.1"',wheelbase:'112.2"'},
+  hp:'265 hp',drivetrain:'FWD / AWD',transmission:'8-speed auto',
+  engine:'2.4L 4-cyl Turbo Hybrid',
   trims:[
     {name:'LE',price:40860,features:['2.4L Turbo 4-cyl (265 hp)','8-speed auto','AWD standard','8" touchscreen','3-row / 8-passenger','Toyota Safety Sense 2.5+']},
     {name:'XLE',price:44860,features:['Leather-trimmed seats','Hands-free power rear door','Panoramic moonroof','Wireless charging','Captain chairs']},
@@ -899,6 +937,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_fq_oem_2_500.jpg'],
   int:['/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_i_oem_1_500.jpg','/toyota/grand-highlander/2025/oem/2025_toyota_grand-highlander_4dr-suv_xle_d_oem_1_500.jpg'],
   dims:{length:'200.6"',width:'78.1"',height:'70.7"',wheelbase:'116.1"'},
+  hp:'362 hp',drivetrain:'FWD / AWD',transmission:'6-speed auto',
+  engine:'2.4L 4-cyl Turbo Hybrid',
   trims:[
     {name:'LE',price:42310,features:['2.4L Turbo 4-cyl (265 hp)','AWD available','12.3" touchscreen','3-row / 8-passenger','Toyota Safety Sense 3.0']},
     {name:'XLE',price:45360,features:['Leather-trimmed seats','Dual moonroof','Power liftgate','Heated front seats','Wireless charging']},
@@ -909,6 +949,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_1_500.jpg','/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_fq_oem_2_500.jpg'],
   int:['/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_i_oem_1_500.jpg','/toyota/crown-signia/2025/oem/2025_toyota_crown-signia_4dr-suv_xle_d_oem_1_500.jpg'],
   dims:{length:'192.5"',width:'74.4"',height:'66.3"',wheelbase:'112.2"'},
+  hp:'243 hp',drivetrain:'AWD',transmission:'e-CVT',
+  engine:'2.5L 4-cyl Hybrid',
   trims:[
     {name:'XLE',price:40230,features:['2.5L Hybrid (243 hp combined)','AWD standard','12.3" touchscreen','Toyota Safety Sense 3.0','37 MPG combined','Panoramic glass roof']},
     {name:'Limited',price:46030,features:['JBL 9-speaker audio','Ventilated seats','Head-up display','Heated rear seats','Premium leather','Advanced Park']},
@@ -917,6 +959,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_fq_oem_2_500.jpg'],
   int:['/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_i_oem_1_500.jpg','/toyota/4runner/2025/oem/2025_toyota_4runner_4dr-suv_limited_d_oem_1_500.jpg'],
   dims:{length:'191.7"',width:'76.0"',height:'72.0"',wheelbase:'109.8"'},
+  hp:'278 hp',drivetrain:'RWD / 4WD',transmission:'6-speed auto',
+  engine:'2.4L 4-cyl Turbo',
   trims:[
     {name:'SR5',price:41270,features:['2.4L Turbo 4-cyl (278 hp)','8-speed auto','RWD or 4WD','8" touchscreen','Toyota Safety Sense 3.0','Multi-terrain Select']},
     {name:'TRD Sport',price:45900,features:['TRD-tuned suspension','TRD-stamped components','Hood scoop','Performance exhaust note']},
@@ -928,6 +972,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_1_500.jpg','/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_fq_oem_2_500.jpg'],
   int:['/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_i_oem_1_500.jpg','/toyota/sequoia/2025/oem/2025_toyota_sequoia_4dr-suv_limited_d_oem_1_500.jpg'],
   dims:{length:'214.4"',width:'80.0"',height:'74.0"',wheelbase:'122.0"'},
+  hp:'437 hp',drivetrain:'RWD / 4WD',transmission:'10-speed auto',
+  engine:'3.4L Twin-Turbo V6 Hybrid',
   trims:[
     {name:'SR5',price:62295,features:['3.5L Twin-Turbo V6 Hybrid (437 hp)','Hybrid-only','3-row / 8-passenger','14" touchscreen','Toyota Safety Sense 2.5+','9,000-lb towing']},
     {name:'Limited',price:71795,features:['Semi-aniline leather','Tri-zone climate','JBL 14-speaker audio','Wireless charging','Power running boards']},
@@ -939,6 +985,8 @@ const DEFAULT_CARS = [
   ext:['/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_1_500.jpg','/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_fq_oem_2_500.jpg'],
   int:['/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_i_oem_1_500.jpg','/toyota/land-cruiser/2025/oem/2025_toyota_land-cruiser_4dr-suv_1958_d_oem_1_500.jpg'],
   dims:{length:'192.3"',width:'77.6"',height:'75.4"',wheelbase:'112.2"'},
+  hp:'326 hp',drivetrain:'RWD / 4WD',transmission:'8-speed auto',
+  engine:'3.4L Twin-Turbo V6 Hybrid',
   trims:[
     {name:'Land Cruiser',price:56450,features:['2.4L Twin-Turbo Hybrid (326 hp)','4WD standard','Multi-terrain select','KDSS stabilizer','14" touchscreen','Toyota Safety Sense 3.0']},
     {name:'1958 Edition',price:59550,features:['Heritage-inspired styling','Unique 18" wheels','Retro badging','Off-road skid plates','Electronic locking differential']},
@@ -953,6 +1001,55 @@ function img(path){ if(!path) return FALLBACK; return path.startsWith('http') ? 
 
 // ── PERSISTENCE ──────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'automatch_cars_v1';
+const FILTER_BODIES_KEY = 'automatch_filter_bodies_v1';
+const FILTER_SEGS_KEY   = 'automatch_filter_segs_v1';
+
+// Default filter option lists (editable in admin)
+const DEFAULT_BODIES = ['Sedan','SUV','Crossover','Truck','Sports Car','Hatchback','Minivan','Wagon'];
+const DEFAULT_SEGS   = ['Subcompact','Compact','Mid-Size','Full-Size'];
+
+// Live filter option lists — loaded from localStorage or defaults
+let FILTER_BODIES = (()=>{ try{ const s=localStorage.getItem(FILTER_BODIES_KEY); return s?JSON.parse(s):[...DEFAULT_BODIES]; }catch(e){ return [...DEFAULT_BODIES]; } })();
+let FILTER_SEGS   = (()=>{ try{ const s=localStorage.getItem(FILTER_SEGS_KEY);   return s?JSON.parse(s):[...DEFAULT_SEGS];   }catch(e){ return [...DEFAULT_SEGS];   } })();
+
+function saveFilterOptions(){
+  try{ localStorage.setItem(FILTER_BODIES_KEY, JSON.stringify(FILTER_BODIES)); }catch(e){}
+  try{ localStorage.setItem(FILTER_SEGS_KEY,   JSON.stringify(FILTER_SEGS));   }catch(e){}
+}
+
+// Rebuild all three filter dropdowns from live data
+function rebuildFilterDds(){
+  // Brand: always derived from unique brands in CARS
+  const brands = [...new Set(CARS.map(c=>c.brand).filter(Boolean))].sort();
+  _rebuildOneDd('brandDdPanel', 'brand', 'brandDd', brands);
+
+  // Body style: from FILTER_BODIES list (merged with any in CARS not yet in list)
+  const carsBodyValues = [...new Set(CARS.map(c=>c.body).filter(Boolean))];
+  const mergedBodies = [...new Set([...FILTER_BODIES, ...carsBodyValues])].sort();
+  // add any new car bodies to our list
+  let bodyChanged = false;
+  carsBodyValues.forEach(v=>{ if(!FILTER_BODIES.includes(v)){ FILTER_BODIES.push(v); bodyChanged=true; } });
+  if(bodyChanged){ saveFilterOptions(); }
+  _rebuildOneDd('bodyDdPanel', 'body', 'bodyDd', mergedBodies);
+
+  // Size: from FILTER_SEGS list (merged with any in CARS not yet in list)
+  const carsSegValues = [...new Set(CARS.map(c=>c.segment).filter(Boolean))];
+  let segChanged = false;
+  carsSegValues.forEach(v=>{ if(!FILTER_SEGS.includes(v)){ FILTER_SEGS.push(v); segChanged=true; } });
+  if(segChanged){ saveFilterOptions(); }
+  const mergedSegs = [...new Set([...FILTER_SEGS, ...carsSegValues])].sort();
+  _rebuildOneDd('segDdPanel', 'seg', 'segDd', mergedSegs);
+}
+
+function _rebuildOneDd(panelId, type, ddId, values){
+  const panel = document.getElementById(panelId);
+  if(!panel) return;
+  // Keep current selection
+  const inputId = type==='brand' ? 'fBrand' : type==='body' ? 'fBody' : 'fSeg';
+  const currentVal = document.getElementById(inputId)?.value || '';
+  panel.innerHTML = `<button class="filter-dd-opt${!currentVal?' active':''}" onclick="setFilterDd('${type}','','All','${ddId}')">All</button>`
+    + values.map(v=>`<button class="filter-dd-opt${v===currentVal?' active':''}" onclick="setFilterDd('${type}','${v.replace(/'/g,"\\'")}','${v.replace(/'/g,"\\'")}','${ddId}')">${v}</button>`).join('');
+}
 
 // Boot: load saved data or fall back to defaults
 // Use `let` so resetToDefaults() can splice/push freely
@@ -980,6 +1077,7 @@ function resetToDefaults(){
   if(!confirm('Reset all cars to the original defaults? Any additions or edits you have made will be lost.')) return;
   localStorage.removeItem(STORAGE_KEY);
   CARS.splice(0, CARS.length, ...DEFAULT_CARS.map(c=>Object.assign({},c)));
+  rebuildFilterDds();
   doFilter();
   renderAdmEditList();
   const msg = document.getElementById('admResetMsg');
@@ -1279,26 +1377,62 @@ function switchGal(type,el){
   renderGal();
 }
 
-function renderDims(){
+function renderDims(trimIdx){
   const d=activeCar.dims;
+  const c=activeCar;
+  // If a trim index is given and that trim has overrides, use them
+  const t = (trimIdx!=null && activeCar.trims[trimIdx]) ? activeCar.trims[trimIdx] : null;
+  const engine       = (t&&t.engine)       || c.engine       || '—';
+  const hp           = (t&&t.hp)           || c.hp           || '—';
+  const drivetrain   = (t&&t.drivetrain)   || c.drivetrain   || '—';
+  const transmission = (t&&t.transmission) || c.transmission || '—';
+  // Show badge if trim overrides any powertrain spec
+  const ctx = document.getElementById('mSpecsTrimCtx');
+  if(ctx){
+    const hasOverride = t && (t.engine||t.hp||t.drivetrain||t.transmission);
+    ctx.textContent  = hasOverride ? (t.name+' trim') : '';
+    ctx.style.display = hasOverride ? 'inline-block' : 'none';
+  }
+  const entries=[
+    {k:'Engine',v:engine},{k:'Horsepower',v:hp},{k:'Drivetrain',v:drivetrain},{k:'Transmission',v:transmission},
+    {k:'Length',v:d.length},{k:'Width',v:d.width},{k:'Height',v:d.height},{k:'Wheelbase',v:d.wheelbase}
+  ];
   document.getElementById('mDims').innerHTML=
-    [{k:'Length',v:d.length},{k:'Width',v:d.width},{k:'Height',v:d.height},{k:'Wheelbase',v:d.wheelbase}]
-    .map(x=>`<div class="dim-box"><div class="dim-val">${x.v}</div><div class="dim-key">${x.k}</div></div>`).join('');
+    entries.map(x=>`<div class="dim-box"><div class="dim-val">${x.v}</div><div class="dim-key">${x.k}</div></div>`).join('');
 }
 
 function renderTrims(){
-  document.getElementById('mTrims').innerHTML=activeCar.trims.map((t,i)=>`
-    <div class="trim-item" id="ti${i}">
+  document.getElementById('mTrims').innerHTML=activeCar.trims.map((t,i)=>{
+    const hasPwt = t.engine||t.hp||t.drivetrain||t.transmission;
+    const pwtBadge = hasPwt ? `<span class="trim-pwt-badge" title="This trim has different powertrain specs">⚡</span>` : '';
+    const pwtRow = hasPwt ? `<div class="trim-pwt-row">${
+      [t.engine&&`<span>${t.engine}</span>`,t.hp&&`<span>${t.hp}</span>`,t.drivetrain&&`<span>${t.drivetrain}</span>`,t.transmission&&`<span>${t.transmission}</span>`].filter(Boolean).join('<span class="trim-pwt-sep">·</span>')
+    }</div>` : '';
+    return `<div class="trim-item" id="ti${i}">
       <div class="trim-hdr" onclick="togTrim(${i})">
-        <span class="trim-nm">${t.name}</span>
+        <span class="trim-nm">${t.name}${pwtBadge}</span>
         <span class="trim-pr">${fmt(t.price)}</span>
         <span class="trim-arr">▾</span>
       </div>
-      <div class="trim-bd"><ul class="trim-feats">${t.features.map(f=>`<li>${f}</li>`).join('')}</ul></div>
-    </div>`).join('');
+      <div class="trim-bd">${pwtRow}<ul class="trim-feats">${t.features.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+    </div>`;
+  }).join('');
 }
 
-function togTrim(i){document.getElementById('ti'+i).classList.toggle('open');}
+function togTrim(i){
+  const el=document.getElementById('ti'+i);
+  const wasOpen=el.classList.contains('open');
+  // close all
+  document.querySelectorAll('.trim-item.open').forEach(x=>x.classList.remove('open'));
+  if(!wasOpen){
+    el.classList.add('open');
+    // update specs panel with this trim's powertrain overrides
+    renderDims(i);
+  } else {
+    // all closed → revert to car-level specs
+    renderDims();
+  }
+}
 
 function closeModal(e){
   if(e&&e.target!==document.getElementById('overlay'))return;
@@ -1356,7 +1490,12 @@ function renderCmp(){
   cols.className='cmp-cols n'+Math.min(cars.length,4);
   const specs=[
     ['Segment',c=>c.segment],['Body',c=>c.body],['Starting MSRP',c=>fmt(c.msrp)],
-    ['Year',c=>String(c.year)],['Length',c=>c.dims.length],['Width',c=>c.dims.width],
+    ['Year',c=>String(c.year)],
+    ['Engine',c=>(()=>{const t=c.trims[0];return t.engine||c.engine||'—';})()],
+    ['Horsepower',c=>(()=>{const t=c.trims[0];return t.hp||c.hp||'—';})()],
+    ['Drivetrain',c=>(()=>{const t=c.trims[0];return t.drivetrain||c.drivetrain||'—';})()],
+    ['Transmission',c=>(()=>{const t=c.trims[0];return t.transmission||c.transmission||'—';})()],
+    ['Length',c=>c.dims.length],['Width',c=>c.dims.width],
     ['Height',c=>c.dims.height],['Wheelbase',c=>c.dims.wheelbase],
     ['# of Trims',c=>String(c.trims.length)],
     ['Base Trim',c=>c.trims[0].name+' — '+fmt(c.trims[0].price)],
@@ -1387,12 +1526,61 @@ function renderCmp(){
 }
 
 function tfMini(car,idx){
-  return `<ul class="cmp-feats">${car.trims[idx].features.map(f=>`<li>${f}</li>`).join('')}</ul>`;
+  const t=car.trims[idx];
+  const pwtRow = (t.engine||t.hp||t.drivetrain||t.transmission) ? `<div class="trim-pwt-row cmp-pwt-row">${
+    [t.engine&&`<span>${t.engine}</span>`,t.hp&&`<span>${t.hp}</span>`,t.drivetrain&&`<span>${t.drivetrain}</span>`,t.transmission&&`<span>${t.transmission}</span>`].filter(Boolean).join('<span class="trim-pwt-sep">·</span>')
+  }</div>` : '';
+  return pwtRow+`<ul class="cmp-feats">${t.features.map(f=>`<li>${f}</li>`).join('')}</ul>`;
 }
 function rTF(cid){
   const sel=document.getElementById('ts_'+cid);
+  const idx=parseInt(sel.value);
   const car=CARS.find(c=>c.id===cid);
-  document.getElementById('tf_'+cid).innerHTML=tfMini(car,parseInt(sel.value));
+  document.getElementById('tf_'+cid).innerHTML=tfMini(car,idx);
+  // Update powertrain rows in this column's spec table
+  updateCmpPwtRows(cid, idx);
+}
+function updateCmpPwtRows(cid, idx){
+  const cars=cmpList.map(id=>CARS.find(c=>c.id===id));
+  // Get effective powertrain value for a car at its currently selected trim
+  function effVal(car, field){
+    const sel=document.getElementById('ts_'+car.id);
+    const ti=sel ? parseInt(sel.value) : 0;
+    const t=car.trims[ti];
+    return t[field] || car[field] || '—';
+  }
+  // Re-render all powertrain rows across all columns so diff highlighting stays accurate
+  cars.forEach(car=>{
+    const tbl=car._specTbl || document.querySelector('#cmpCols .cmp-col [data-carid="'+car.id+'"] .spec-tbl');
+    // We'll update via the row index approach — find rows by label
+    const tbls=document.querySelectorAll('.cmp-col .spec-tbl');
+    tbls.forEach(tbl=>{
+      const rows=tbl.querySelectorAll('tr');
+      rows.forEach(row=>{
+        const lbl=row.cells[0]?.textContent;
+        let field=null;
+        if(lbl==='Engine') field='engine';
+        else if(lbl==='Horsepower') field='hp';
+        else if(lbl==='Drivetrain') field='drivetrain';
+        else if(lbl==='Transmission') field='transmission';
+        if(!field) return;
+        // find which car this table belongs to — walk up to .cmp-col
+        const col=tbl.closest('.cmp-col');
+        if(!col) return;
+        // find car by matching select id pattern
+        const sel=col.querySelector('select[id^="ts_"]');
+        if(!sel) return;
+        const colCid=sel.id.replace('ts_','');
+        const colCar=CARS.find(c=>c.id===colCid);
+        if(!colCar) return;
+        const val=effVal(colCar, field);
+        // check if all cars have same effective value
+        const allSame=cars.every(x=>effVal(x,field)===effVal(colCar,field));
+        row.cells[1].textContent=val;
+        row.cells[1].className=cars.every(x=>effVal(x,field)===val) ? 'same':'diff';
+      });
+    });
+  });
 }
 
 // ── INIT
@@ -1508,6 +1696,10 @@ function shareComparison(){
   });
 }
 
+// On load: build filter dropdowns and render the grid
+rebuildFilterDds();
+doFilter();
+
 // On load: restore comparison from URL ?cmp= param
 (function bootFromUrl(){
   const params = new URLSearchParams(location.search);
@@ -1576,6 +1768,7 @@ function shareComparison(){
     <div class="adm-tabs">
       <button class="adm-tab active" onclick="switchAdmTab('add',this)">＋ Add New Car</button>
       <button class="adm-tab" onclick="switchAdmTab('edit',this)">✎ Edit Existing</button>
+      <button class="adm-tab" onclick="switchAdmTab('filters',this)">⚙ Filter Options</button>
     </div>
 
     <!-- ADD TAB -->
@@ -1633,10 +1826,14 @@ function shareComparison(){
             </select>
           </div>
           <div class="adm-field"><label class="adm-label">Base MSRP ($)</label><input id="cf-msrp" class="adm-input" type="number"></div>
+          <div class="adm-field"><label class="adm-label">Engine</label><input id="cf-engine" class="adm-input" placeholder='e.g. 2.5L 4-cyl Turbo'></div>
+          <div class="adm-field"><label class="adm-label">Horsepower</label><input id="cf-hp" class="adm-input" placeholder='e.g. 201 hp'></div>
+          <div class="adm-field"><label class="adm-label">Drivetrain</label><input id="cf-drivetrain" class="adm-input" placeholder='e.g. FWD / AWD'></div>
+          <div class="adm-field"><label class="adm-label">Transmission</label><input id="cf-transmission" class="adm-input" placeholder='e.g. CVT'></div>
           <div class="adm-field"><label class="adm-label">Length</label><input id="cf-length" class="adm-input" placeholder='e.g. 182.4"'></div>
           <div class="adm-field"><label class="adm-label">Width</label><input id="cf-width" class="adm-input" placeholder='e.g. 73.0"'></div>
           <div class="adm-field"><label class="adm-label">Height</label><input id="cf-height" class="adm-input" placeholder='e.g. 67.5"'></div>
-          <div class="adm-field"><label class="adm-label">Wheelbase</label><input id="cf-wheelbase" class="adm-input" placeholder='e.g. 105.9"'></div>
+          <div class="adm-field"><label class="adm-label">Wheelbase</label><input id="cf-wheelbase" class="adm-input" placeholder='e.g. 105.9"'>  </div>
         </div>
 
         <div class="adm-field" style="margin-top:1rem">
@@ -1668,7 +1865,44 @@ function shareComparison(){
     </div>
 
     <!-- EDIT TAB -->
-    <div id="admTabEdit" class="adm-tab-body" style="display:none">
+    <div id="admTabFilters" class="adm-tab-body" style="display:none">
+      <div class="adm-section-title">Manage Filter Options</div>
+      <p style="font-size:0.78rem;color:#9898aa;margin-bottom:1.25rem;line-height:1.5">
+        Add or remove values that appear in the Brand, Body Style, and Size dropdowns.
+        Brand options are always auto-generated from your car data — you cannot manually edit them here.
+      </p>
+
+      <!-- BRAND (read-only, auto from CARS) -->
+      <div class="adm-filter-section">
+        <div class="adm-filter-section-hd">
+          <span>Brand</span>
+          <span class="adm-filter-auto-badge">Auto from cars</span>
+        </div>
+        <div id="admBrandTags" class="adm-tag-list"></div>
+      </div>
+
+      <!-- BODY STYLE -->
+      <div class="adm-filter-section">
+        <div class="adm-filter-section-hd"><span>Body Style</span></div>
+        <div id="admBodyTags" class="adm-tag-list"></div>
+        <div class="adm-add-tag-row">
+          <input id="admBodyNewVal" class="adm-input adm-add-tag-input" placeholder="e.g. Coupe" onkeydown="if(event.key==='Enter')admAddFilterVal('body')">
+          <button class="adm-btn-primary adm-add-tag-btn" onclick="admAddFilterVal('body')">+ Add</button>
+        </div>
+      </div>
+
+      <!-- SIZE / SEGMENT -->
+      <div class="adm-filter-section">
+        <div class="adm-filter-section-hd"><span>Size</span></div>
+        <div id="admSegTags" class="adm-tag-list"></div>
+        <div class="adm-add-tag-row">
+          <input id="admSegNewVal" class="adm-input adm-add-tag-input" placeholder="e.g. Full-Size" onkeydown="if(event.key==='Enter')admAddFilterVal('seg')">
+          <button class="adm-btn-primary adm-add-tag-btn" onclick="admAddFilterVal('seg')">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+        <div id="admTabEdit" class="adm-tab-body" style="display:none">
       <div class="adm-section-title">Select a car to edit</div>
       <div class="adm-search-wrap">
         <input id="admEditSearch" class="adm-input" placeholder="Search by name…" oninput="renderAdmEditList()">
@@ -1695,6 +1929,10 @@ function shareComparison(){
             </select>
           </div>
           <div class="adm-field"><label class="adm-label">Base MSRP ($)</label><input id="ef-msrp" class="adm-input" type="number"></div>
+          <div class="adm-field"><label class="adm-label">Engine</label><input id="ef-engine" class="adm-input" placeholder='e.g. 2.5L 4-cyl Turbo'></div>
+          <div class="adm-field"><label class="adm-label">Horsepower</label><input id="ef-hp" class="adm-input" placeholder='e.g. 201 hp'></div>
+          <div class="adm-field"><label class="adm-label">Drivetrain</label><input id="ef-drivetrain" class="adm-input" placeholder='e.g. FWD / AWD'></div>
+          <div class="adm-field"><label class="adm-label">Transmission</label><input id="ef-transmission" class="adm-input" placeholder='e.g. CVT'></div>
           <div class="adm-field"><label class="adm-label">Length</label><input id="ef-length" class="adm-input"></div>
           <div class="adm-field"><label class="adm-label">Width</label><input id="ef-width" class="adm-input"></div>
           <div class="adm-field"><label class="adm-label">Height</label><input id="ef-height" class="adm-input"></div>
@@ -1951,6 +2189,17 @@ function shareComparison(){
   padding:0.3rem 0.75rem;cursor:pointer;transition:opacity 0.15s;
 }
 .adm-add-trim-btn:hover{opacity:0.8}
+.adm-trim-pwt-section{margin-top:0.6rem;border-top:1px solid rgba(0,0,0,0.06);padding-top:0.5rem}
+.adm-trim-pwt-summary{
+  font-size:0.74rem;font-weight:500;color:#9898aa;cursor:pointer;
+  list-style:none;display:flex;align-items:center;gap:0.4rem;user-select:none;
+  padding:0.2rem 0;
+}
+.adm-trim-pwt-summary::-webkit-details-marker{display:none}
+.adm-trim-pwt-summary::before{content:'▸';font-size:0.65rem;transition:transform 0.15s}
+details.adm-trim-pwt-section[open] .adm-trim-pwt-summary::before{content:'▾'}
+.adm-trim-pwt-hint{font-size:0.68rem;color:#b0b0bb;font-weight:400}
+.adm-trim-pwt-section .adm-trim-fields{grid-template-columns:1fr 1fr 1fr}
 .adm-trim-row{
   background:#f9f9fc;border:1px solid rgba(0,0,0,0.08);
   border-radius:10px;padding:0.85rem 0.9rem;
@@ -1987,6 +2236,37 @@ function shareComparison(){
 .adm-edit-name{font-size:0.82rem;font-weight:500;color:#111118}
 .adm-edit-meta{font-size:0.72rem;color:#9898aa}
 .adm-edit-arrow{color:#9898aa;font-size:0.75rem}
+/* ── FILTER OPTIONS TAB ── */
+.adm-filter-section{margin-bottom:1.5rem}
+.adm-filter-section-hd{
+  display:flex;align-items:center;gap:0.5rem;
+  font-size:0.74rem;font-weight:600;color:#44444f;
+  margin-bottom:0.6rem;
+}
+.adm-filter-auto-badge{
+  font-size:0.65rem;font-weight:500;color:#9898aa;
+  background:#f5f5f8;border:1px solid rgba(0,0,0,0.08);
+  border-radius:999px;padding:0.15rem 0.55rem;
+}
+.adm-tag-list{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.65rem;min-height:24px}
+.adm-tag{
+  display:inline-flex;align-items:center;gap:0.35rem;
+  font-size:0.78rem;font-weight:500;color:#111118;
+  background:#f5f5f8;border:1px solid rgba(0,0,0,0.1);
+  border-radius:999px;padding:0.25rem 0.65rem 0.25rem 0.75rem;
+}
+.adm-tag.auto{color:#9898aa;background:#fafafa}
+.adm-tag-rm{
+  width:16px;height:16px;border-radius:50%;border:none;
+  background:rgba(0,0,0,0.08);color:#666;cursor:pointer;
+  font-size:0.7rem;line-height:16px;text-align:center;
+  padding:0;transition:background 0.12s;
+}
+.adm-tag-rm:hover{background:rgba(232,69,69,0.18);color:#c0392b}
+.adm-add-tag-row{display:flex;gap:0.5rem;align-items:center}
+.adm-add-tag-input{flex:1;max-width:220px}
+.adm-add-tag-btn{white-space:nowrap;padding:0.55rem 1rem}
+/* ── END FILTER OPTIONS TAB ── */
 </style>
 
 <script>
@@ -2047,9 +2327,89 @@ function closeAdmin(){
 function switchAdmTab(tab, el){
   document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('admTabAdd').style.display = tab==='add' ? 'block' : 'none';
-  document.getElementById('admTabEdit').style.display = tab==='edit' ? 'block' : 'none';
-  if(tab==='edit') renderAdmEditList();
+  document.getElementById('admTabAdd').style.display     = tab==='add'     ? 'block' : 'none';
+  document.getElementById('admTabEdit').style.display    = tab==='edit'    ? 'block' : 'none';
+  document.getElementById('admTabFilters').style.display = tab==='filters' ? 'block' : 'none';
+  if(tab==='edit')    renderAdmEditList();
+  if(tab==='filters') renderAdmFilterTags();
+}
+
+// ── FILTER OPTIONS ADMIN ──
+function renderAdmFilterTags(){
+  // Brand (auto / read-only)
+  const brands = [...new Set(CARS.map(c=>c.brand).filter(Boolean))].sort();
+  document.getElementById('admBrandTags').innerHTML =
+    brands.map(v=>`<span class="adm-tag auto">${v}</span>`).join('') ||
+    '<span style="font-size:0.75rem;color:#9898aa">No cars yet</span>';
+
+  // Body Style (editable)
+  const carsBodyValues = [...new Set(CARS.map(c=>c.body).filter(Boolean))];
+  const allBodies = [...new Set([...FILTER_BODIES, ...carsBodyValues])].sort();
+  document.getElementById('admBodyTags').innerHTML = allBodies.map(v=>{
+    const inUse = carsBodyValues.includes(v);
+    return `<span class="adm-tag">
+      ${v}${inUse?' <span title="In use by a car" style="font-size:0.65rem;color:#9898aa">(in use)</span>':''}
+      <button class="adm-tag-rm" onclick="admRemoveFilterVal('body','${v.replace(/'/g,"\'")}')" title="Remove">&times;</button>
+    </span>`;
+  }).join('') || '<span style="font-size:0.75rem;color:#9898aa">None yet</span>';
+
+  // Size (editable)
+  const carsSegValues = [...new Set(CARS.map(c=>c.segment).filter(Boolean))];
+  const allSegs = [...new Set([...FILTER_SEGS, ...carsSegValues])].sort();
+  document.getElementById('admSegTags').innerHTML = allSegs.map(v=>{
+    const inUse = carsSegValues.includes(v);
+    return `<span class="adm-tag">
+      ${v}${inUse?' <span title="In use by a car" style="font-size:0.65rem;color:#9898aa">(in use)</span>':''}
+      <button class="adm-tag-rm" onclick="admRemoveFilterVal('seg','${v.replace(/'/g,"\'")}')" title="Remove">&times;</button>
+    </span>`;
+  }).join('') || '<span style="font-size:0.75rem;color:#9898aa">None yet</span>';
+}
+
+function admAddFilterVal(type){
+  const inputId = type==='body' ? 'admBodyNewVal' : 'admSegNewVal';
+  const val = document.getElementById(inputId).value.trim();
+  if(!val) return;
+  if(type==='body'){
+    if(!FILTER_BODIES.includes(val)){ FILTER_BODIES.push(val); saveFilterOptions(); }
+  } else {
+    if(!FILTER_SEGS.includes(val)){ FILTER_SEGS.push(val); saveFilterOptions(); }
+  }
+  document.getElementById(inputId).value = '';
+  rebuildFilterDds();
+  renderAdmFilterTags();
+  // Also update the select elements in the add/edit forms
+  _syncAdmFormSelects();
+}
+
+function admRemoveFilterVal(type, val){
+  if(type==='body'){
+    FILTER_BODIES = FILTER_BODIES.filter(v=>v!==val);
+    saveFilterOptions();
+  } else {
+    FILTER_SEGS = FILTER_SEGS.filter(v=>v!==val);
+    saveFilterOptions();
+  }
+  rebuildFilterDds();
+  renderAdmFilterTags();
+  _syncAdmFormSelects();
+}
+
+// Keep the Body Type / Segment <select> elements in Add and Edit forms in sync
+function _syncAdmFormSelects(){
+  ['cf-body','ef-body'].forEach(id=>{
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    const cur = sel.value;
+    const allBodies = [...new Set([...FILTER_BODIES, ...[...document.querySelectorAll('#admBodyTags .adm-tag')].map(t=>t.textContent.trim().replace(/\s*\(in use\)$/,''))])].sort();
+    sel.innerHTML = allBodies.map(v=>`<option${v===cur?' selected':''}>${v}</option>`).join('');
+  });
+  ['cf-segment','ef-segment'].forEach(id=>{
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    const cur = sel.value;
+    const allSegs = [...new Set([...FILTER_SEGS, ...[...document.querySelectorAll('#admSegTags .adm-tag')].map(t=>t.textContent.trim().replace(/\s*\(in use\)$/,''))])].sort();
+    sel.innerHTML = allSegs.map(v=>`<option${v===cur?' selected':''}>${v}</option>`).join('');
+  });
 }
 
 // ── FETCH & EXTRACT ──
@@ -2079,6 +2439,10 @@ function populateAddForm(car){
   document.getElementById('cf-width').value = car.dims?.width||'';
   document.getElementById('cf-height').value = car.dims?.height||'';
   document.getElementById('cf-wheelbase').value = car.dims?.wheelbase||'';
+  document.getElementById('cf-engine').value = car.engine||'';
+  document.getElementById('cf-hp').value = car.hp||'';
+  document.getElementById('cf-drivetrain').value = car.drivetrain||'';
+  document.getElementById('cf-transmission').value = car.transmission||'';
   document.getElementById('cf-ext').value = (car.ext||[]).filter(Boolean).join('\n');
   document.getElementById('cf-int').value = (car.int||[]).filter(Boolean).join('\n');
   renderTrimList('cf', car.trims||[]);
@@ -2121,6 +2485,10 @@ function admPublishCar(){
       height: document.getElementById('cf-height').value.trim(),
       wheelbase: document.getElementById('cf-wheelbase').value.trim()
     };
+    const engine       = document.getElementById('cf-engine').value.trim();
+    const hp           = document.getElementById('cf-hp').value.trim();
+    const drivetrain   = document.getElementById('cf-drivetrain').value.trim();
+    const transmission = document.getElementById('cf-transmission').value.trim();
     const ext = document.getElementById('cf-ext').value.split('\n').map(s=>s.trim()).filter(Boolean);
     const int_ = document.getElementById('cf-int').value.split('\n').map(s=>s.trim()).filter(Boolean);
     const trims = readTrimList('cf');
@@ -2134,9 +2502,10 @@ function admPublishCar(){
     let i=2; const baseId=id;
     while(CARS.find(c=>c.id===id)){ id=`${baseId}-${i}`; i++; }
 
-    const newCar = {id, brand, model, year, body, segment, msrp, ext, int:int_, dims, trims};
+    const newCar = {id, brand, model, year, body, segment, msrp, ext, int:int_, dims, engine, hp, drivetrain, transmission, trims};
     CARS.push(newCar);
     saveCars();
+    rebuildFilterDds();
     doFilter();
 
     const msg = document.getElementById('admPublishMsg');
@@ -2168,6 +2537,7 @@ function admFillManual(){
     brand:'', model:'', year: new Date().getFullYear(),
     body:'SUV', segment:'Compact', msrp:0,
     dims:{length:'',width:'',height:'',wheelbase:''},
+    hp:'',drivetrain:'',transmission:'',
     ext:[], int:[],
     trims:[{name:'',price:0,features:[]}]
   });
@@ -2210,6 +2580,10 @@ function admOpenEdit(id){
   document.getElementById('ef-width').value = c.dims?.width||'';
   document.getElementById('ef-height').value = c.dims?.height||'';
   document.getElementById('ef-wheelbase').value = c.dims?.wheelbase||'';
+  document.getElementById('ef-engine').value = c.engine||'';
+  document.getElementById('ef-hp').value = c.hp||'';
+  document.getElementById('ef-drivetrain').value = c.drivetrain||'';
+  document.getElementById('ef-transmission').value = c.transmission||'';
   document.getElementById('ef-ext').value = (c.ext||[]).filter(Boolean).join('\n');
   document.getElementById('ef-int').value = (c.int||[]).filter(Boolean).join('\n');
   renderTrimList('ef', c.trims||[]);
@@ -2244,11 +2618,16 @@ function admSaveEdit(){
         height: document.getElementById('ef-height').value.trim(),
         wheelbase: document.getElementById('ef-wheelbase').value.trim()
       },
+      engine:       document.getElementById('ef-engine').value.trim(),
+      hp:           document.getElementById('ef-hp').value.trim(),
+      drivetrain:   document.getElementById('ef-drivetrain').value.trim(),
+      transmission: document.getElementById('ef-transmission').value.trim(),
       ext: document.getElementById('ef-ext').value.split('\n').map(s=>s.trim()).filter(Boolean),
       int: document.getElementById('ef-int').value.split('\n').map(s=>s.trim()).filter(Boolean),
       trims
     };
     saveCars();
+    rebuildFilterDds();
     doFilter();
     renderAdmEditList();
 
@@ -2274,6 +2653,7 @@ function admDeleteCar(){
   const idx = CARS.findIndex(x=>x.id===admEditingId);
   CARS.splice(idx,1);
   saveCars();
+  rebuildFilterDds();
   doFilter();
   renderAdmEditList();
   admCancelEdit();
@@ -2296,13 +2676,17 @@ function addTrimRow(prefix, data, idx){
   const id = prefix+'-trim-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
   const msrp = data ? data.price : 0;
   const features = data ? (data.features||[]).join(', ') : '';
+  const trimEngine       = data ? (data.engine||'') : '';
+  const trimHp           = data ? (data.hp||'') : '';
+  const trimDrivetrain   = data ? (data.drivetrain||'') : '';
+  const trimTransmission = data ? (data.transmission||'') : '';
   const div = document.createElement('div');
   div.className = 'adm-trim-row';
   div.dataset.trimId = id;
   div.innerHTML = `
     <div class="adm-trim-row-header">
       <span class="adm-trim-row-num">Trim ${list.children.length + 1}</span>
-      <button class="adm-trim-remove" onclick="removeTrimRow(this)" title="Remove this trim">✕</button>
+      <button class="adm-trim-remove" onclick="removeTrimRow(this)" title="Remove this trim">\u2715</button>
     </div>
     <div class="adm-trim-fields">
       <div class="adm-field">
@@ -2318,7 +2702,31 @@ function addTrimRow(prefix, data, idx){
       <label class="adm-label">Features <span class="adm-hint-inline">— separate with commas</span></label>
       <textarea class="adm-textarea trim-features" rows="2" placeholder="e.g. 2.0L 4-cyl (181 hp), 6-speed manual, Bose audio">${features}</textarea>
     </div>
+    <details class="adm-trim-pwt-section">
+      <summary class="adm-trim-pwt-summary">Powertrain overrides <span class="adm-trim-pwt-hint">— only if different from the car defaults above</span></summary>
+      <div class="adm-trim-fields" style="margin-top:0.5rem">
+        <div class="adm-field">
+          <label class="adm-label">Engine</label>
+          <input class="adm-input trim-engine" type="text" placeholder="e.g. 3.5L Twin-Turbo V6" value="${trimEngine}">
+        </div>
+        <div class="adm-field">
+          <label class="adm-label">Horsepower</label>
+          <input class="adm-input trim-hp" type="text" placeholder="e.g. 302 hp" value="${trimHp}">
+        </div>
+        <div class="adm-field">
+          <label class="adm-label">Drivetrain</label>
+          <input class="adm-input trim-drivetrain" type="text" placeholder="e.g. AWD" value="${trimDrivetrain}">
+        </div>
+        <div class="adm-field">
+          <label class="adm-label">Transmission</label>
+          <input class="adm-input trim-transmission" type="text" placeholder="e.g. e-CVT" value="${trimTransmission}">
+        </div>
+      </div>
+    </details>
   `;
+  if(trimEngine || trimHp || trimDrivetrain || trimTransmission){
+    div.querySelector('.adm-trim-pwt-section').open = true;
+  }
   list.appendChild(div);
   renumberTrimRows(prefix);
 }
@@ -2347,11 +2755,22 @@ function readTrimList(prefix){
   const rows = document.querySelectorAll('#'+prefix+'-trims-list .adm-trim-row');
   const trims = [];
   rows.forEach(row => {
-    const name  = row.querySelector('.trim-name').value.trim();
-    const price = parseInt(row.querySelector('.trim-price').value) || 0;
-    const featStr = row.querySelector('.trim-features').value;
-    const features = featStr.split(',').map(f=>f.trim()).filter(Boolean);
-    if(name || price) trims.push({name, price, features});
+    const name         = row.querySelector('.trim-name').value.trim();
+    const price        = parseInt(row.querySelector('.trim-price').value) || 0;
+    const featStr      = row.querySelector('.trim-features').value;
+    const features     = featStr.split(',').map(f=>f.trim()).filter(Boolean);
+    const engine       = (row.querySelector('.trim-engine')?.value||'').trim();
+    const hp           = (row.querySelector('.trim-hp')?.value||'').trim();
+    const drivetrain   = (row.querySelector('.trim-drivetrain')?.value||'').trim();
+    const transmission = (row.querySelector('.trim-transmission')?.value||'').trim();
+    if(name || price){
+      const t = {name, price, features};
+      if(engine)       t.engine       = engine;
+      if(hp)           t.hp           = hp;
+      if(drivetrain)   t.drivetrain   = drivetrain;
+      if(transmission) t.transmission = transmission;
+      trims.push(t);
+    }
   });
   return trims;
 }
